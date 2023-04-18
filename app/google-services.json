@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "574819516751",
+    "project_id": "codebyte-2",
+    "storage_bucket": "codebyte-2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574819516751:android:4d049c196af765c949453a",
+        "android_client_info": {
+          "package_name": "edu.pis.codebyte"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "574819516751-1pul0sfreui2mk57320qg5lb2vtcun25.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.pis.codebyte",
+            "certificate_hash": "180b0a4dfd1c30b51a4c3e2204359e50d9d1245e"
+          }
+        },
+        {
+          "client_id": "574819516751-cq1cgtad1iv8aura5kgupcjo8cr5gvca.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpHtzByG4D38aD4beL3TPt50lIUstVVoA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "574819516751-cq1cgtad1iv8aura5kgupcjo8cr5gvca.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

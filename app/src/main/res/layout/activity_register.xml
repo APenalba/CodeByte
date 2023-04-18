@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.register.RegisterActivity">
+
+    <TextView
+        android:id="@+id/signup_textView"
+        android:layout_width="253dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/quicksand_medium"
+        android:text="@string/signup"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.12"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextSizeCheck" />
+
+    <TextView
+        android:id="@+id/signup_password_textView"
+        android:layout_width="241dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="28dp"
+        android:fontFamily="@font/quicksand_bold"
+        android:text="@string/password"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/reg_password_editText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.182"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="TextSizeCheck" />
+
+    <EditText
+        android:id="@+id/reg_email_emailText"
+        android:layout_width="337dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="28dp"
+        android:ems="10"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/signup_password_textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.418"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_textView"
+        tools:ignore="Autofill,DuplicateSpeakableTextCheck,UnknownIdInLayout" />
+
+    <TextView
+        android:id="@+id/reg_email_textViev"
+        android:layout_width="241dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/quicksand_bold"
+        android:text="@string/email"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/reg_email_emailText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.182"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup_textView"
+        app:layout_constraintVertical_bias="0.977"
+        tools:ignore="TextSizeCheck" />
+
+    <EditText
+        android:id="@+id/reg_password_editText"
+        android:layout_width="337dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="84dp"
+        android:ems="10"
+        android:hint="@string/password"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/reg_signup_bttn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.418"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_textView"
+        tools:ignore="DuplicateSpeakableTextCheck,UnknownIdInLayout" />
+
+    <Button
+        android:id="@+id/reg_signup_bttn"
+        android:layout_width="343dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="340dp"
+        android:backgroundTint="#8D5CF2"
+        android:fontFamily="@font/quicksand_bold"
+        android:text="@string/signup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_editText"
+        tools:ignore="DuplicateSpeakableTextCheck,UnknownIdInLayout,VisualLintButtonSize" />
+
+    <CheckBox
+        android:id="@+id/terminosCondiciones_checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/terminos"
+        app:layout_constraintBottom_toTopOf="@+id/reg_signup_bttn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reg_password_editText"
+        tools:ignore="VisualLintButtonSize" />
+
+    <TextView
+        android:id="@+id/ya_cuenta_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/quicksand_medium"
+        android:text="@string/ya_cuenta"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.179"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reg_signup_bttn"
+        app:layout_constraintVertical_bias="0.118" />
+
+    <Button
+        android:id="@+id/reg_login_bttn"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="153dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="#FFFFFF"
+        android:backgroundTintMode="add"
+        android:fontFamily="@font/quicksand_bold"
+        android:text="@string/login"
+        android:textColor="#8C5CF1"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.868"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reg_signup_bttn"
+        app:layout_constraintVertical_bias="0.046"
+        tools:ignore="TextSizeCheck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

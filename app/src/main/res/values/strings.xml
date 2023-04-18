@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">CodeByte</string>
+    <string name="login">Inicia Sesión</string>
+    <string name="introduce_tus_datos">Intoduce tus datos</string>
+    <string name="email">Correo electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="keep_session_bttn">Mantén la sesión iniciada</string>
+    <string name="google">Google</string>
+    <string name="github">GitHub</string>
+    <string name="forgot_password">Has olvidado la contraseña?</string>
+    <string name="no_tienes_cuenta">Aún no tienes cuenta?</string>
+    <string name="recupera_contraseña">Recupera</string>
+    <string name="signup">Registrate</string>
+    <string name="terminos">Acepto los términos y la política de privacidad.</string>
+    <string name="ya_cuenta">Ya tienes cuenta?</string>
+    <string name="username">NombreDeUsuario</string>
+    <string name="correotest">user@correo.com</string>
+    <string name="cambiar_nombre">Cambiar Nombre</string>
+    <string name="cambiar_contraseña">Cambiar Contraseña</string>
+    <string name="cambiar_correo">Cambiar Correo</string>
+    <string name="problem_report">Algún problema? Háznoslo saber:</string>
+    <string name="textbox_problem_report">Indicanos tu problema</string>
+    <string name="envia">Envía</string>
+    <string-array name="idiomas">
+        <item>Cambiar idioma</item>
+        <item>Castellano</item>
+        <item>Catalán</item>
+    </string-array>
+
+
+    <!--Content Descriptions-->
+
+    <string name="cd_PROFILEACTIVITY_logo_profile_asset">Icono del perfil, decoración</string>
+    <string name="cd_PROFILEACTIVITY_logo_menu_asset">Icono-boton del menú lateral desplegable</string>
+    <string name="cd_PROFILEACTIVITY_profile_picture">Foto de perfil del usuario</string>
+    <string name="cd_PROFILEACTIVITY_logo_add_photo_asset">Icono-boton para cambiar la foto de perfil</string>
+
+
+</resources>
