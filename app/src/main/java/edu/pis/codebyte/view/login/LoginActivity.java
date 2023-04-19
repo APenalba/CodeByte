@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,14 +28,19 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.OAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import edu.pis.codebyte.R;
+import edu.pis.codebyte.model.LoginUtils;
+import edu.pis.codebyte.model.exceptions.InvalidEmailException;
+import edu.pis.codebyte.model.exceptions.InvalidPasswordException;
+import edu.pis.codebyte.model.exceptions.WeakPasswordException;
 import edu.pis.codebyte.view.profile.ProfileActivity;
 import edu.pis.codebyte.view.register.RegisterActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = "GoogleActivity";
+    private static final String GOOGLE_ACTIVITY = "GoogleActivity";
     private static final int GOOGLE_SIGN_IN = 100;
     public static final String PREFERENCES_FILE = "MyPrefs";
 
@@ -57,12 +61,37 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mAuth = FirebaseAuth.getInstance();
+
+        firebase_setup();
         prefs = getSharedPreferences(PREFERENCES_FILE, MODE_PRIVATE);
 
         checkSession();
 
         activity_setup();
+
+    }
+
+    private void firebase_setup() {
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+        FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    String name = user.getDisplayName();
+                    String email = user.getEmail();
+                    if (name == null || name.isEmpty()) {
+                        // Si el nombre no se proporciona en la cuenta, utilizar el nombre de usuario generado
+                        name = LoginUtils.generateUsernameFromEmail(email);
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(name)
+                                .build();
+                        user.updateProfile(profileUpdates);
+                    }
+                }
+            }
+        });
 
     }
 
@@ -94,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void activity_setup() {
 
-        email_text = (TextView) findViewById(R.id.email_textView);
+        email_text = (TextView) findViewById(R.id.email_emailText);
         password_text = (TextView) findViewById(R.id.password_editText);
 
         login_button_setup();
@@ -112,31 +141,8 @@ public class LoginActivity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    if (email_text.getText().toString().isEmpty()) {
-                        email_text.setError("Correo electrónico no válido");
-                    } else if (password_text.getText().toString().isEmpty()) {
-                        password_text.setError("Contraseña no válida");
-                    } else {
-                        mAuth.
-                                signInWithEmailAndPassword(email_text.getText().toString(),
-                                        password_text.getText().toString()).
-                                addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if (task.isSuccessful()) {
-                                            goToHome();
-                                        } else {
-                                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                                    Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
-                    }
-
-                } catch (Exception e) {
-                    showError(e);
-                }
+                System.out.println("EMPIEZA LOGIN");
+                emailPassword_auth();
             }
         });
     }
@@ -175,6 +181,35 @@ public class LoginActivity extends AppCompatActivity {
     private void keepSession_cb_setup () {
         keepSession_cb = (CheckBox) findViewById(R.id.keepSession_checkBox);
         keepSession_cb.setChecked(true);
+    }
+
+    private void emailPassword_auth() {
+        String email = email_text.getText().toString();
+        String password = password_text.getText().toString();
+        try {
+            LoginUtils.isValidEmail(email);
+            if (password.isEmpty()) throw new InvalidPasswordException("Contraseña no valida");
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                goToHome();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "La autenticación falló.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        } catch (InvalidEmailException e) {
+            // Si el email no es válido, marcar el TextView de email con error y mostrar un mensaje de error
+            email_text.setError("El email proporcionado no es válido.");
+            email_text.requestFocus();
+            Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+        } catch (InvalidPasswordException e) {
+            password_text.setError("La contraseña proporcionada no es valida.");
+            password_text.requestFocus();
+            Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void google_auth() {
@@ -257,7 +292,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<GetTokenResult> task) {
                         if (task.isSuccessful()) {
                             String token = task.getResult().getToken();
-                            SharedPreferences.Editor editor = getSharedPreferences(PREFERENCES_FILE, MODE_PRIVATE).edit();
+                            SharedPreferences.Editor editor = prefs.edit();
                             editor.putString("idToken", token);
                             editor.apply();
                         } else {
@@ -296,11 +331,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void showError(Exception e) {
-        Toast.makeText(this, e.toString(),
-                Toast.LENGTH_SHORT).show();
-    }
-
     private void goToNewActivity(Class<?> cls) {
         Intent intent = new Intent(this, cls);
         startActivity(intent);
@@ -317,4 +347,6 @@ public class LoginActivity extends AppCompatActivity {
         goToNewActivity(ProfileActivity.class);
         finish();
     }
+
+
 }

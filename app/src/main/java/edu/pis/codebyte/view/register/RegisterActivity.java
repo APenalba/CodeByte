@@ -18,6 +18,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import edu.pis.codebyte.R;
+import edu.pis.codebyte.model.LoginUtils;
+import edu.pis.codebyte.model.exceptions.InvalidEmailException;
+import edu.pis.codebyte.model.exceptions.WeakPasswordException;
 import edu.pis.codebyte.view.login.LoginActivity;
 import edu.pis.codebyte.view.register.*;
 
@@ -45,17 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
         signUp_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (email_text.getText().toString().isEmpty()) {
-                    email_text.setError("Correo electrónico no válido");
-                }else if (password_text.getText().toString().isEmpty()) {
-                    password_text.setError("Contraseña no válida");
-                }else if (! terminosYcondiciones.isChecked()) {
-                    terminosYcondiciones.setError("Para crear una cuenta debes aceptar los terminos y condiciones");
-                } else {
-                    email = email_text.getText().toString();
-                    password = password_text.getText().toString();
-                    createAccount();
-                }
+                createAccount();
             }
         });
 
@@ -72,20 +65,37 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void createAccount() {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+        email = email_text.getText().toString();
+        password = password_text.getText().toString();
+        try{
+            LoginUtils.isValidEmail(email);
+            LoginUtils.isSecurePassword(password);
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+
+        }catch (InvalidEmailException e) {
+            // Si el email no es válido, marcar el TextView de email con error y mostrar un mensaje de error
+            email_text.setError("El email proporcionado no es válido.");
+            email_text.requestFocus();
+            Toast.makeText(RegisterActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+        } catch (WeakPasswordException e) {
+            // Si la contraseña no es segura, marcar el TextView de contraseña con error y mostrar un mensaje de error
+            password_text.setError("La contraseña proporcionada no es segura. Por favor, utiliza una contraseña más segura.");
+            password_text.requestFocus();
+            Toast.makeText(RegisterActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 }
