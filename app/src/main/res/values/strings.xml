@@ -20,7 +20,11 @@
     <string name="cambiar_correo">Cambiar Correo</string>
     <string name="problem_report">Algún problema? Háznoslo saber:</string>
     <string name="textbox_problem_report">Indicanos tu problema</string>
+    <string name="cambiar_nombre_usuario_titulo">Cambiar nombre de usuario</string>
+    <string name="guardar">Guardar</string>
     <string name="envia">Envía</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="nuevo_nombre_usuario_hint">Nuevo nombre de usuario </string>
     <string-array name="idiomas">
         <item>Cambiar idioma</item>
         <item>Castellano</item>
