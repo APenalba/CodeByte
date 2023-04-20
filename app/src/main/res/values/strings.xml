@@ -20,7 +20,6 @@
     <string name="cambiar_correo">Cambiar Correo</string>
     <string name="problem_report">Algún problema? Háznoslo saber:</string>
     <string name="textbox_problem_report">Indicanos tu problema</string>
-    <string name="cambiar_nombre_usuario_titulo">Cambiar nombre de usuario</string>
     <string name="guardar">Guardar</string>
     <string name="envia">Envía</string>
     <string name="cancelar">Cancelar</string>
@@ -38,6 +37,7 @@
     <string name="cd_PROFILEACTIVITY_logo_menu_asset">Icono-boton del menú lateral desplegable</string>
     <string name="cd_PROFILEACTIVITY_profile_picture">Foto de perfil del usuario</string>
     <string name="cd_PROFILEACTIVITY_logo_add_photo_asset">Icono-boton para cambiar la foto de perfil</string>
+    <string name="boton_cambiar_foto_perfil">Boton cambiar foto perfil</string>
 
 
 </resources>

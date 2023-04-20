@@ -52,8 +52,10 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/perfil_ale" />
 
-    <ImageView
+    <Button
         android:id="@+id/logo_add_photo_asset"
+        android:text="@string/boton_cambiar_foto_perfil"
+        android:background="@drawable/icon_add_camera"
         android:layout_width="31dp"
         android:layout_height="31dp"
         android:layout_marginStart="8dp"
@@ -63,8 +65,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/profile_picture"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.106"
-        app:srcCompat="@drawable/icon_add_camera" />
+        app:layout_constraintVertical_bias="0.106" />
 
     <TextView
         android:id="@+id/username_textView"

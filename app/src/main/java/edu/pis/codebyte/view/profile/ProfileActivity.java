@@ -1,18 +1,32 @@
 package edu.pis.codebyte.view.profile;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import edu.pis.codebyte.R;
 import edu.pis.codebyte.viewmodel.profile.ProfileViewModel;
@@ -26,6 +40,8 @@ public class ProfileActivity extends AppCompatActivity {
     private Spinner idioma;
     private ImageView pfp;
     private ProfileViewModel profileVM;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri mImageUri;
 
 
     @Override
@@ -46,19 +62,20 @@ public class ProfileActivity extends AppCompatActivity {
         cambiarNombre_button_setup();
         cambiarPassword_button_setup();
         cambiarCorreo_button_setup();
+        cambiarProfileImage_button_setup();
 
-        enviaProblema_button = (Button) findViewById(R.id.btn_enviaProblema);
+        enviaProblema_button = findViewById(R.id.btn_enviaProblema);
 
-        problema = (EditText) findViewById(R.id.editText_problem);
+        problema = findViewById(R.id.editText_problem);
 
-        idioma = (Spinner) findViewById(R.id.spinner_idiomas);
+        idioma = findViewById(R.id.spinner_idiomas);
 
-        pfp = (ImageView) findViewById(R.id.profile_picture);
+        pfp = findViewById(R.id.profile_picture);
 
     }
 
     private void email_textView_setup() {
-        email_textView = (TextView) findViewById(R.id.correo_textView);
+        email_textView = findViewById(R.id.correo_textView);
         final Observer<String> observerEmail = new Observer<String>() {
             @Override
             public void onChanged(String email) {
@@ -69,7 +86,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void username_textView_setup() {
-        username_textView = (TextView) findViewById(R.id.username_textView);
+        username_textView = findViewById(R.id.username_textView);
         final Observer<String> observerUsername = new Observer<String>() {
             @Override
             public void onChanged(String username) {
@@ -81,7 +98,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void cambiarNombre_button_setup() {
-        Button cambiarNombre_button = (Button) findViewById(R.id.btn_nombre);
+        Button cambiarNombre_button = findViewById(R.id.btn_nombre);
         cambiarNombre_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +108,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void cambiarPassword_button_setup() {
-        Button cambiarContraseña_button = (Button) findViewById(R.id.btn_contrasena);
+        Button cambiarContraseña_button = findViewById(R.id.btn_contrasena);
         cambiarContraseña_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +119,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void cambiarCorreo_button_setup() {
-        Button cambiarCorreo_button = (Button) findViewById(R.id.btn_correo);
+        Button cambiarCorreo_button = findViewById(R.id.btn_correo);
         cambiarCorreo_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,6 +127,31 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void cambiarProfileImage_button_setup() {
+        Button chooseImageButton = findViewById(R.id.logo_add_photo_asset);
+        chooseImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser();
+            }
+        });
+    }
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            mImageUri = data.getData();
+            profileVM.uploadImage(ProfileActivity.this, mImageUri);
+        }
     }
 
     private void mostrarDialogo(String title) {
@@ -123,7 +165,6 @@ public class ProfileActivity extends AppCompatActivity {
                 EditText input_editText = view.findViewById(R.id.new_editText);
                 String new_input = input_editText.getText().toString().trim();
                 if(!new_input.isEmpty()) {
-                    System.out.println("AQUI");
                     profileVM.cambiarNombreUsuario(new_input,ProfileActivity.this);
                 }
             }
@@ -131,5 +172,4 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setNegativeButton(R.string.cancelar, null);
         builder.show();
     }
-
 }
