@@ -6,7 +6,7 @@
     android:padding="16dp">
 
     <EditText
-        android:id="@+id/et_nuevo_nombre_usuario"
+        android:id="@+id/new_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/nuevo_nombre_usuario_hint"
