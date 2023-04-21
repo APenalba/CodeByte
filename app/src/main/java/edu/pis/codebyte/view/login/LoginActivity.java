@@ -31,18 +31,17 @@ import com.google.firebase.auth.OAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 import edu.pis.codebyte.R;
+import edu.pis.codebyte.model.DataBaseManager;
 import edu.pis.codebyte.model.LoginUtils;
 import edu.pis.codebyte.model.exceptions.InvalidEmailException;
 import edu.pis.codebyte.model.exceptions.InvalidPasswordException;
-import edu.pis.codebyte.model.exceptions.WeakPasswordException;
 import edu.pis.codebyte.view.profile.ProfileActivity;
 import edu.pis.codebyte.view.register.RegisterActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String GOOGLE_ACTIVITY = "GoogleActivity";
     private static final int GOOGLE_SIGN_IN = 100;
-    public static final String PREFERENCES_FILE = "MyPrefs";
+    public static final String PREFERENCES_FILE = "login_prefs";
 
     private Button login_button;
     private Button signup_button;
@@ -53,54 +52,29 @@ public class LoginActivity extends AppCompatActivity {
     private TextView password_text;
     private CheckBox keepSession_cb;
     private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
     private SharedPreferences prefs;
+    private DataBaseManager dbm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
-        firebase_setup();
+        dbm = DataBaseManager.getInstance();
         prefs = getSharedPreferences(PREFERENCES_FILE, MODE_PRIVATE);
-
-        checkSession();
-
+        mAuth = FirebaseAuth.getInstance();
         activity_setup();
-
     }
 
-    private void firebase_setup() {
-        mAuth = FirebaseAuth.getInstance();
-        mAuth.signOut();
-        FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    String name = user.getDisplayName();
-                    String email = user.getEmail();
-                    if (name == null || name.isEmpty()) {
-                        // Si el nombre no se proporciona en la cuenta, utilizar el nombre de usuario generado
-                        name = LoginUtils.generateUsernameFromEmail(email);
-                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(name)
-                                .build();
-                        user.updateProfile(profileUpdates);
-                    }
-                }
-            }
-        });
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkSession();
     }
 
     private void checkSession() {
         boolean saveSession = prefs.getBoolean("saveSession", false);
-
         if (saveSession) {
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-            if (currentUser == null) {
+            if (mAuth.getCurrentUser() == null) {
                 String token = "";
                 prefs.getString("idToken",token);
                 mAuth.signInWithCustomToken(token)
@@ -108,13 +82,14 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    FirebaseUser currentUser = mAuth.getCurrentUser();
                                     goToHome();
                                 } else {
                                     Toast.makeText(LoginActivity.this, "Your session has expired", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
+            }else {
+                goToHome();
             }
         }else {
             mAuth.signOut();
@@ -125,12 +100,12 @@ public class LoginActivity extends AppCompatActivity {
 
         email_text = (TextView) findViewById(R.id.email_emailText);
         password_text = (TextView) findViewById(R.id.password_editText);
+        keepSession_cb = (CheckBox) findViewById(R.id.keepSession_checkBox);
 
         login_button_setup();
         signup_button_setup();
         google_button_setup();
-        gihub_button_setup();
-        keepSession_cb_setup();
+        github_button_setup();
 
         //TODO
         recuperaPassword_button = findViewById(R.id.recuperaPassword_bttn);
@@ -141,7 +116,6 @@ public class LoginActivity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("EMPIEZA LOGIN");
                 emailPassword_auth();
             }
         });
@@ -167,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void gihub_button_setup() {
+    private void github_button_setup() {
         github_button = (Button) findViewById(R.id.github_bttn);
         github_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,11 +150,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void keepSession_cb_setup () {
-        keepSession_cb = (CheckBox) findViewById(R.id.keepSession_checkBox);
-        keepSession_cb.setChecked(true);
     }
 
     private void emailPassword_auth() {
@@ -222,23 +191,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void github_auth() {
-        // [START auth_github_provider_create]
         OAuthProvider.Builder provider = OAuthProvider.newBuilder("github.com");
-        // [END auth_github_provider_create]
-
-        // [START auth_github_provider_params]
-        // Target specific email with login hint.
         provider.addCustomParameter("login", "");
-        // [END auth_github_provider_params]
 
         Task<AuthResult> pendingResultTask = mAuth.getPendingAuthResult();
         if (pendingResultTask != null) {
-            // There's something already here! Finish the sign-in for your user.
             pendingResultTask
                     .addOnSuccessListener(
                             new OnSuccessListener<AuthResult>() {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
+                                    if (authResult.getAdditionalUserInfo().isNewUser()) {
+                                        dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(),mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail());
+                                    }
+                                    goToHome();
                                     // User is signed in.
                                     // IdP data available in
                                     // authResult.getAdditionalUserInfo().getProfile().
@@ -269,6 +235,9 @@ public class LoginActivity extends AppCompatActivity {
                                     // ((OAuthCredential)authResult.getCredential()).getAccessToken().
                                     // The OAuth secret can be retrieved by calling:
                                     // ((OAuthCredential)authResult.getCredential()).getSecret().
+                                    if (authResult.getAdditionalUserInfo().isNewUser()) {
+                                        dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(),mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail());
+                                    }
                                     goToHome();
                                 }
                             })
@@ -282,24 +251,28 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void keepSession() throws Exception {
-        if (currentUser == null) {
-            throw new Exception("No hay ningun usuario logeado");
-        }
-        currentUser.getIdToken(true)
-                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                        if (task.isSuccessful()) {
-                            String token = task.getResult().getToken();
-                            SharedPreferences.Editor editor = prefs.edit();
-                            editor.putString("idToken", token);
-                            editor.apply();
-                        } else {
-                            throw new RuntimeException("No se ha conseguido el user idToken");
+    private void keepSession() {
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("saveSession", keepSession_cb.isChecked());
+        editor.apply();
+
+        if (mAuth.getCurrentUser() != null && keepSession_cb.isChecked()) {
+            mAuth.getCurrentUser().getIdToken(true)
+                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                String token = task.getResult().getToken();
+                                SharedPreferences.Editor editor = prefs.edit();
+                                editor.putString("idToken", token);
+                                editor.apply();
+                            } else {
+                                throw new RuntimeException("No se ha conseguido el user idToken");
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -317,6 +290,9 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            if (task.getResult().getAdditionalUserInfo().isNewUser()) {
+                                dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(),mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail());
+                            }
                             goToHome();
                         } else {
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
@@ -332,21 +308,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goToNewActivity(Class<?> cls) {
+        keepSession();
         Intent intent = new Intent(this, cls);
         startActivity(intent);
+        this.onPause();
     }
     private void goToHome() {
-        currentUser = mAuth.getCurrentUser();
-        if (keepSession_cb.isChecked()) {
-            try {
-                keepSession();
-            } catch (Exception e) {
-                Log.e("KEEP_SESSION", e.toString());
-            }
-        }
         goToNewActivity(ProfileActivity.class);
         finish();
     }
-
-
 }

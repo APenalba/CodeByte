@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
@@ -18,22 +19,51 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import edu.pis.codebyte.R;
 
 public class ProfileViewModel extends ViewModel {
 
     private FirebaseUser currentUser;
     private MutableLiveData<String> username;
     private MutableLiveData<String> email;
+    private MutableLiveData<String> imageURL;
     private StorageReference mStorageRef;
+    private DatabaseReference mDatabaseRef;
 
     public ProfileViewModel() {
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         username = new MutableLiveData<>(currentUser.getDisplayName());
         email = new MutableLiveData<>(currentUser.getEmail());
+        imageURL = new MutableLiveData<>();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("users");
+        String userId = currentUser.getUid();
+        mDatabaseRef.child(userId).child("imageURL").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    imageURL.setValue(dataSnapshot.getValue().toString());
+
+                } else {
+                    // TODO: Si el usuario no tiene una imagen de perfil, establece la imagen predeterminada
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("ERROR",error.getMessage());
+            }
+
+        });
     }
 
     public void cambiarNombreUsuario(String new_username, Context context) {
@@ -63,6 +93,10 @@ public class ProfileViewModel extends ViewModel {
 
     public MutableLiveData<String> getEmail() {
         return email;
+    }
+
+    public MutableLiveData<String> getImageURL() {
+        return imageURL;
     }
 
     public void uploadImage(Context context, Uri mImageUri) {

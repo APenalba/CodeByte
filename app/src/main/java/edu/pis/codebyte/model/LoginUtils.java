@@ -1,6 +1,7 @@
 package edu.pis.codebyte.model;
 
 import edu.pis.codebyte.model.exceptions.InvalidEmailException;
+import edu.pis.codebyte.model.exceptions.TermsAndConditionsNotAcceptedException;
 import edu.pis.codebyte.model.exceptions.WeakPasswordException;
 
 public class LoginUtils {
@@ -43,4 +44,10 @@ public class LoginUtils {
         return true;
     }
 
+    public static boolean areTermsAndConditionsAccepted(boolean checked) throws TermsAndConditionsNotAcceptedException {
+        if (!checked){
+            throw new TermsAndConditionsNotAcceptedException("Debes aceptar los terminos y condiciones");
+        }
+        return true;
+    }
 }

@@ -16,10 +16,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import edu.pis.codebyte.R;
+import edu.pis.codebyte.model.DataBaseManager;
 import edu.pis.codebyte.model.LoginUtils;
 import edu.pis.codebyte.model.exceptions.InvalidEmailException;
+import edu.pis.codebyte.model.exceptions.TermsAndConditionsNotAcceptedException;
 import edu.pis.codebyte.model.exceptions.WeakPasswordException;
 import edu.pis.codebyte.view.login.LoginActivity;
 import edu.pis.codebyte.view.register.*;
@@ -33,6 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button login_button;
     private CheckBox terminosYcondiciones;
     private String email, password;
+    private DataBaseManager dbm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         mAuth = FirebaseAuth.getInstance();
+        dbm = DataBaseManager.getInstance();
         email_text = findViewById(R.id.reg_email_emailText);
         password_text = findViewById(R.id.reg_password_editText);
         signUp_button = findViewById(R.id.reg_signup_bttn);
@@ -55,13 +60,9 @@ public class RegisterActivity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                goToLogIn();
             }
         });
-
-
     }
 
     private void createAccount() {
@@ -70,15 +71,23 @@ public class RegisterActivity extends AppCompatActivity {
         try{
             LoginUtils.isValidEmail(email);
             LoginUtils.isSecurePassword(password);
+            LoginUtils.areTermsAndConditionsAccepted(terminosYcondiciones.isChecked());
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                                finish();
+                                String username = LoginUtils.generateUsernameFromEmail(email);
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(username)
+                                        .build();
+                                user.updateProfile(profileUpdates);
+
+                                dbm.addUserToDatabase(user.getUid(), user.getDisplayName(), user.getEmail());
+
+                                goToLogIn();
+
                             } else {
                                 Toast.makeText(RegisterActivity.this, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
@@ -96,6 +105,16 @@ public class RegisterActivity extends AppCompatActivity {
             password_text.setError("La contraseña proporcionada no es segura. Por favor, utiliza una contraseña más segura.");
             password_text.requestFocus();
             Toast.makeText(RegisterActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+        } catch (TermsAndConditionsNotAcceptedException e) {
+            terminosYcondiciones.setError("Debes aceptar los terminos y condiciones");
+            terminosYcondiciones.requestFocus();
+            Toast.makeText(RegisterActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void goToLogIn() {
+        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

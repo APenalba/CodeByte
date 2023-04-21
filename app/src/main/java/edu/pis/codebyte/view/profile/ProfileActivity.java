@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import edu.pis.codebyte.R;
 import edu.pis.codebyte.viewmodel.profile.ProfileViewModel;
@@ -137,7 +138,15 @@ public class ProfileActivity extends AppCompatActivity {
                 openFileChooser();
             }
         });
+        final Observer<String> observerImage = new Observer<String>() {
+            @Override
+            public void onChanged(String imageURL) {
+                Picasso.get().load(imageURL).into(pfp);
+            }
+        };
+        profileVM.getImageURL().observe(this, observerImage);
     }
+
     private void openFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
