@@ -24,18 +24,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.OAuthProvider;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 import edu.pis.codebyte.R;
 import edu.pis.codebyte.model.DataBaseManager;
 import edu.pis.codebyte.model.LoginUtils;
 import edu.pis.codebyte.model.exceptions.InvalidEmailException;
 import edu.pis.codebyte.model.exceptions.InvalidPasswordException;
-import edu.pis.codebyte.view.profile.ProfileActivity;
+import edu.pis.codebyte.view.register.profile.ProfileActivity;
 import edu.pis.codebyte.view.register.RegisterActivity;
 
 public class LoginActivity extends AppCompatActivity {

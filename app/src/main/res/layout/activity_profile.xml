@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.profile.ProfileActivity">
+    tools:context=".view.register.profile.ProfileActivity">
 
     <ImageView
         android:id="@+id/logo_profile_asset"
@@ -52,25 +52,11 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/perfil_ale" />
 
-    <Button
-        android:id="@+id/logo_add_photo_asset"
-        android:text="@string/boton_cambiar_foto_perfil"
-        android:background="@drawable/icon_add_camera"
-        android:layout_width="31dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="8dp"
-        android:contentDescription="@string/cd_PROFILEACTIVITY_logo_add_photo_asset"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/profile_picture"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.106" />
-
     <TextView
         android:id="@+id/username_textView"
         android:layout_width="127dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/username"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -84,6 +70,7 @@
         android:id="@+id/correo_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/quicksand_medium"
         android:text="@string/correotest"
         android:textColor="#B1B1B1"
@@ -97,7 +84,7 @@
 
     <Button
         android:id="@+id/btn_nombre"
-        android:layout_width="wrap_content"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:backgroundTint="#9C5CF5"
@@ -112,7 +99,7 @@
 
     <Button
         android:id="@+id/btn_contrasena"
-        android:layout_width="wrap_content"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="#9C5CF5"
@@ -130,19 +117,18 @@
         android:id="@+id/btn_enviaProblema"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="52dp"
         android:backgroundTint="#9C5CF5"
         android:text="@string/envia"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_problem"
-        app:layout_constraintVertical_bias="0.084"
         tools:ignore="TextContrastCheck" />
 
     <Button
         android:id="@+id/btn_correo"
-        android:layout_width="wrap_content"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="#9C5CF5"
@@ -169,25 +155,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_contrasena"
         app:layout_constraintVertical_bias="0.0" />
-
-    <EditText
-        android:id="@+id/editText_problem"
-        android:layout_width="285dp"
-        android:layout_height="131dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:fontFamily="@font/quicksand_medium"
-        android:inputType="textPersonName"
-        android:lineSpacingExtra="14sp"
-        android:text="@string/textbox_problem_report"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/report_problem_textView"
-        app:layout_constraintVertical_bias="0.005"
-        tools:ignore="LabelFor,SmallSp"
-        android:autofillHints="" />
 
     <Spinner
         android:id="@+id/spinner_idiomas"

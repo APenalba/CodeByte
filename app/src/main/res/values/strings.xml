@@ -25,7 +25,6 @@
     <string name="cancelar">Cancelar</string>
     <string name="nuevo_nombre_usuario_hint">Nuevo nombre de usuario </string>
     <string-array name="idiomas">
-        <item>Cambiar idioma</item>
         <item>Castellano</item>
         <item>Catalán</item>
     </string-array>

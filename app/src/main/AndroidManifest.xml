@@ -12,7 +12,7 @@
         android:theme="@style/Theme.CodeByte"
         tools:targetApi="31">
         <activity
-            android:name=".view.profile.ProfileActivity"
+            android:name=".view.register.profile.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".view.register.RegisterActivity"
