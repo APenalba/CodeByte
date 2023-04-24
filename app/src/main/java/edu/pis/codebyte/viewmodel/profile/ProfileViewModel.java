@@ -1,11 +1,7 @@
 package edu.pis.codebyte.viewmodel.profile;
 
-import android.content.ContentResolver;
-
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
-import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,78 +9,53 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
+import com.google.firebase.firestore.DocumentSnapshot;
 
-import edu.pis.codebyte.R;
+import edu.pis.codebyte.model.DataBaseManager;
+import edu.pis.codebyte.model.User;
+
 
 public class ProfileViewModel extends ViewModel {
 
-    private FirebaseUser currentUser;
     private MutableLiveData<String> username;
     private MutableLiveData<String> email;
     private MutableLiveData<String> imageURL;
-    private StorageReference mStorageRef;
-    private DatabaseReference mDatabaseRef;
+    private DataBaseManager dbm;
+    private User currentUser;
+    private FirebaseUser firebaseUser;
 
     public ProfileViewModel() {
-        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        username = new MutableLiveData<>(currentUser.getDisplayName());
-        email = new MutableLiveData<>(currentUser.getEmail());
-        imageURL = new MutableLiveData<>();
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("users");
-        String userId = currentUser.getUid();
-        mDatabaseRef.child(userId).child("imageURL").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    imageURL.setValue(dataSnapshot.getValue().toString());
+        dbm = DataBaseManager.getInstance();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        username = new MutableLiveData<>(firebaseUser.getDisplayName());
+        email = new MutableLiveData<>(firebaseUser.getEmail());
+        imageURL = new MutableLiveData<>("");
+        setImageURL();
 
-                } else {
-                    // TODO: Si el usuario no tiene una imagen de perfil, establece la imagen predeterminada
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("ERROR",error.getMessage());
-            }
-
-        });
     }
 
-    public void cambiarNombreUsuario(String new_username, Context context) {
-
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(new_username)
-                .build();
-        currentUser.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            // El nombre de usuario se ha actualizado correctamente
-                            Toast.makeText(context, "Nombre de usuario actualizado", Toast.LENGTH_SHORT).show();
-                            username.setValue(currentUser.getDisplayName());
-                        } else {
-                            // Se produjo un error al actualizar el nombre de usuario
-                            Toast.makeText(context, "Error al actualizar el nombre de usuario", Toast.LENGTH_SHORT).show();
-                        }
+    public void setImageURL() {
+        dbm.getUser(firebaseUser.getUid(), new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    // Crear objeto User con los datos del usuario de Firestore
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String profileImageURL = document.getString("profileImageURL");
+                        imageURL.setValue(profileImageURL);
                     }
-                });
+                } else {
+                    // Error al obtener datos del usuario de Firestore
+                }
+            }
+        });
     }
 
     public MutableLiveData<String> getUsername() {
@@ -99,40 +70,106 @@ public class ProfileViewModel extends ViewModel {
         return imageURL;
     }
 
-    public void uploadImage(Context context, Uri mImageUri) {
-        if (mImageUri != null) {
-            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
-                    + "." + getFileExtension(context, mImageUri));
+    public void getCurrentUserProvider(OnCompleteListener<DocumentSnapshot> listener) {
+        dbm.getUser(firebaseUser.getUid(), listener);
+    }
 
-            fileReference.putFile(mImageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Toast.makeText(context, "Upload successful", Toast.LENGTH_LONG).show();
-                            Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
-                            downloadUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    String imageUrl = uri.toString();
-                                    // TODO: Aquí es donde debes guardar la URL de la imagen en la base de datos de Firebase Realtime Database o Cloud Firestore
-                                }
-                            });
+    public void cambiarNombreUsuario(String new_username, Context context) {
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(new_username)
+                .build();
+        firebaseUser.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            // El nombre de usuario se ha actualizado correctamente
+                            Toast.makeText(context, "Nombre de usuario actualizado", Toast.LENGTH_SHORT).show();
+                            username.setValue(firebaseUser.getDisplayName());
+                            dbm.updateUserUsername(firebaseUser.getUid(), new_username);
+                        } else {
+                            // Se produjo un error al actualizar el nombre de usuario
+                            Toast.makeText(context, "Error al actualizar el nombre de usuario", Toast.LENGTH_SHORT).show();
                         }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
+                    }
+                });
+    }
+
+    public void cambiarContrasena(String current_password, String new_password, Context context) {
+        if (firebaseUser != null) {
+            // Crear credencial de autenticación con el correo electrónico del usuario y la contraseña actual
+            AuthCredential credential = EmailAuthProvider.getCredential(firebaseUser.getEmail(), current_password);
+
+            // Reautenticar al usuario con la credencial creada anteriormente
+            firebaseUser.reauthenticate(credential)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                // El usuario ha sido reautenticado correctamente, actualizar la contraseña
+                                firebaseUser.updatePassword(new_password)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    // La contraseña se ha actualizado correctamente
+                                                    Toast.makeText(context, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    // Se produjo un error al actualizar la contraseña
+                                                    Toast.makeText(context, "Error al actualizar la contraseña", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                            } else {
+                                // Se produjo un error al reautenticar al usuario
+                                Toast.makeText(context, "Error al reautenticar al usuario", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
-        } else {
-            Toast.makeText(context, "No image selected", Toast.LENGTH_LONG).show();
         }
     }
 
-    private String getFileExtension(Context context, Uri uri) {
-        ContentResolver contentResolver = context.getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
+    public void cambiarCorreoElectronico(String new_email, String password, Context context) {
+        AuthCredential credential = EmailAuthProvider.getCredential(firebaseUser.getEmail(), password);
+        firebaseUser.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            firebaseUser.updateEmail(new_email)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                // El correo electrónico se ha actualizado correctamente
+                                                Toast.makeText(context, "Correo electrónico actualizado", Toast.LENGTH_SHORT).show();
+                                                email.setValue(firebaseUser.getEmail());
+                                                dbm.updateUserEmail(firebaseUser.getUid(), new_email);
+                                            } else {
+                                                // Se produjo un error al actualizar el correo electrónico
+                                                Toast.makeText(context, "Error al actualizar el correo electrónico", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                        } else {
+                            // Se produjo un error al autenticar al usuario
+                            Toast.makeText(context, "Error al autenticar al usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
+
+    public void cambiarImagenPerfil(Uri imagenPerfilUri, Context context) {
+        dbm.subirImagenPerfil(firebaseUser.getUid(), imagenPerfilUri,
+                url -> {
+                    // La imagen se subió exitosamente y se obtuvo la URL
+                    dbm.updateUserImageUrl(firebaseUser.getUid(), url.toString());
+                    imageURL.setValue(url.toString());
+                });
+    }
+
+
+
+
 }

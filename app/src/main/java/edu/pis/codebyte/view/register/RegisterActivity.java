@@ -84,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         .build();
                                 user.updateProfile(profileUpdates);
 
-                                dbm.addUserToDatabase(user.getUid(), user.getDisplayName(), user.getEmail());
+                                dbm.addUserToDatabase(user.getUid(), user.getDisplayName(), user.getEmail(), "email_password");
 
                                 goToLogIn();
 

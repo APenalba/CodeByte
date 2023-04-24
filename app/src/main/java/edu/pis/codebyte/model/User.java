@@ -7,11 +7,22 @@ public class User {
     private String username;
     private String uImageURL;
     private String email;
+    private String provider;
 
-    public User(String uId, String username, String email) {
+    public User(String uId, String username, String email, String uImageURL, String provider) {
         this.uId = uId;
         this.username = username;
         this.email = email;
+        this.uImageURL = uImageURL;
+        this.provider = provider;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
 
     public String getuId() {

@@ -202,7 +202,7 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
                                     if (authResult.getAdditionalUserInfo().isNewUser()) {
-                                        dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(),mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail());
+                                        dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(),mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail(), "github.com");
                                     }
                                     goToHome();
                                     // User is signed in.
@@ -236,7 +236,7 @@ public class LoginActivity extends AppCompatActivity {
                                     // The OAuth secret can be retrieved by calling:
                                     // ((OAuthCredential)authResult.getCredential()).getSecret().
                                     if (authResult.getAdditionalUserInfo().isNewUser()) {
-                                        dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(),mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail());
+                                        dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(),mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail(), "github.com");
                                     }
                                     goToHome();
                                 }
@@ -291,7 +291,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             if (task.getResult().getAdditionalUserInfo().isNewUser()) {
-                                dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(),mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail());
+                                dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(),mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail(), "google.com");
                             }
                             goToHome();
                         } else {

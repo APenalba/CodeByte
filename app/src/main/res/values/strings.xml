@@ -24,6 +24,8 @@
     <string name="envia">Envía</string>
     <string name="cancelar">Cancelar</string>
     <string name="nuevo_nombre_usuario_hint">Nuevo nombre de usuario </string>
+    <string name="contrasena_actual_hint">Contraseña actual</string>
+    <string name="nueva_contrasena_hint">Nueva contraseña</string>
     <string-array name="idiomas">
         <item>Cambiar idioma</item>
         <item>Castellano</item>
@@ -38,6 +40,10 @@
     <string name="cd_PROFILEACTIVITY_profile_picture">Foto de perfil del usuario</string>
     <string name="cd_PROFILEACTIVITY_logo_add_photo_asset">Icono-boton para cambiar la foto de perfil</string>
     <string name="boton_cambiar_foto_perfil">Boton cambiar foto perfil</string>
+    <string name="error_empty_password">Error contraseña vacia</string>
+    <string name="error_empty_email">Error contraseña vacia</string>
+    <string name="nuevo_email_hint">Email nuevo</string>
+    <string name="password_hint">Contraseña actual</string>
 
 
 </resources>
