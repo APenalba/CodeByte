@@ -17,6 +17,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.Date;
+
 import edu.pis.codebyte.model.DataBaseManager;
 import edu.pis.codebyte.model.User;
 
@@ -169,7 +171,16 @@ public class ProfileViewModel extends ViewModel {
                 });
     }
 
+    public void enviarComentario(String contenidoComentario, Context context) {
+        // Obtener la fecha actual
+        Date fechaActual = new Date();
 
+        // Obtener el usuario actual (por ejemplo, de la sesión)
+        String usuarioActual = firebaseUser.getUid();
+
+        // Guardar el comentario en Firestore
+        dbm.agregarComentario(usuarioActual, contenidoComentario, fechaActual, context);
+    }
 
 
 }

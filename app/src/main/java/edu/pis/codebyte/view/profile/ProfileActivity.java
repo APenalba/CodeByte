@@ -63,8 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
         cambiarProfileImage_button_setup();
         cambiarUsername_button_setup();
 
-        enviaProblema_button = findViewById(R.id.btn_enviaProblema);
-        problema = findViewById(R.id.editText_problem);
+        enviarProblema_setup();
         idioma = findViewById(R.id.spinner_idiomas);
     }
 
@@ -155,6 +154,19 @@ public class ProfileActivity extends AppCompatActivity {
                 } else {
                     cambiarContraseña();
                 }
+            }
+        });
+    }
+
+    private void enviarProblema_setup() {
+        enviaProblema_button = findViewById(R.id.btn_enviaProblema);
+        problema = findViewById(R.id.editText_problem);
+        enviaProblema_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String contenidoComentario = problema.getText().toString();
+                profileVM.enviarComentario(contenidoComentario, ProfileActivity.this);
+                problema.setText("");
             }
         });
     }

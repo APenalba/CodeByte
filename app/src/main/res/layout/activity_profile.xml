@@ -162,17 +162,16 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:fontFamily="@font/quicksand_medium"
-        android:inputType="textPersonName"
+        android:hint="@string/enviar_problema_hint"
+        android:inputType="textMultiLine"
         android:lineSpacingExtra="14sp"
-        android:text="@string/textbox_problem_report"
-        android:textSize="10sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/report_problem_textView"
         app:layout_constraintVertical_bias="0.005"
-        tools:ignore="LabelFor,SmallSp"
-        android:autofillHints="" />
+        tools:ignore="LabelFor,SmallSp" />
 
     <Spinner
         android:id="@+id/spinner_idiomas"

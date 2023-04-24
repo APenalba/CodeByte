@@ -2,8 +2,10 @@ package edu.pis.codebyte.model;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -21,6 +23,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -181,5 +184,29 @@ public class DataBaseManager {
     public void getUser(String uid, OnCompleteListener<DocumentSnapshot> listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(uid).get().addOnCompleteListener(listener);
+    }
+
+    public void agregarComentario(String usuario, String comentario, Date fecha, Context context) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Map<String, Object> comentarioData = new HashMap<>();
+        comentarioData.put("usuario", usuario);
+        comentarioData.put("comentario", comentario);
+        comentarioData.put("fecha", fecha);
+
+        db.collection("comments")
+                .add(comentarioData)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(context, "Problema enviado correctamente", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "Problema al enviar el problema", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

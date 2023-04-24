@@ -44,6 +44,7 @@
     <string name="error_empty_email">Error contraseña vacia</string>
     <string name="nuevo_email_hint">Email nuevo</string>
     <string name="password_hint">Contraseña actual</string>
+    <string name="enviar_problema_hint">Indicanos aqui el problema</string>
 
 
 </resources>
