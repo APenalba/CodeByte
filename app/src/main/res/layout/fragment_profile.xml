@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.profile.ProfileActivity">
+    tools:context=".view.profile.ProfileFragment">
 
     <ImageView
         android:id="@+id/logo_profile_asset"
@@ -37,7 +37,7 @@
         app:srcCompat="@drawable/icon_menu" />
 
     <ImageView
-        android:id="@+id/profile_picture"
+        android:id="@+id/userImage_ImageView"
         android:layout_width="0dp"
         android:layout_height="124dp"
         android:layout_marginStart="130dp"
@@ -63,7 +63,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_picture"
+        app:layout_constraintTop_toBottomOf="@+id/userImage_ImageView"
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="TextSizeCheck" />
 
@@ -87,7 +87,7 @@
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/btn_username"
+        android:id="@+id/cambiarUsername_button"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -118,7 +118,7 @@
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/btn_enviaProblema"
+        android:id="@+id/enviarProblema_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="52dp"
@@ -141,7 +141,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_username"
+        app:layout_constraintTop_toBottomOf="@+id/cambiarUsername_button"
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="TextContrastCheck" />
 
@@ -161,7 +161,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
-        android:id="@+id/editText_problem"
+        android:id="@+id/problema_editText"
         android:layout_width="285dp"
         android:layout_height="131dp"
         android:layout_marginTop="8dp"
@@ -188,7 +188,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.08"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_enviaProblema"
+        app:layout_constraintTop_toBottomOf="@+id/enviarProblema_button"
         app:layout_constraintVertical_bias="0.679"
         tools:ignore="TextSizeCheck" />
 

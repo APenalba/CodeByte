@@ -3,6 +3,7 @@ package edu.pis.codebyte.view.login;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.transition.platform.MaterialFadeThrough;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,7 +35,7 @@ import edu.pis.codebyte.model.DataBaseManager;
 import edu.pis.codebyte.model.LoginUtils;
 import edu.pis.codebyte.model.exceptions.InvalidEmailException;
 import edu.pis.codebyte.model.exceptions.InvalidPasswordException;
-import edu.pis.codebyte.view.profile.ProfileActivity;
+import edu.pis.codebyte.view.main.MainActivity;
 import edu.pis.codebyte.view.register.RegisterActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -56,6 +58,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setEnterTransition(new MaterialFadeThrough());
+        getWindow().setExitTransition(new MaterialFadeThrough());
         setContentView(R.layout.activity_login);
         dbm = DataBaseManager.getInstance();
         prefs = getSharedPreferences(PREFERENCES_FILE, MODE_PRIVATE);
@@ -308,11 +312,10 @@ public class LoginActivity extends AppCompatActivity {
     private void goToNewActivity(Class<?> cls) {
         keepSession();
         Intent intent = new Intent(this, cls);
-        startActivity(intent);
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
         this.onPause();
     }
     private void goToHome() {
-        goToNewActivity(ProfileActivity.class);
-        finish();
+        goToNewActivity(MainActivity.class);
     }
 }
