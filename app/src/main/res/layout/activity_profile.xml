@@ -84,7 +84,7 @@
 
     <Button
         android:id="@+id/btn_username"
-        android:layout_width="wrap_content"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:backgroundTint="#9C5CF5"
