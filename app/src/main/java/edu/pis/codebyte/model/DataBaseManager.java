@@ -19,6 +19,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -272,5 +273,46 @@ public class DataBaseManager {
                 }
             }
         });
+    }
+
+    public void recuperarTemasCompletados(String uId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Recuperar los temas completados del usuario
+        db.collection("Progreso").document(uId).collection("TemasCompletados").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Log.d(TAG, "Tema completado: " + documentSnapshot.getId());
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error al recuperar el progreso del usuario", e);
+                    }
+                });
+    }
+
+    public void registrarTemaCompletado(String uId, String idTema) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Agregar un tema completado al progreso del usuario
+        db.collection("Progreso").document(uId).collection("TemasCompletados").document(idTema).set(new HashMap<String, Object>())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Tema completado añadido al progreso del usuario");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error al añadir el tema completado al progreso del usuario", e);
+                    }
+                });
+
     }
 }

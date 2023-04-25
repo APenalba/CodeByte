@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,7 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
     private CheckBox terminosYcondiciones;
     private String email, password;
     private DataBaseManager dbm;
-    private ProgressDialog progressDialog;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +54,9 @@ public class RegisterActivity extends AppCompatActivity {
         signUp_button = findViewById(R.id.reg_signup_bttn);
         login_button = findViewById(R.id.reg_login_bttn);
         terminosYcondiciones = findViewById(R.id.terminosCondiciones_checkBox);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Cargando...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.bringToFront();
+        progressBar.setVisibility(View.GONE);
         signUp_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
             LoginUtils.isValidEmail(email);
             LoginUtils.isSecurePassword(password);
             LoginUtils.areTermsAndConditionsAccepted(terminosYcondiciones.isChecked());
-            progressDialog.show();
+            progressBar.setVisibility(View.VISIBLE);
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -92,13 +93,12 @@ public class RegisterActivity extends AppCompatActivity {
                                         .setDisplayName(username)
                                         .build();
                                 user.updateProfile(profileUpdates);
-
                                 dbm.addUserToDatabase(user.getUid(), user.getDisplayName(), user.getEmail(), "email_password");
                                 goToLogIn();
 
                             } else {
-                                Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+                                Snackbar.make(signUp_button, "Authentication failed.",Snackbar.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
                             }
                         }
                     });
@@ -107,16 +107,17 @@ public class RegisterActivity extends AppCompatActivity {
             // Si el email no es válido, marcar el TextView de email con error y mostrar un mensaje de error
             email_text.setError("El email proporcionado no es válido.");
             email_text.requestFocus();
-            Toast.makeText(RegisterActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            Snackbar.make(email_text, e.toString(),Snackbar.LENGTH_SHORT).show();
         } catch (WeakPasswordException e) {
             // Si la contraseña no es segura, marcar el TextView de contraseña con error y mostrar un mensaje de error
             password_text.setError("La contraseña proporcionada no es segura. Por favor, utiliza una contraseña más segura.");
             password_text.requestFocus();
-            Toast.makeText(RegisterActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            Snackbar.make(email_text, e.toString(),Snackbar.LENGTH_SHORT).show();
         } catch (TermsAndConditionsNotAcceptedException e) {
+            // Si el usuario no acepta los terminos y condiciones se marca el checkbox con error
             terminosYcondiciones.setError("Debes aceptar los terminos y condiciones");
             terminosYcondiciones.requestFocus();
-            Toast.makeText(RegisterActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            Snackbar.make(email_text, e.toString(),Snackbar.LENGTH_SHORT).show();
         }
     }
 
