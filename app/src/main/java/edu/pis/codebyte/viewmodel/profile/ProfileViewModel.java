@@ -33,6 +33,11 @@ public class ProfileViewModel extends ViewModel {
 
     public ProfileViewModel() {
         dbm = DataBaseManager.getInstance();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        username = new MutableLiveData<>(firebaseUser.getDisplayName());
+        email = new MutableLiveData<>(firebaseUser.getEmail());
+        imageURL = new MutableLiveData<>("");
+        userProvider = new MutableLiveData<>("");
         dbm.setOnLoadUserPicture(new DataBaseManager.OnLoadUserPictureUrlListener() {
             @Override
             public void onLoadUserPictureUrl(String pictureUrl) {
@@ -45,10 +50,6 @@ public class ProfileViewModel extends ViewModel {
                 userProvider.setValue(newProvider);
             }
         });
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        username = new MutableLiveData<>(firebaseUser.getDisplayName());
-        email = new MutableLiveData<>(firebaseUser.getEmail());
-        imageURL = new MutableLiveData<>("");
         dbm.loadImageURL();
         dbm.loadUserProvider();
     }
