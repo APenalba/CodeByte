@@ -30,6 +30,7 @@
         <item>Castellano</item>
         <item>Catalán</item>
     </string-array>
+    <string name="lenguaje">Lenguaje actual</string>
 
 
     <!--Content Descriptions-->
