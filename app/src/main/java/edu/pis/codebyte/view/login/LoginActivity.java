@@ -72,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void checkSession() {
+
         boolean saveSession = prefs.getBoolean("saveSession", false);
         if (saveSession) {
             if (mAuth.getCurrentUser() == null) {

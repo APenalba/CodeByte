@@ -13,7 +13,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,12 +23,13 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
 import edu.pis.codebyte.R;
+import edu.pis.codebyte.model.LoginUtils;
+import edu.pis.codebyte.model.exceptions.InvalidEmailException;
+import edu.pis.codebyte.model.exceptions.WeakPasswordException;
 import edu.pis.codebyte.viewmodel.profile.ProfileViewModel;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -67,26 +67,9 @@ public class ProfileActivity extends AppCompatActivity {
         idioma = findViewById(R.id.spinner_idiomas);
     }
 
-    private void getUserProvider() {
-        profileVM.getCurrentUserProvider(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    // Crear objeto User con los datos del usuario de Firestore
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        String provider = document.getString("provider");
-                        userProvider = provider;
-                        cambiarPassword_button_setup();
-                        cambiarCorreo_button_setup();
-                    }
-                } else {
-                    // Error al obtener datos del usuario de Firestore
-                }
-            }
-        });
-    }
-
+    /**
+     * Este metodo inicializa el textView que muestra el email
+     */
     private void email_textView_setup() {
         email_textView = findViewById(R.id.correo_textView);
         final Observer<String> observerEmail = new Observer<String>() {
@@ -98,6 +81,9 @@ public class ProfileActivity extends AppCompatActivity {
         profileVM.getEmail().observe(this, observerEmail);
     }
 
+    /**
+     * Este metodo inicializa el textView que muestra el username
+     */
     private void username_textView_setup() {
         username_textView = findViewById(R.id.username_textView);
         final Observer<String> observerUsername = new Observer<String>() {
@@ -110,6 +96,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Este metodo inicializa el boton para cambiar el username del usuario
+     */
     private void cambiarUsername_button_setup() {
         Button cambiarUsername_button = findViewById(R.id.btn_username);
         cambiarUsername_button.setOnClickListener(new View.OnClickListener() {
@@ -120,12 +109,15 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Este metodo inicializa ele imageView de la foto de perfil del usuario
+     */
     private void cambiarProfileImage_button_setup() {
         pfp = findViewById(R.id.profile_picture);
         pfp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFileChooser();
+                cambiarUserImage();
             }
         });
         final Observer<String> observerImage = new Observer<String>() {
@@ -134,11 +126,35 @@ public class ProfileActivity extends AppCompatActivity {
                 if(!imageURL.isEmpty()) Picasso.get().load(imageURL)
                             .transform(new CropCircleTransformation())
                             .into(pfp);
+                else {
+
+               }
             }
         };
         profileVM.getImageURL().observe(this, observerImage);
     }
 
+    /**
+     * Este metodo carga el provider del usuario
+     */
+    private void getUserProvider() {
+        final Observer<String> observerProvider = new Observer<String>() {
+            @Override
+            public void onChanged(String newUserProvider) {
+                userProvider = newUserProvider;
+                // Llamo aqui a estos metodos porque para la correcta ejecución necesitan saber el
+                // userProvider ya que este determinara si los botones deben funcionar o no
+                cambiarPassword_button_setup();
+                cambiarCorreo_button_setup();
+            }
+        };
+
+        profileVM.getUserProvider().observe(this,observerProvider);
+    }
+
+    /**
+     * Inicializa el boton para cambiar la contraseña
+     */
     private void cambiarPassword_button_setup() {
 
         Button cambiarContraseña_button = findViewById(R.id.btn_contrasena);
@@ -158,6 +174,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Inicializa el boton para enviar un problema o comentario
+     */
     private void enviarProblema_setup() {
         enviaProblema_button = findViewById(R.id.btn_enviaProblema);
         problema = findViewById(R.id.editText_problem);
@@ -171,6 +190,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Inicializa el boton para cambiar el correo del usuario
+     */
     private void cambiarCorreo_button_setup() {
         Button cambiarEmail_button = findViewById(R.id.btn_correo);
         if (userProvider.equals("google.com") || userProvider.equals("github.com")) {
@@ -188,82 +210,14 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        }
-
-    private void cambiarContraseña() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View view = getLayoutInflater().inflate(R.layout.change_password_dialog, null);
-        builder.setView(view);
-        builder.setTitle("Cambiar contraseña");
-        builder.setPositiveButton(R.string.guardar, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                EditText current_password_editText = view.findViewById(R.id.current_password_editText);
-                EditText new_password_editText = view.findViewById(R.id.new_password_editText);
-
-                String current_password = current_password_editText.getText().toString().trim();
-                String new_password = new_password_editText.getText().toString().trim();
-
-                if(!current_password.isEmpty() && !new_password.isEmpty()) {
-                    profileVM.cambiarContrasena(current_password, new_password, ProfileActivity.this);
-                }
-            }
-        });
-        builder.setNegativeButton(R.string.cancelar, null);
-        builder.show();
     }
 
-    private void cambiarCorreo() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View view = getLayoutInflater().inflate(R.layout.input_email_password_dialog, null);
-        builder.setView(view);
-        builder.setTitle("Cambiar correo");
-
-        EditText newEmailEditText = view.findViewById(R.id.new_email_editText);
-        EditText currentPasswordEditText = view.findViewById(R.id.password_editText);
-
-        builder.setPositiveButton(R.string.guardar, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String newEmail = newEmailEditText.getText().toString().trim();
-                String currentPassword = currentPasswordEditText.getText().toString().trim();
-
-                if (TextUtils.isEmpty(newEmail)) {
-                    Toast.makeText(ProfileActivity.this, R.string.error_empty_email, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (TextUtils.isEmpty(currentPassword)) {
-                    Toast.makeText(ProfileActivity.this, R.string.error_empty_password, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                profileVM.cambiarCorreoElectronico(newEmail, currentPassword, ProfileActivity.this);
-            }
-        });
-        builder.setNegativeButton(R.string.cancelar, null);
-        builder.show();
-    }
-
-    private void openFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
-            mImageUri = data.getData();
-            profileVM.cambiarImagenPerfil(mImageUri, ProfileActivity.this);
-        }
-    }
-
+    /**
+     * Este metodo abre unintent para que el usuario pueda cambiar su username
+     */
     private void cambiarUsername() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View view = getLayoutInflater().inflate(R.layout.input_edittext_dialog, null);
+        View view = getLayoutInflater().inflate(R.layout.change_username_dialog, null);
         builder.setView(view);
         builder.setTitle("Cambiar nombre de usuario");
         builder.setPositiveButton(R.string.guardar, new DialogInterface.OnClickListener() {
@@ -278,5 +232,94 @@ public class ProfileActivity extends AppCompatActivity {
         });
         builder.setNegativeButton(R.string.cancelar, null);
         builder.show();
+    }
+
+    /**
+     * Este metodo inicializa un fragment para que el usuario pueda cambiar la contraseña
+     */
+    private void cambiarContraseña() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.change_password_dialog, null);
+        builder.setView(view);
+        builder.setTitle("Cambiar contraseña");
+        builder.setPositiveButton(R.string.guardar, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                EditText current_password_editText = view.findViewById(R.id.current_password_editText);
+                EditText new_password_editText = view.findViewById(R.id.new_password_editText);
+
+                String current_password = current_password_editText.getText().toString().trim();
+                String new_password = new_password_editText.getText().toString().trim();
+
+                try {
+                    LoginUtils.isSecurePassword(new_password);
+                    profileVM.cambiarContrasena(current_password, new_password, ProfileActivity.this);
+                } catch (WeakPasswordException e) {
+                    Toast.makeText(ProfileActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.cancelar, null);
+        builder.show();
+    }
+
+    /**
+     * Este metodo inicializa un fragment para que el usuario pueda cambiar el email
+     */
+    private void cambiarCorreo() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.change_email_dialog, null);
+        builder.setView(view);
+        builder.setTitle("Cambiar correo");
+
+        EditText newEmailEditText = view.findViewById(R.id.new_email_editText);
+        EditText currentPasswordEditText = view.findViewById(R.id.password_editText);
+
+        builder.setPositiveButton(R.string.guardar, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String newEmail = newEmailEditText.getText().toString().trim();
+                String currentPassword = currentPasswordEditText.getText().toString().trim();
+                try {
+                    LoginUtils.isValidEmail(newEmail);
+                } catch (InvalidEmailException e) {
+                    Toast.makeText(ProfileActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                profileVM.cambiarCorreoElectronico(newEmail, currentPassword, ProfileActivity.this);
+            }
+        });
+        builder.setNegativeButton(R.string.cancelar, null);
+        builder.show();
+    }
+
+    /**
+     * Este metodo abre un intent para que el usuario pueda cambiar su imagen
+     */
+    private void cambiarUserImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    /**
+     * Este metodo espera a que el usuario seleccione una imagen de su dispositivo
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            mImageUri = data.getData();
+            profileVM.cambiarImagenPerfil(mImageUri, ProfileActivity.this);
+        }
     }
 }

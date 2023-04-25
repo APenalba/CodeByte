@@ -20,7 +20,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.Date;
 
 import edu.pis.codebyte.model.DataBaseManager;
-import edu.pis.codebyte.model.User;
 
 
 public class ProfileViewModel extends ViewModel {
@@ -28,40 +27,38 @@ public class ProfileViewModel extends ViewModel {
     private MutableLiveData<String> username;
     private MutableLiveData<String> email;
     private MutableLiveData<String> imageURL;
+    private MutableLiveData<String> userProvider;
     private DataBaseManager dbm;
-    private User currentUser;
     private FirebaseUser firebaseUser;
 
     public ProfileViewModel() {
         dbm = DataBaseManager.getInstance();
+        dbm.setOnLoadUserPicture(new DataBaseManager.OnLoadUserPictureUrlListener() {
+            @Override
+            public void onLoadUserPictureUrl(String pictureUrl) {
+                imageURL.setValue(pictureUrl);
+            }
+        });
+        dbm.setProviderListener(new DataBaseManager.OnLoadUserProviderListener() {
+            @Override
+            public void onLoadUserProvider(String newProvider) {
+                userProvider.setValue(newProvider);
+            }
+        });
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         username = new MutableLiveData<>(firebaseUser.getDisplayName());
         email = new MutableLiveData<>(firebaseUser.getEmail());
         imageURL = new MutableLiveData<>("");
-        setImageURL();
-
-    }
-
-    public void setImageURL() {
-        dbm.getUser(firebaseUser.getUid(), new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    // Crear objeto User con los datos del usuario de Firestore
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        String profileImageURL = document.getString("profileImageURL");
-                        imageURL.setValue(profileImageURL);
-                    }
-                } else {
-                    // Error al obtener datos del usuario de Firestore
-                }
-            }
-        });
+        dbm.loadImageURL();
+        dbm.loadUserProvider();
     }
 
     public MutableLiveData<String> getUsername() {
         return username;
+    }
+
+    public MutableLiveData<String> getUserProvider() {
+        return userProvider;
     }
 
     public MutableLiveData<String> getEmail() {
@@ -73,7 +70,7 @@ public class ProfileViewModel extends ViewModel {
     }
 
     public void getCurrentUserProvider(OnCompleteListener<DocumentSnapshot> listener) {
-        dbm.getUser(firebaseUser.getUid(), listener);
+        dbm.getUserDocument(firebaseUser.getUid(), listener);
     }
 
     public void cambiarNombreUsuario(String new_username, Context context) {
@@ -100,25 +97,20 @@ public class ProfileViewModel extends ViewModel {
 
     public void cambiarContrasena(String current_password, String new_password, Context context) {
         if (firebaseUser != null) {
-            // Crear credencial de autenticación con el correo electrónico del usuario y la contraseña actual
             AuthCredential credential = EmailAuthProvider.getCredential(firebaseUser.getEmail(), current_password);
 
-            // Reautenticar al usuario con la credencial creada anteriormente
             firebaseUser.reauthenticate(credential)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                // El usuario ha sido reautenticado correctamente, actualizar la contraseña
                                 firebaseUser.updatePassword(new_password)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
-                                                    // La contraseña se ha actualizado correctamente
                                                     Toast.makeText(context, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
                                                 } else {
-                                                    // Se produjo un error al actualizar la contraseña
                                                     Toast.makeText(context, "Error al actualizar la contraseña", Toast.LENGTH_SHORT).show();
                                                 }
                                             }

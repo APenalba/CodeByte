@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -21,18 +22,31 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class DataBaseManager {
     private static DataBaseManager dbm;
-    private StorageReference mStorageRef;
+    private FirebaseFirestore db;
+    private OnLoadUserPictureUrlListener userPictureUrlListener;
+    private OnLoadUserProviderListener providerListener;
+
+
+
+
+    public interface OnLoadUserPictureUrlListener {
+        public void onLoadUserPictureUrl(String pictureUrl);
+    }
+
+    public interface OnLoadUserProviderListener {
+        public void onLoadUserProvider(String userProvider);
+    }
 
     private DataBaseManager() {
-        mStorageRef = FirebaseStorage.getInstance().getReference();
+        db = FirebaseFirestore.getInstance();
     }
 
     public static DataBaseManager getInstance() {
@@ -40,8 +54,22 @@ public class DataBaseManager {
         return dbm;
     }
 
+    public void setProviderListener(OnLoadUserProviderListener providerListener) {
+        this.providerListener = providerListener;
+    }
 
-    public boolean addUserToDatabase(String uId, String username, String email, String provider) {
+    public void setOnLoadUserPicture(OnLoadUserPictureUrlListener listener) {
+        this.userPictureUrlListener = listener;
+    }
+
+    /**
+     * Este metodo añade un usuario a la coleccion "users" de Firestore
+     * @param uId
+     * @param username
+     * @param email
+     * @param provider (google.com / github.com / email_password)
+     */
+    public void addUserToDatabase(String uId, String username, String email, String provider) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collection = db.collection("users");
 
@@ -57,28 +85,21 @@ public class DataBaseManager {
                     user.put("profileImageURL", "" );
                     user.put("provider", provider);
                     transaction.set(document, user);
-                    Log.d(TAG, "DocumentSnapshot added with ID: " + uId);
+                    Log.d(TAG, "Usuario con ID " + uId + " añadido a la base de datos");
                 } else {
-                    Log.d(TAG, "User already exists with ID: " + uId);
+                    Log.d(TAG, "Ya existe un usuario con ID" + uId);
                 }
                 return null;
             }
-        }).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "Transaction succeeded");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Transaction failed", e);
-            }
         });
-        return true;
     }
 
+    /**
+     * Actualiza el username de un usuario
+     * @param uId
+     * @param new_username
+     */
     public void updateUserUsername(String uId, String new_username) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(uId);
 
         Map<String, Object> updates = new HashMap<>();
@@ -87,17 +108,22 @@ public class DataBaseManager {
         docRef.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "Username updated on DB successfully");
+                Log.d(TAG, "Username del usuario con ID \" + uId + \"actualizado correctamente");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error updating username on DB", e);
+                Log.w(TAG, "Error al actualizar el username del usuario con ID " + uId, e);
             }
         });
     }
 
 
+    /**
+     * Este metodo actualiza el correo de un usuario
+     * @param uId
+     * @param new_email
+     */
     public void updateUserEmail(String uId, String new_email) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(uId);
@@ -108,56 +134,44 @@ public class DataBaseManager {
         docRef.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "Email updated successfully");
+                Log.d(TAG, "Email del usuario con ID \" + uId + \"actualizado correctamente");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error updating email", e);
+                Log.w(TAG, "Error al actualizar el email del usuario con ID \" + uId", e);
             }
         });
     }
 
-    public void updateUserProfileImageURL(String uId, String newProfileImageURL) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("users").document(uId);
-
-        Map<String, Object> updates = new HashMap<>();
-        updates.put("profileImageURL", newProfileImageURL);
-
-        docRef.update(updates)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Profile image URL updated successfully");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating profile image URL", e);
-                    }
-                });
-    }
-
+    /**
+     * Metodo para subir una imagen a Firebase Storage
+     * @param uId
+     * @param imagenPerfilUri
+     * @param successListener
+     */
     public void subirImagenPerfil(String uId, Uri imagenPerfilUri, OnSuccessListener<Uri> successListener) {
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference userImageRef = storageRef.child("userImages/" + uId + ".jpg");
 
         userImageRef.putFile(imagenPerfilUri)
                 .addOnSuccessListener(taskSnapshot -> {
-                    // La imagen se subió exitosamente
-                    // Guarda el link de la imagen en Firestore
+                    Log.d(TAG, "Imagen subida correctamente");
                     userImageRef.getDownloadUrl().addOnSuccessListener(successListener);
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        // Error al subir la imagen
+                        Log.w(TAG, "Error al subir la imagen a la base de datos", e);
                     }
                 });
     }
 
+    /**
+     * Metodo para actualizar la imagen de un usuario
+     * @param uId
+     * @param imageUrl
+     */
     public void updateUserImageUrl(String uId, String imageUrl) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference userRef = db.collection("users").document(uId);
@@ -169,23 +183,35 @@ public class DataBaseManager {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        // Link de la imagen guardado exitosamente en Firestore
+                        Log.d(TAG, "Imagen del usuario con ID \" + uId + \"actualizada correctamente");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        // Error al guardar el link de la imagen en Firestore
+                        Log.w(TAG, "Error al actualizar la imagen del usuario con ID \" + uId", e);
                     }
                 });
 
     }
 
-    public void getUser(String uid, OnCompleteListener<DocumentSnapshot> listener) {
+    /**
+     * Este metodo devuelve el documento de un usuario a traves de un listener por parametros
+     * @param uid
+     * @param listener OnCompleteListener<DocumentSnapshot>
+     */
+    public void getUserDocument(String uid, OnCompleteListener<DocumentSnapshot> listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(uid).get().addOnCompleteListener(listener);
     }
 
+    /**
+     * Este metodo añade a la coleccion "comments" de Firestore un comentario o problema indicado por un usuario
+     * @param usuario
+     * @param comentario
+     * @param fecha
+     * @param context
+     */
     public void agregarComentario(String usuario, String comentario, Date fecha, Context context) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -208,5 +234,43 @@ public class DataBaseManager {
                         Toast.makeText(context, "Problema al enviar el problema", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    public void loadImageURL() {
+        dbm.getUserDocument(FirebaseAuth.getInstance().getCurrentUser().getUid(), new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    // Crear objeto User con los datos del usuario de Firestore
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String profileImageURL = document.getString("profileImageURL");
+                        //imageURL.setValue(profileImageURL);ç
+                        userPictureUrlListener.onLoadUserPictureUrl(profileImageURL);
+                    }
+                } else {
+                    // Error al obtener datos del usuario de Firestore
+                }
+            }
+        });
+    }
+
+    public void loadUserProvider() {
+        dbm.getUserDocument(FirebaseAuth.getInstance().getCurrentUser().getUid(), new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    // Crear objeto User con los datos del usuario de Firestore
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String profileImageURL = document.getString("profileImageURL");
+                        //imageURL.setValue(profileImageURL);ç
+                        userPictureUrlListener.onLoadUserPictureUrl(profileImageURL);
+                    }
+                } else {
+                    // Error al obtener datos del usuario de Firestore
+                }
+            }
+        });
     }
 }

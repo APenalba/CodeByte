@@ -95,7 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
 
-        }catch (InvalidEmailException e) {
+        } catch (InvalidEmailException e) {
             // Si el email no es válido, marcar el TextView de email con error y mostrar un mensaje de error
             email_text.setError("El email proporcionado no es válido.");
             email_text.requestFocus();
