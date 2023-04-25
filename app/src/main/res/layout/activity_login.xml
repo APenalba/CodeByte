@@ -10,6 +10,7 @@
         android:id="@+id/forgotPassword_textView"
         android:layout_width="196dp"
         android:layout_height="22dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="36dp"
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/forgot_password"
@@ -17,17 +18,18 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.157"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/google_bttn"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.078"
         tools:ignore="TextSizeCheck,VisualLintBounds" />
 
     <TextView
         android:id="@+id/noCuenta_textView"
         android:layout_width="196dp"
         android:layout_height="22dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/no_tienes_cuenta"
@@ -35,10 +37,10 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.143"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/forgotPassword_textView"
-        app:layout_constraintVertical_bias="0.285"
+        app:layout_constraintVertical_bias="0.0"
         tools:ignore="TextSizeCheck,VisualLintBounds" />
 
     <TextView
@@ -155,11 +157,12 @@
 
     <Button
         android:id="@+id/google_bttn"
-        android:layout_width="154dp"
-        android:layout_height="50dp"
+        android:layout_width="158dp"
+        android:layout_height="57dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:backgroundTint="#EAEAEA"
+        android:drawableTop="@drawable/google_logo_1"
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/google"
         android:textColor="#1268B3"
@@ -170,11 +173,12 @@
 
     <Button
         android:id="@+id/github_bttn"
-        android:layout_width="154dp"
-        android:layout_height="50dp"
+        android:layout_width="157dp"
+        android:layout_height="59dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="36dp"
         android:backgroundTint="#425892"
+        android:drawableTop="@drawable/github_logo"
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/github"
         app:layout_constraintEnd_toEndOf="parent"
@@ -197,7 +201,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="26dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="32dp"
         android:backgroundTint="#FFFFFF"
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/recupera_contraseña"
@@ -205,10 +209,10 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.156"
+        app:layout_constraintHorizontal_bias="0.846"
         app:layout_constraintStart_toEndOf="@+id/forgotPassword_textView"
         app:layout_constraintTop_toBottomOf="@+id/github_bttn"
-        app:layout_constraintVertical_bias="0.009"
+        app:layout_constraintVertical_bias="0.01"
         tools:ignore="MissingConstraints,VisualLintBounds" />
 
     <Button
@@ -217,7 +221,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="#FFFFFF"
         android:fontFamily="@font/quicksand_bold"
@@ -226,10 +230,10 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.703"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/noCuenta_textView"
         app:layout_constraintTop_toBottomOf="@+id/recuperaPassword_bttn"
-        app:layout_constraintVertical_bias="0.285"
+        app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints,VisualLintBounds" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

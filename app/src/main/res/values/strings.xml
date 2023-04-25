@@ -27,7 +27,6 @@
     <string name="contrasena_actual_hint">Contraseña actual</string>
     <string name="nueva_contrasena_hint">Nueva contraseña</string>
     <string-array name="idiomas">
-        <item>Cambiar idioma</item>
         <item>Castellano</item>
         <item>Catalán</item>
     </string-array>

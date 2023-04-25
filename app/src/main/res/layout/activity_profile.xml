@@ -56,6 +56,7 @@
         android:id="@+id/username_textView"
         android:layout_width="127dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/username"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -69,6 +70,7 @@
         android:id="@+id/correo_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/quicksand_medium"
         android:text="@string/correotest"
         android:textColor="#B1B1B1"
@@ -97,7 +99,7 @@
 
     <Button
         android:id="@+id/btn_contrasena"
-        android:layout_width="wrap_content"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="#9C5CF5"
@@ -115,19 +117,18 @@
         android:id="@+id/btn_enviaProblema"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="52dp"
         android:backgroundTint="#9C5CF5"
         android:text="@string/envia"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_problem"
-        app:layout_constraintVertical_bias="0.084"
         tools:ignore="TextContrastCheck" />
 
     <Button
         android:id="@+id/btn_correo"
-        android:layout_width="wrap_content"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="#9C5CF5"
