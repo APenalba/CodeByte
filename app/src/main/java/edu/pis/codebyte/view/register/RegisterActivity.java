@@ -1,5 +1,6 @@
 package edu.pis.codebyte.view.register;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -37,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
     private CheckBox terminosYcondiciones;
     private String email, password;
     private DataBaseManager dbm;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +52,18 @@ public class RegisterActivity extends AppCompatActivity {
         signUp_button = findViewById(R.id.reg_signup_bttn);
         login_button = findViewById(R.id.reg_login_bttn);
         terminosYcondiciones = findViewById(R.id.terminosCondiciones_checkBox);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Cargando...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
         signUp_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 createAccount();
             }
         });
+
 
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
             LoginUtils.isValidEmail(email);
             LoginUtils.isSecurePassword(password);
             LoginUtils.areTermsAndConditionsAccepted(terminosYcondiciones.isChecked());
+            progressDialog.show();
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -85,7 +94,6 @@ public class RegisterActivity extends AppCompatActivity {
                                 user.updateProfile(profileUpdates);
 
                                 dbm.addUserToDatabase(user.getUid(), user.getDisplayName(), user.getEmail(), "email_password");
-
                                 goToLogIn();
 
                             } else {
