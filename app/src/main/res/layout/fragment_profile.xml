@@ -41,7 +41,7 @@
         android:layout_width="0dp"
         android:layout_height="124dp"
         android:layout_marginStart="130dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="130dp"
         android:contentDescription="@string/cd_PROFILEACTIVITY_profile_picture"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -118,19 +118,6 @@
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/enviarProblema_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="52dp"
-        android:backgroundTint="#9C5CF5"
-        android:text="@string/envia"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="TextContrastCheck" />
-
-    <Button
         android:id="@+id/btn_correo"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
@@ -145,39 +132,6 @@
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="TextContrastCheck" />
 
-    <TextView
-        android:id="@+id/report_problem_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/quicksand_bold"
-        android:text="@string/problem_report"
-        android:textStyle="bold|italic"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_contrasena"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <EditText
-        android:id="@+id/problema_editText"
-        android:layout_width="285dp"
-        android:layout_height="131dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:fontFamily="@font/quicksand_medium"
-        android:hint="@string/enviar_problema_hint"
-        android:inputType="textMultiLine"
-        android:lineSpacingExtra="14sp"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/report_problem_textView"
-        app:layout_constraintVertical_bias="0.005"
-        tools:ignore="LabelFor,SmallSp" />
-
     <Spinner
         android:id="@+id/spinner_idiomas"
         android:layout_width="231dp"
@@ -186,10 +140,76 @@
         android:spinnerStyle="@style/SpinnerTheme"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.08"
+        app:layout_constraintHorizontal_bias="0.088"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enviarProblema_button"
-        app:layout_constraintVertical_bias="0.679"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintVertical_bias="0.901"
         tools:ignore="TextSizeCheck" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="298dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="20dp"
+        android:background="#EAEAEA"
+        android:backgroundTint="#EAEAEA"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_contrasena">
+
+        <Button
+            android:id="@+id/enviarProblema_button"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:backgroundTint="#9C5CF5"
+            android:text="@string/envia"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField"
+            app:layout_constraintVertical_bias="0.4"
+            tools:ignore="TextContrastCheck" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField"
+            android:layout_width="258dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:boxStrokeWidth="2dp"
+            app:helperTextEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/report_problem_textView">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/problema_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:fontFamily="@font/quicksand_medium"
+                android:gravity="top|left"
+                android:hint="@string/enviar_problema_hint"
+                android:inputType="textMultiLine"
+                android:lineSpacingExtra="14sp"
+                android:maxLines="3"
+                android:minLines="3"
+                android:textSize="16sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <TextView
+            android:id="@+id/report_problem_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/quicksand_bold"
+            android:text="@string/problem_report"
+            android:textStyle="bold|italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
