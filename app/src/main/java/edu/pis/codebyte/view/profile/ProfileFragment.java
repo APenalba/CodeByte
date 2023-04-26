@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -27,6 +26,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 import edu.pis.codebyte.R;
@@ -151,8 +151,10 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (userProvider.equals("google.com") || userProvider.equals("github.com")) {
-                    Toast.makeText(mContext, "Has iniciado sesion con Google o " +
-                            "Github, no puedes cambiar el email de la cuenta desde aqui", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "Has iniciado sesion con Google o " + "Github, no puedes cambiar el email de la cuenta desde aqui", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, "Has iniciado sesion con Google o " +
+                            "Github, no puedes cambiar el email de la cuenta desde aqui", Snackbar.LENGTH_SHORT).show();
+
                 } else {
                     showChangeEmailDialog();
                 }
@@ -174,8 +176,9 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (userProvider.equals("google.com") || userProvider.equals("github.com")) {
-                    Toast.makeText(mContext, "Has iniciado sesion con Google o " +
-                            "Github, no puedes cambiar la contraseña de la cuenta desde aqui", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "Has iniciado sesion con Google o " + "Github, no puedes cambiar la contraseña de la cuenta desde aqui", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, "Has iniciado sesion con Google o " +
+                            "Github, no puedes cambiar la contraseña de la cuenta desde aqui", Snackbar.LENGTH_SHORT).show();
                 } else {
                     showChangePasswordDialog();
                 }
@@ -200,7 +203,8 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 String problemaText = problema.getText().toString();
                 if (problemaText.isEmpty()) {
-                    Toast.makeText(mContext, "Ingrese el problema que tiene", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "Ingrese el problema que tiene", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, "Ingrese el problema que tiene", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 profileVM.enviarComentario(problemaText,mContext);
@@ -226,7 +230,8 @@ public class ProfileFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 String newUsername = input.getText().toString();
                 if (newUsername.isEmpty()) {
-                    Toast.makeText(mContext, "Ingrese un nombre de usuario válido", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "Ingrese un nombre de usuario válido", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), "Ingrese un nombre de usuario válido", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 profileVM.cambiarNombreUsuario(newUsername, mContext);
@@ -281,14 +286,17 @@ public class ProfileFragment extends Fragment {
                     // Show error message if passwords do not match
                     inputConfirmPassword.setError(getString(R.string.change_email_dialog_password_mismatch_error));
                     inputConfirmPassword.requestFocus();
-                    Toast.makeText(mContext, R.string.change_email_dialog_password_mismatch_error, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, R.string.change_email_dialog_password_mismatch_error, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), R.string.change_email_dialog_password_mismatch_error, Snackbar.LENGTH_SHORT).show();
+
                     return;
                 }
 
                 try {
                     LoginUtils.isValidEmail(newEmail);
                 } catch (InvalidEmailException e) {
-                    Toast.makeText(mContext, e.toString(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, e.toString(), Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), e.toString(), Snackbar.LENGTH_SHORT).show();
                 }
                 profileVM.cambiarCorreoElectronico(newEmail, password, mContext);
             }
@@ -343,14 +351,17 @@ public class ProfileFragment extends Fragment {
                     // Show error message if passwords do not match
                     inputConfirmPassword.setError(getString(R.string.change_password_dialog_password_mismatch_error));
                     inputConfirmPassword.requestFocus();
-                    Toast.makeText(mContext, R.string.change_password_dialog_password_mismatch_error, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, R.string.change_password_dialog_password_mismatch_error, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(inputConfirmPassword, R.string.change_password_dialog_password_mismatch_error, Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 try {
                     LoginUtils.isSecurePassword(newPassword);
                     profileVM.cambiarContrasena(currentPassword, newPassword, mContext);
                 } catch (WeakPasswordException e) {
-                    Toast.makeText(mContext, e.toString(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, e.toString(), Toast.LENGTH_SHORT).show();
+                    Snackbar.make(inputConfirmPassword, e.toString(), Snackbar.LENGTH_SHORT).show();
+
                 }
             }
         });

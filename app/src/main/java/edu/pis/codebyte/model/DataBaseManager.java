@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -34,7 +36,6 @@ public class DataBaseManager {
     private FirebaseFirestore db;
     private OnLoadUserPictureUrlListener userPictureUrlListener;
     private OnLoadUserProviderListener providerListener;
-
 
 
 
@@ -226,13 +227,15 @@ public class DataBaseManager {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(context, "Problema enviado correctamente", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "Problema enviado correctamente", Toast.LENGTH_SHORT).show();
+                        //TODO: Snackbar.make(ESTO, "Problema enviado correctamente",Snackbar.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "Problema al enviar el problema", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "Problema al enviar el problema", Toast.LENGTH_SHORT).show();
+                        //TODO: Snackbar.make(ESTO, "Problema al enviar el problema",Snackbar.LENGTH_SHORT).show();
                     }
                 });
     }

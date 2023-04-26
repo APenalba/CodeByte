@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.transition.platform.MaterialFadeThrough;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -86,7 +87,9 @@ public class LoginActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     goToHome();
                                 } else {
-                                    Toast.makeText(LoginActivity.this, "Your session has expired", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(LoginActivity.this, "Your session has expired", Toast.LENGTH_SHORT).show();
+                                    //TODO: Snackbar.make(new View(LoginActivity.this), "Your session has expired", Snackbar.LENGTH_SHORT).show();
+
                                 }
                             }
                         });
@@ -167,7 +170,9 @@ public class LoginActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 goToHome();
                             } else {
-                                Toast.makeText(LoginActivity.this, "La autenticación falló.", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(LoginActivity.this, "La autenticación falló.", Toast.LENGTH_SHORT).show();
+                                Snackbar.make( login_button, "La autenticación falló.", Snackbar.LENGTH_SHORT).show();
+
                             }
                         }
                     });
@@ -175,11 +180,13 @@ public class LoginActivity extends AppCompatActivity {
             // Si el email no es válido, marcar el TextView de email con error y mostrar un mensaje de error
             email_text.setError("El email proporcionado no es válido.");
             email_text.requestFocus();
-            Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            Snackbar.make(login_button, e.toString(), Snackbar.LENGTH_SHORT).show();
         } catch (InvalidPasswordException e) {
             password_text.setError("La contraseña proporcionada no es valida.");
             password_text.requestFocus();
-            Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            Snackbar.make(login_button, e.toString(), Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -297,8 +304,9 @@ public class LoginActivity extends AppCompatActivity {
                             }
                             goToHome();
                         } else {
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(login_button, "Authentication failed.", Snackbar.LENGTH_SHORT).show();
+
                         }
                     }
                 });

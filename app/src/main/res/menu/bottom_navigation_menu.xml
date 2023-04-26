@@ -17,7 +17,7 @@
         app:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/navigation_bar_lenguajes"
-        android:icon="@drawable/ic_statistics"
+        android:icon="@drawable/ic_all_languages"
         android:title="@string/all_lenguajes"
         app:showAsAction="ifRoom|withText" />
 </menu>
