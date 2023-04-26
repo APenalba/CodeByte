@@ -1,8 +1,5 @@
 package edu.pis.codebyte.view.login;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,7 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -88,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                                     goToHome();
                                 } else {
                                     //Toast.makeText(LoginActivity.this, "Your session has expired", Toast.LENGTH_SHORT).show();
-                                    //TODO: Snackbar.make(new View(LoginActivity.this), "Your session has expired", Snackbar.LENGTH_SHORT).show();
+                                    Snackbar.make(login_button, "Your session has expired", Snackbar.LENGTH_SHORT).show();
 
                                 }
                             }

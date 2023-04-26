@@ -2,11 +2,9 @@ package edu.pis.codebyte.model;
 
 import static android.content.ContentValues.TAG;
 
-import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -212,9 +210,9 @@ public class DataBaseManager {
      * @param usuario
      * @param comentario
      * @param fecha
-     * @param context
+     * @param view
      */
-    public void agregarComentario(String usuario, String comentario, Date fecha, Context context) {
+    public void agregarComentario(String usuario, String comentario, Date fecha, View view) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         Map<String, Object> comentarioData = new HashMap<>();
@@ -228,14 +226,14 @@ public class DataBaseManager {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         //Toast.makeText(context, "Problema enviado correctamente", Toast.LENGTH_SHORT).show();
-                        //TODO: Snackbar.make(ESTO, "Problema enviado correctamente",Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view, "Problema enviado correctamente",Snackbar.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         //Toast.makeText(context, "Problema al enviar el problema", Toast.LENGTH_SHORT).show();
-                        //TODO: Snackbar.make(ESTO, "Problema al enviar el problema",Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view, "Problema al enviar el problema",Snackbar.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -267,9 +265,9 @@ public class DataBaseManager {
                     // Crear objeto User con los datos del usuario de Firestore
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        String profileImageURL = document.getString("profileImageURL");
+                        String provider = document.getString("provider");
                         //imageURL.setValue(profileImageURL);ç
-                        userPictureUrlListener.onLoadUserPictureUrl(profileImageURL);
+                        providerListener.onLoadUserProvider(provider);
                     }
                 } else {
                     // Error al obtener datos del usuario de Firestore

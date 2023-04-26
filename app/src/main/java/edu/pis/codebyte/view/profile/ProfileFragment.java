@@ -207,7 +207,7 @@ public class ProfileFragment extends Fragment {
                     Snackbar.make(view, "Ingrese el problema que tiene", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                profileVM.enviarComentario(problemaText,mContext);
+                profileVM.enviarComentario(problemaText,enviaProblema_button);
                 problema.setText("");
             }
         });
@@ -234,7 +234,7 @@ public class ProfileFragment extends Fragment {
                     Snackbar.make(getView(), "Ingrese un nombre de usuario válido", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                profileVM.cambiarNombreUsuario(newUsername, mContext);
+                profileVM.cambiarNombreUsuario(newUsername, getView());
             }
         });
 
@@ -399,7 +399,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onChanged(String newUserProvider) {
                 userProvider = newUserProvider;
-                // Llamo aqui a estos metodos porque para la correcta ejecución necesitan saber el
+                // Llamo aqui a estos metodos porque necesitan saber el
                 // userProvider ya que este determinara si los botones deben funcionar o no
                 cambiarPassword_button_setup(view);
                 cambiarEmail_button_setup(view);

@@ -3,7 +3,6 @@ package edu.pis.codebyte.viewmodel.profile;
 import android.content.Context;
 import android.net.Uri;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -72,11 +71,16 @@ public class ProfileViewModel extends ViewModel {
         return imageURL;
     }
 
-    public void getCurrentUserProvider(OnCompleteListener<DocumentSnapshot> listener) {
-        dbm.getUserDocument(firebaseUser.getUid(), listener);
+    public void getCurrentUserProvider() {
+        dbm.getUserDocument(firebaseUser.getUid(), new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+            }
+        });
     }
 
-    public void cambiarNombreUsuario(String new_username, Context context) {
+    public void cambiarNombreUsuario(String new_username, View view) {
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(new_username)
@@ -88,13 +92,13 @@ public class ProfileViewModel extends ViewModel {
                         if (task.isSuccessful()) {
                             // El nombre de usuario se ha actualizado correctamente
                             //Toast.makeText(context, "Nombre de usuario actualizado", Toast.LENGTH_SHORT).show();
-                            //TODO: Snackbar.make(new View(context), "Nombre de usuario actualizado",Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(view, "Nombre de usuario actualizado",Snackbar.LENGTH_SHORT).show();
                             username.setValue(firebaseUser.getDisplayName());
                             dbm.updateUserUsername(firebaseUser.getUid(), new_username);
                         } else {
                             // Se produjo un error al actualizar el nombre de usuario
                             //Toast.makeText(context, "Error al actualizar el nombre de usuario", Toast.LENGTH_SHORT).show();
-                            //TODO: Snackbar.make(new View(context), "Error al actualizar el nombre de usuario",Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(view, "Error al actualizar el nombre de usuario",Snackbar.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -115,17 +119,17 @@ public class ProfileViewModel extends ViewModel {
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
                                                     //Toast.makeText(context, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
-                                                    //TODO: Snackbar.make(new View(context), "Contraseña actualizada",Snackbar.LENGTH_SHORT).show();
+                                                    Snackbar.make(new View(context), "Contraseña actualizada",Snackbar.LENGTH_SHORT).show();
                                                 } else {
                                                     //Toast.makeText(context, "Error al actualizar la contraseña", Toast.LENGTH_SHORT).show();
-                                                    //TODO: Snackbar.make(new View(context), "Error al actualizar la contraseña",Snackbar.LENGTH_SHORT).show();
+                                                    Snackbar.make(new View(context), "Error al actualizar la contraseña",Snackbar.LENGTH_SHORT).show();
                                                 }
                                             }
                                         });
                             } else {
                                 // Se produjo un error al reautenticar al usuario
                                 //Toast.makeText(context, "Error al reautenticar al usuario", Toast.LENGTH_SHORT).show();
-                                //TODO: Snackbar.make(new View(context), "Error al reautenticar al usuario",Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(new View(context), "Error al reautenticar al usuario",Snackbar.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -146,20 +150,20 @@ public class ProfileViewModel extends ViewModel {
                                             if (task.isSuccessful()) {
                                                 // El correo electrónico se ha actualizado correctamente
                                                 //Toast.makeText(context, "Correo electrónico actualizado", Toast.LENGTH_SHORT).show();
-                                                //TODO: Snackbar.make(new View(context), "Correo electrónico actualizado",Snackbar.LENGTH_SHORT).show();
+                                                Snackbar.make(new View(context), "Correo electrónico actualizado",Snackbar.LENGTH_SHORT).show();
                                                 email.setValue(firebaseUser.getEmail());
                                                 dbm.updateUserEmail(firebaseUser.getUid(), new_email);
                                             } else {
                                                 // Se produjo un error al actualizar el correo electrónico
                                                 //Toast.makeText(context, "Error al actualizar el correo electrónico", Toast.LENGTH_SHORT).show();
-                                                //TODO: Snackbar.make(new View(context), "Error al actualizar el correo electrónico",Snackbar.LENGTH_SHORT).show();
+                                                Snackbar.make(new View(context), "Error al actualizar el correo electrónico",Snackbar.LENGTH_SHORT).show();
                                             }
                                         }
                                     });
                         } else {
                             // Se produjo un error al autenticar al usuario
                             //Toast.makeText(context, "Error al autenticar al usuario", Toast.LENGTH_SHORT).show();
-                            //TODO: Snackbar.make(new View(context), "Error al autenticar al usuario", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(new View(context), "Error al autenticar al usuario", Snackbar.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -174,7 +178,7 @@ public class ProfileViewModel extends ViewModel {
                 });
     }
 
-    public void enviarComentario(String contenidoComentario, Context context) {
+    public void enviarComentario(String contenidoComentario, View view) {
         // Obtener la fecha actual
         Date fechaActual = new Date();
 
@@ -182,7 +186,7 @@ public class ProfileViewModel extends ViewModel {
         String usuarioActual = firebaseUser.getUid();
 
         // Guardar el comentario en Firestore
-        dbm.agregarComentario(usuarioActual, contenidoComentario, fechaActual, context);
+        dbm.agregarComentario(usuarioActual, contenidoComentario, fechaActual, view);
     }
 
 
