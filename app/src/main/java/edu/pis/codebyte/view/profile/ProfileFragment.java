@@ -11,12 +11,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -73,7 +75,8 @@ public class ProfileFragment extends Fragment {
         cambiarUsername_button_setup(view);
         problema_editText_setup(view);
         enviarProblema_button_setup(view);
-        idioma = view.findViewById(R.id.spinner_idiomas);
+        language_button_setup(view);
+        //idioma = view.findViewById(R.id.spinner_idiomas);
     }
 
     /**
@@ -211,6 +214,34 @@ public class ProfileFragment extends Fragment {
                 problema.setText("");
             }
         });
+    }
+
+    private void language_button_setup(View view) {
+        Button language_button = view.findViewById(R.id.language_button);
+        language_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLanguageMenu(language_button);
+            }
+        });
+    }
+
+    private void showLanguageMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(getContext(), view);
+        popupMenu.inflate(R.menu.menu_language);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return false;
+            }
+        });
+        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+
+            }
+        });
+        popupMenu.show();
     }
 
     /**
