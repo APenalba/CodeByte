@@ -2,18 +2,19 @@ package edu.pis.codebyte.view.home;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import java.util.ArrayList;
 
 import edu.pis.codebyte.R;
+import edu.pis.codebyte.model.ProgrammingLanguage;
+import edu.pis.codebyte.model.ProgrammingLanguagesAdapter;
 import edu.pis.codebyte.model.RecyclerViewAdapter;
 
 /**
@@ -32,7 +33,7 @@ public class HomeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private RecyclerView recyclerView;
-    private RecyclerViewAdapter adapter;
+    private ProgrammingLanguagesAdapter adapter;
     private ArrayList<RecyclerViewAdapter.MyData> mData;
 
     public HomeFragment() {
@@ -73,21 +74,18 @@ public class HomeFragment extends Fragment {
         // inflar la vista del fragmento
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // encontrar la vista RecyclerView en la vista inflada
-        recyclerView = rootView.findViewById(R.id.recycler_view_lenguajes);
 
-        // configurar RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        // crear los datos
-        mData = new ArrayList<>();
-        mData.add(new RecyclerViewAdapter.MyData(R.drawable.logo_c));
-        mData.add(new RecyclerViewAdapter.MyData(R.drawable.logo_cpp));
-        mData.add(new RecyclerViewAdapter.MyData(R.drawable.logo_html));
-
-        // crear el adaptador y establecerlo en RecyclerView
-        adapter = new RecyclerViewAdapter(mData);
+        recyclerView = rootView.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        ArrayList<ProgrammingLanguage> programmingLanguagesList = new ArrayList<>();
+        programmingLanguagesList.add(new ProgrammingLanguage("Java","", R.drawable.logo_java));
+        programmingLanguagesList.add(new ProgrammingLanguage("Python","", R.drawable.logo_python));
+        programmingLanguagesList.add(new ProgrammingLanguage("C++","", R.drawable.logo_cpp));
+        programmingLanguagesList.add(new ProgrammingLanguage("HTML","", R.drawable.logo_html));
+        //Agrega elementos a programmingLanguagesList
+        adapter = new ProgrammingLanguagesAdapter(programmingLanguagesList);
         recyclerView.setAdapter(adapter);
+        recyclerView.scrollToPosition(Integer.MAX_VALUE / 2);
 
         return rootView;
     }

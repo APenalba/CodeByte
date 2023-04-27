@@ -6,40 +6,45 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class LenguajeDeProgramacion {
+public class ProgrammingLanguage {
 
     private String name;
     private String id;
     private String description;
     private ArrayList<Course> courses;
     private HashSet<String> tags;
+    private int imageResourceId;
 
-    public LenguajeDeProgramacion(String name, String description, ArrayList<Course> courses, HashSet<String> tags) {
+    public ProgrammingLanguage(String name, String description, ArrayList<Course> courses, HashSet<String> tags, int imageResourceId) {
         this.name = name;
         this.description = description;
         this.courses = courses;
         this.tags = tags;
+        this.imageResourceId = imageResourceId;
     }
 
-    public LenguajeDeProgramacion(String name, String description, ArrayList<Course> courses) {
+    public ProgrammingLanguage(String name, String description, ArrayList<Course> courses, int imageResourceId) {
         this.name = name;
         this.description = description;
         this.courses = courses;
         this.tags = new HashSet<>();
+        this.imageResourceId = imageResourceId;
     }
 
-    public LenguajeDeProgramacion(String name, String description, HashSet<String> tags) {
+    public ProgrammingLanguage(String name, String description, HashSet<String> tags, int imageResourceId) {
         this.name = name;
         this.description = description;
         this.courses = new ArrayList<>();
         this.tags = tags;
+        this.imageResourceId = imageResourceId;
     }
 
-    public LenguajeDeProgramacion(String name, String description) {
+    public ProgrammingLanguage(String name, String description, int imageResourceId) {
         this.name = name;
         this.description = description;
         this.courses = new ArrayList<>();
         this.tags = new HashSet<>();
+        this.imageResourceId = imageResourceId;
     }
 
     public String getName() {
@@ -98,6 +103,13 @@ public class LenguajeDeProgramacion {
         this.tags.remove(tag);
     }
 
+    public void setImageResourceId(int imageResourceId) {
+        this.imageResourceId = imageResourceId;
+    }
+    public int getImageResourceId() {
+        return this.imageResourceId;
+    }
+
     @Override
     public boolean equals(@Nullable Object obj) {
 
@@ -105,7 +117,7 @@ public class LenguajeDeProgramacion {
             return true;
         }
 
-        LenguajeDeProgramacion lp = obj instanceof  LenguajeDeProgramacion? ((LenguajeDeProgramacion) obj) : null;
+        ProgrammingLanguage lp = obj instanceof ProgrammingLanguage ? ((ProgrammingLanguage) obj) : null;
         if (lp == null) return false;
         return this.id.equals(lp.id);
 

@@ -39,18 +39,22 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/text_en_curso" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_lenguajes"
-        android:layout_width="286dp"
-        android:layout_height="92dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="8dp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="409dp"
+        android:layout_height="527dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/en_curso_image" />
+        app:layout_constraintTop_toBottomOf="@+id/en_curso_image">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="285dp"
+            android:layout_height="55dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
