@@ -22,21 +22,6 @@
         app:srcCompat="@drawable/icon_profile" />
 
     <ImageView
-        android:id="@+id/logo_menu_asset"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:contentDescription="@string/cd_PROFILEACTIVITY_logo_menu_asset"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/logo_profile_asset"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.001"
-        app:srcCompat="@drawable/icon_menu" />
-
-    <ImageView
         android:id="@+id/userImage_ImageView"
         android:layout_width="0dp"
         android:layout_height="124dp"

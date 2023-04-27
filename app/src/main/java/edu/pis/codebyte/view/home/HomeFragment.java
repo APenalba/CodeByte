@@ -1,14 +1,20 @@
 package edu.pis.codebyte.view.home;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import edu.pis.codebyte.R;
+import edu.pis.codebyte.model.RecyclerViewAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +31,9 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private RecyclerView recyclerView;
+    private RecyclerViewAdapter adapter;
+    private ArrayList<RecyclerViewAdapter.MyData> mData;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -57,10 +66,29 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        // inflar la vista del fragmento
+        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+
+        // encontrar la vista RecyclerView en la vista inflada
+        recyclerView = rootView.findViewById(R.id.recycler_view_lenguajes);
+
+        // configurar RecyclerView
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        // crear los datos
+        mData = new ArrayList<>();
+        mData.add(new RecyclerViewAdapter.MyData(R.drawable.logo_c));
+        mData.add(new RecyclerViewAdapter.MyData(R.drawable.logo_cpp));
+        mData.add(new RecyclerViewAdapter.MyData(R.drawable.logo_html));
+
+        // crear el adaptador y establecerlo en RecyclerView
+        adapter = new RecyclerViewAdapter(mData);
+        recyclerView.setAdapter(adapter);
+
+        return rootView;
     }
 }
