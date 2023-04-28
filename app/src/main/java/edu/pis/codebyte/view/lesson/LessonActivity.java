@@ -18,7 +18,7 @@ public class LessonActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lesson);
 
-        LinearProgressIndicator progressBar = findViewById(R.id.progressBar);
+        LinearProgressIndicator progressBar = findViewById(R.id.languageProgress_allLanguagesFragment_progressBar);
         progressBar.setProgressCompat(35, true);
 
         TextView textView = findViewById(R.id.textView2);

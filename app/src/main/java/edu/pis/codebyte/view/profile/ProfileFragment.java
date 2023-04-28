@@ -58,6 +58,10 @@ public class ProfileFragment extends Fragment {
         mContext = context;
     }
 
+    public static ProfileFragment newInstance() {
+        return new ProfileFragment();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -14,7 +14,7 @@
         android:layout_height="769dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar">
+        app:layout_constraintTop_toBottomOf="@+id/languageProgress_lessonActivity_progressBar">
 
         <TextView
             android:id="@+id/textView2"
@@ -63,7 +63,7 @@
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progressBar"
+        android:id="@+id/languageProgress_lessonActivity_progressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"

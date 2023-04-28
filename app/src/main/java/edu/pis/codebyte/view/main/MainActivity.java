@@ -1,11 +1,11 @@
 package edu.pis.codebyte.view.main;
 
+import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-import android.os.Bundle;
-import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -14,6 +14,7 @@ import com.google.android.material.transition.platform.MaterialFadeThrough;
 import java.util.ArrayList;
 
 import edu.pis.codebyte.R;
+import edu.pis.codebyte.view.allLanguages.AllLanguagesFragment;
 import edu.pis.codebyte.view.home.HomeFragment;
 import edu.pis.codebyte.view.profile.ProfileFragment;
 
@@ -45,16 +46,16 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         switch (item.getItemId()) {
             case R.id.navigation_bar_home:
-                selectedFragment = new HomeFragment();
+                selectedFragment = HomeFragment.newInstance();
                 break;
             case R.id.navigation_bar_profile:
-                selectedFragment = new ProfileFragment();
+                selectedFragment = ProfileFragment.newInstance();
                 break;
             case R.id.navigation_bar_lenguajes:
-                selectedFragment = new HomeFragment();
+                selectedFragment = AllLanguagesFragment.newInstance();
                 break;
             case R.id.navigation_bar_statistics:
-                selectedFragment = new ProfileFragment();
+                selectedFragment = ProfileFragment.newInstance();
                 break;
         }
         // Reemplazar el fragment actual con el nuevo fragment seleccionado

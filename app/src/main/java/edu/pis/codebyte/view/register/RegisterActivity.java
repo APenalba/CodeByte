@@ -1,6 +1,5 @@
 package edu.pis.codebyte.view.register;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,7 +7,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +26,6 @@ import edu.pis.codebyte.model.exceptions.InvalidEmailException;
 import edu.pis.codebyte.model.exceptions.TermsAndConditionsNotAcceptedException;
 import edu.pis.codebyte.model.exceptions.WeakPasswordException;
 import edu.pis.codebyte.view.login.LoginActivity;
-import edu.pis.codebyte.view.register.*;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -54,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
         signUp_button = findViewById(R.id.reg_signup_bttn);
         login_button = findViewById(R.id.reg_login_bttn);
         terminosYcondiciones = findViewById(R.id.terminosCondiciones_checkBox);
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.languageProgress_allLanguagesFragment_progressBar);
         progressBar.bringToFront();
         progressBar.setVisibility(View.GONE);
         signUp_button.setOnClickListener(new View.OnClickListener() {
