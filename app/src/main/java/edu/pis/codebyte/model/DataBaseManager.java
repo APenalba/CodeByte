@@ -37,6 +37,7 @@ public class DataBaseManager {
     private FirebaseFirestore db;
     private OnLoadUserPictureUrlListener userPictureUrlListener;
     private OnLoadUserProviderListener providerListener;
+    private OnLoadProgrammingLanguages languagesListener;
 
 
 
@@ -46,6 +47,10 @@ public class DataBaseManager {
 
     public interface OnLoadUserProviderListener {
         public void onLoadUserProvider(String userProvider);
+    }
+
+    public interface OnLoadProgrammingLanguages {
+        public void onLoadProgrammingLanguages(ArrayList<ProgrammingLanguage> languages);
     }
 
     private DataBaseManager() {
@@ -63,6 +68,10 @@ public class DataBaseManager {
 
     public void setOnLoadUserPicture(OnLoadUserPictureUrlListener listener) {
         this.userPictureUrlListener = listener;
+    }
+
+    public void setOnLoadProgrammingLanguages(OnLoadProgrammingLanguages listener) {
+        this.languagesListener = listener;
     }
 
     /**
@@ -320,7 +329,7 @@ public class DataBaseManager {
 
     }
 
-    public void loadProgrammingLanguages() {
+    public void loadProgrammingLanguages(){
 
         ArrayList<ProgrammingLanguage> programmingLanguages = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -329,26 +338,34 @@ public class DataBaseManager {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
+
                             String languageName = document.getId();
-                            String languageDescription = document.getString("description");
+                            String languageDescription = document.getString("descripcion").trim();
                             int resourceImageId = document.getLong("resourceImageId").intValue();
-                            Map<String, Object> tags = document.get("tags", Map.class);
-                            ArrayList<Course> courses = new ArrayList<>();
-                            for (QueryDocumentSnapshot courseDocument : document.getReference().collection("courses").get().getResult()) {
-                                String courseDescription = courseDocument.getString("description");
-                                courses.add(new Course(courseDocument.getId(), courseDescription));
-                            }
+                            ArrayList<String> tags =(ArrayList<String>) document.get("tags");
                             HashSet<String> tags_set = new HashSet<>();
-                            for (Object tag : tags.values()) {
-                                tags_set.add(tag.toString());
-                            }
-                            ProgrammingLanguage programmingLanguage = new ProgrammingLanguage(languageName, languageDescription,courses, tags_set, resourceImageId);
+                            tags_set.addAll(tags);
+                            ProgrammingLanguage programmingLanguage = new ProgrammingLanguage(languageName, languageDescription, tags_set, resourceImageId);
+                            //ProgrammingLanguage programmingLanguage = new ProgrammingLanguage(languageName, languageDescription,courses, resourceImageId);
                             programmingLanguages.add(programmingLanguage);
                         }
+                        languagesListener.onLoadProgrammingLanguages(programmingLanguages);
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
                 });
+
+
     }
 
+    private void loadLanguageCourses(QueryDocumentSnapshot doc, ProgrammingLanguage pl) {
+        doc.getReference().collection("courses").get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                for( QueryDocumentSnapshot document :task.getResult()) {
+                    Course course = new Course(document.getId(), document.getString("description"));
+                    pl.addCourse(course);
+                }
+            }
+        });
+    }
 }

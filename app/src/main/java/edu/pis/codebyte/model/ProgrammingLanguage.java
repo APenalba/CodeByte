@@ -6,6 +6,8 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import edu.pis.codebyte.R;
+
 public class ProgrammingLanguage {
 
     private String name;
@@ -19,7 +21,8 @@ public class ProgrammingLanguage {
         this.description = description;
         this.courses = courses;
         this.tags = tags;
-        this.imageResourceId = imageResourceId;
+        if (imageResourceId == 0) this.imageResourceId = R.drawable.logo__256;
+        else this.imageResourceId = imageResourceId;
     }
 
     public ProgrammingLanguage(String name, String description, ArrayList<Course> courses, int imageResourceId) {
