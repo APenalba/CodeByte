@@ -119,6 +119,7 @@ public class ProgrammingLanguage {
 
         ProgrammingLanguage lp = obj instanceof ProgrammingLanguage ? ((ProgrammingLanguage) obj) : null;
         if (lp == null) return false;
+        if (id == null || lp.id == null) return this.name.equals(lp.name);
         return this.id.equals(lp.id);
 
     }

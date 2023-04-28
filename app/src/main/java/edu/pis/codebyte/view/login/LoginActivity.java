@@ -29,6 +29,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.OAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 import edu.pis.codebyte.R;
 import edu.pis.codebyte.model.DataBaseManager;
@@ -42,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final int GOOGLE_SIGN_IN = 100;
     public static final String PREFERENCES_FILE = "login_prefs";
+    private static final String TAG = "log";
 
     private Button login_button;
     private Button signup_button;
@@ -65,11 +69,71 @@ public class LoginActivity extends AppCompatActivity {
         prefs = getSharedPreferences(PREFERENCES_FILE, MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
         activity_setup();
+        recuperaPassword_button = findViewById(R.id.recuperaPassword_bttn);
+        recuperaPassword_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                metodo();
+            }
+        });
     }
     @Override
     public void onResume() {
         super.onResume();
         checkSession();
+    }
+
+    private void metodo() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String lenguaje = "Kotlin";
+        String curso = "Introducción a " + lenguaje;
+        String tema = "Introducción a las variables";
+
+// Añadir un nuevo lenguaje
+        db.collection("Lenguajes").document(lenguaje).set(new HashMap<String, Object>())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Lenguaje añadido correctamente");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error al añadir el lenguaje", e);
+                    }
+                });
+
+// Añadir un nuevo curso
+        db.collection("Lenguajes").document(lenguaje).collection("Cursos").document(curso).set(new HashMap<String, Object>())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Curso añadido correctamente");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error al añadir el curso", e);
+                    }
+                });
+
+// Añadir un nuevo tema
+        db.collection("Lenguajes").document(lenguaje).collection("Cursos").document(curso).collection("Temas").document(tema).set(new HashMap<String, Object>())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Tema añadido correctamente");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error al añadir el tema", e);
+                    }
+                });
+
     }
 
     private void checkSession() {

@@ -82,10 +82,14 @@ public class HomeFragment extends Fragment {
         programmingLanguagesList.add(new ProgrammingLanguage("Python","", R.drawable.logo_python));
         programmingLanguagesList.add(new ProgrammingLanguage("C++","", R.drawable.logo_cpp));
         programmingLanguagesList.add(new ProgrammingLanguage("HTML","", R.drawable.logo_html));
-        //Agrega elementos a programmingLanguagesList
+        programmingLanguagesList.add(new ProgrammingLanguage("C","", R.drawable.logo_c));
+        programmingLanguagesList.add(new ProgrammingLanguage("JavaScript","", R.drawable.logo_js));
+        programmingLanguagesList.add(new ProgrammingLanguage("C#","", R.drawable.logo_csh));
+
+
         adapter = new ProgrammingLanguagesAdapter(programmingLanguagesList);
         recyclerView.setAdapter(adapter);
-        recyclerView.scrollToPosition(Integer.MAX_VALUE / 2);
+        recyclerView.scrollToPosition(programmingLanguagesList.size() / 2);
 
         return rootView;
     }

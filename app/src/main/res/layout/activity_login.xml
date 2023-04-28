@@ -11,17 +11,15 @@
         android:layout_width="196dp"
         android:layout_height="22dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/forgot_password"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/recuperaPassword_bttn"
+        app:layout_constraintHorizontal_bias="0.092"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/google_bttn"
-        app:layout_constraintVertical_bias="0.078"
         tools:ignore="TextSizeCheck,VisualLintBounds" />
 
     <TextView
@@ -30,17 +28,14 @@
         android:layout_height="22dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:layout_marginBottom="16dp"
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/no_tienes_cuenta"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/signup_bttn"
+        app:layout_constraintHorizontal_bias="0.106"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/forgotPassword_textView"
-        app:layout_constraintVertical_bias="0.0"
         tools:ignore="TextSizeCheck,VisualLintBounds" />
 
     <TextView
@@ -161,15 +156,16 @@
         android:layout_height="57dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="5dp"
         android:backgroundTint="#EAEAEA"
         android:drawableTop="@drawable/google_logo_1"
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/google"
         android:textColor="#1268B3"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/github_bttn"
+        app:layout_constraintHorizontal_bias="0.156"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/keepSession_checkBox"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/keepSession_checkBox" />
 
     <Button
         android:id="@+id/github_bttn"
@@ -181,10 +177,8 @@
         android:drawableTop="@drawable/github_logo"
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/github"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/keepSession_checkBox"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/keepSession_checkBox" />
 
     <CheckBox
         android:id="@+id/keepSession_checkBox"
@@ -201,7 +195,6 @@
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:backgroundTint="#FFFFFF"
@@ -209,12 +202,8 @@
         android:text="@string/recupera_contraseña"
         android:textColor="@color/purple_codebyte"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/forgotPassword_textView"
         app:layout_constraintTop_toBottomOf="@+id/github_bttn"
-        app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints,VisualLintBounds" />
 
     <Button
@@ -224,18 +213,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="16dp"
         android:backgroundTint="#FFFFFF"
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/signup"
         android:textColor="@color/purple_codebyte"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/noCuenta_textView"
         app:layout_constraintTop_toBottomOf="@+id/recuperaPassword_bttn"
-        app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints,VisualLintBounds" />
 
     <androidx.constraintlayout.widget.Guideline

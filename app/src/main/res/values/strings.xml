@@ -70,6 +70,8 @@
     <string name="second_fragment_label" />
     <string name="spanish">Español</string>
     <string name="catalan">Catalan</string>
+    <string name="python">Python</string>
+    <string name="texto_ejemplo_leccion">Para declarar (crear) una *variable*, debes darle un nombre. En *Python* no hace falta especificar el tipo de variable que trabajarás. Para dar un valor, usamos el operando \'*=*\' y asignamos a la derecha del igual un valor.</string>
 
 
 </resources>
