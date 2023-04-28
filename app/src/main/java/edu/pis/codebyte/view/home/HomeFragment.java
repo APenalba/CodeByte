@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import edu.pis.codebyte.R;
 import edu.pis.codebyte.model.ProgrammingLanguage;
 import edu.pis.codebyte.model.ProgrammingLanguagesAdapter;
-import edu.pis.codebyte.model.RecyclerViewAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,7 +33,6 @@ public class HomeFragment extends Fragment {
     private String mParam2;
     private RecyclerView recyclerView;
     private ProgrammingLanguagesAdapter adapter;
-    private ArrayList<RecyclerViewAdapter.MyData> mData;
 
     public HomeFragment() {
         // Required empty public constructor
