@@ -19,13 +19,16 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 
@@ -316,4 +319,36 @@ public class DataBaseManager {
                 });
 
     }
+
+    public void loadProgrammingLanguages() {
+
+        ArrayList<ProgrammingLanguage> programmingLanguages = new ArrayList<>();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("ProgrammingLanguages")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String languageName = document.getId();
+                            String languageDescription = document.getString("description");
+                            int resourceImageId = document.getLong("resourceImageId").intValue();
+                            Map<String, Object> tags = document.get("tags", Map.class);
+                            ArrayList<Course> courses = new ArrayList<>();
+                            for (QueryDocumentSnapshot courseDocument : document.getReference().collection("courses").get().getResult()) {
+                                String courseDescription = courseDocument.getString("description");
+                                courses.add(new Course(courseDocument.getId(), courseDescription));
+                            }
+                            HashSet<String> tags_set = new HashSet<>();
+                            for (Object tag : tags.values()) {
+                                tags_set.add(tag.toString());
+                            }
+                            ProgrammingLanguage programmingLanguage = new ProgrammingLanguage(languageName, languageDescription,courses, tags_set, resourceImageId);
+                            programmingLanguages.add(programmingLanguage);
+                        }
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                    }
+                });
+    }
+
 }

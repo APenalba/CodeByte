@@ -9,7 +9,6 @@ import java.util.HashSet;
 public class ProgrammingLanguage {
 
     private String name;
-    private String id;
     private String description;
     private ArrayList<Course> courses;
     private HashSet<String> tags;
@@ -53,14 +52,6 @@ public class ProgrammingLanguage {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getDescription() {
@@ -119,9 +110,7 @@ public class ProgrammingLanguage {
 
         ProgrammingLanguage lp = obj instanceof ProgrammingLanguage ? ((ProgrammingLanguage) obj) : null;
         if (lp == null) return false;
-        if (id == null || lp.id == null) return this.name.equals(lp.name);
-        return this.id.equals(lp.id);
-
+        return this.name.equals(lp.name);
     }
 
     @NonNull

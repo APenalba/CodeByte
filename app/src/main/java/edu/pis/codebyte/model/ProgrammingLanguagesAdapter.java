@@ -1,5 +1,6 @@
 package edu.pis.codebyte.model;
 
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,7 +116,7 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
                 int randNumber = new Random().nextInt(101);
                 allLanguagesHolder.progressBar.setProgressCompat(randNumber, true);
                 allLanguagesHolder.progress.setText(Integer.toString(randNumber) + "%");
-                allLanguagesHolder.description.setText(programmingLanguageAllLanguages.getDescription());
+                ajustarDescripcion(programmingLanguageAllLanguages.getDescription(), allLanguagesHolder.description);
 
                 allLanguagesHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -129,6 +130,25 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
             default:
                 break;
         }
+    }
+
+    private void ajustarDescripcion(String descripcion, TextView textView) {
+        int ancho = textView.getWidth();
+        int alturaLinea = textView.getLineHeight();
+        int alturaTextView = textView.getLineCount() * alturaLinea;
+
+        float tamanoFuente = textView.getTextSize();
+        Paint paint = new Paint();
+        paint.setTextSize(tamanoFuente);
+
+        int maximoCaracteres = (int) (ancho / paint.measureText("x"));
+        int maximoCaracteresTotal = maximoCaracteres * (alturaTextView / alturaLinea);
+
+        if (descripcion.length() > maximoCaracteresTotal) {
+            descripcion = descripcion.substring(0, maximoCaracteresTotal - 3) + "...";
+        }
+
+        textView.setText(descripcion);
     }
 
     @Override
