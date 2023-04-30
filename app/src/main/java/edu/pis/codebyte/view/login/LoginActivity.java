@@ -482,7 +482,7 @@ public class LoginActivity extends AppCompatActivity {
         objCCourses.add(new Course("Objective-C Basics", "Introduction to Objective-C programming language"));
         objCCourses.add(new Course("Objective-C for iOS Development", "Building iOS applications using Objective-C"));
         HashSet<String> objCTags = new HashSet<>(Arrays.asList("iOS Development", "Object-Oriented Programming"));
-        ProgrammingLanguage objC = new ProgrammingLanguage("Objective-C", descripcionObjC, objCCourses, objCTags, 0);
+        ProgrammingLanguage objC = new ProgrammingLanguage("Objective-C", descripcionObjC, objCCourses, objCTags, R.drawable.logo_obj_c);
         lenguajes.add(objC);
 
         // Lenguaje Ruby
@@ -514,7 +514,7 @@ public class LoginActivity extends AppCompatActivity {
         scalaCourses.add(new Course("Scala Basics", "Introduction to Scala programming language"));
         scalaCourses.add(new Course("Functional Programming in Scala", "Learn functional programming concepts in Scala"));
         HashSet<String> scalaTags = new HashSet<>(Arrays.asList("Functional Programming", "JVM", "Concurrency"));
-        ProgrammingLanguage scala = new ProgrammingLanguage("Scala", "Scala is a modern multi-paradigm programming language designed to express common programming patterns in a concise, elegant, and type-safe way.", scalaCourses, scalaTags, 0);
+        ProgrammingLanguage scala = new ProgrammingLanguage("Scala", "Scala is a modern multi-paradigm programming language designed to express common programming patterns in a concise, elegant, and type-safe way.", scalaCourses, scalaTags, R.drawable.logo_scala);
         lenguajes.add(scala);
 
         // Lenguaje Pascal
@@ -524,7 +524,7 @@ public class LoginActivity extends AppCompatActivity {
         HashSet<String> pascalTags = new HashSet<>();
         pascalTags.add("Structured Programming");
         pascalTags.add("Algorithm Design");
-        ProgrammingLanguage pascal = new ProgrammingLanguage("Pascal", "Pascal is a procedural programming language designed for teaching programming and producing reliable and efficient programs.", pascalCourses, pascalTags, 0);
+        ProgrammingLanguage pascal = new ProgrammingLanguage("Pascal", "Pascal is a procedural programming language designed for teaching programming and producing reliable and efficient programs.", pascalCourses, pascalTags, R.drawable.logo_pascal);
         lenguajes.add(pascal);
 
         // Lenguaje Elixir
@@ -532,7 +532,7 @@ public class LoginActivity extends AppCompatActivity {
         elixirCourses.add(new Course("Elixir Basics", "Introduction to Elixir programming language"));
         elixirCourses.add(new Course("Concurrent Programming with Elixir", "Learn concurrent programming using Elixir"));
         HashSet<String> elixirTags = new HashSet<>(Arrays.asList("Functional Programming", "Concurrency", "Scalability"));
-        ProgrammingLanguage elixir = new ProgrammingLanguage("Elixir", "Elixir is a functional, concurrent, and extensible programming language built on the Erlang virtual machine (BEAM).", elixirCourses, elixirTags, 0);
+        ProgrammingLanguage elixir = new ProgrammingLanguage("Elixir", "Elixir is a functional, concurrent, and extensible programming language built on the Erlang virtual machine (BEAM).", elixirCourses, elixirTags, R.drawable.logo_elixir);
         lenguajes.add(elixir);
 
         // Lenguaje Erlang
@@ -540,7 +540,7 @@ public class LoginActivity extends AppCompatActivity {
         erlangCourses.add(new Course("Erlang Basics", "Introduction to Erlang programming language"));
         erlangCourses.add(new Course("OTP Framework in Erlang", "Learn to build fault-tolerant systems with OTP in Erlang"));
         HashSet<String> erlangTags = new HashSet<>(Arrays.asList("Concurrent Programming", "Fault-Tolerant Systems", "Telecommunications"));
-        ProgrammingLanguage erlang = new ProgrammingLanguage("Erlang", "Erlang is a general-purpose, concurrent, and functional programming language used primarily in telecommunication, banking, and e-commerce.", erlangCourses, erlangTags, 0);
+        ProgrammingLanguage erlang = new ProgrammingLanguage("Erlang", "Erlang is a general-purpose, concurrent, and functional programming language used primarily in telecommunication, banking, and e-commerce.", erlangCourses, erlangTags, R.drawable.logo_erlang);
         lenguajes.add(erlang);
 
         // Lenguaje Scheme
@@ -548,7 +548,7 @@ public class LoginActivity extends AppCompatActivity {
         schemeCourses.add(new Course("Scheme Basics", "Introduction to Scheme programming language"));
         schemeCourses.add(new Course("Functional Programming in Scheme", "Learn functional programming concepts in Scheme"));
         HashSet<String> schemeTags = new HashSet<>(Arrays.asList("Lisp", "Functional Programming", "Language Design"));
-        ProgrammingLanguage scheme = new ProgrammingLanguage("Scheme", "Scheme is a dialect of the Lisp programming language known for its simplicity and elegance. It is often used for teaching programming and implementing programming language concepts.", schemeCourses, schemeTags, 0);
+        ProgrammingLanguage scheme = new ProgrammingLanguage("Scheme", "Scheme is a dialect of the Lisp programming language known for its simplicity and elegance. It is often used for teaching programming and implementing programming language concepts.", schemeCourses, schemeTags, R.drawable.logo_scheme);
         lenguajes.add(scheme);
 
         // Lenguaje Postscript
@@ -556,7 +556,7 @@ public class LoginActivity extends AppCompatActivity {
         postscriptCourses.add(new Course("Introduction to Postscript", "Learn the basics of Postscript language"));
         postscriptCourses.add(new Course("Advanced Postscript", "Advanced concepts and features of Postscript language"));
         HashSet<String> postscriptTags = new HashSet<>(Arrays.asList("Page Description Language", "Printing", "Graphics"));
-        ProgrammingLanguage postscript = new ProgrammingLanguage("Postscript", "Postscript is a programming language that is primarily used for describing the appearance of printed pages.", postscriptCourses, postscriptTags, 0);
+        ProgrammingLanguage postscript = new ProgrammingLanguage("Postscript", "Postscript is a programming language that is primarily used for describing the appearance of printed pages.", postscriptCourses, postscriptTags, R.drawable.logo_postiscript);
         lenguajes.add(postscript);
 
         // Lenguaje Basic
@@ -565,7 +565,7 @@ public class LoginActivity extends AppCompatActivity {
         basicCourses.add(new Course("Advanced Basic", "Advanced concepts and features of Basic programming language"));
         HashSet<String> basicTags = new HashSet<>();
         basicTags.add("Beginner");
-        ProgrammingLanguage basic = new ProgrammingLanguage("Basic", "Basic is a family of general-purpose programming languages that are simple to learn and widely used.", basicCourses, basicTags, 0);
+        ProgrammingLanguage basic = new ProgrammingLanguage("Basic", "Basic is a family of general-purpose programming languages that are simple to learn and widely used.", basicCourses, basicTags, R.drawable.logo_basic);
         lenguajes.add(basic);
 
         // Lenguaje Cobol
@@ -573,7 +573,7 @@ public class LoginActivity extends AppCompatActivity {
         cobolCourses.add(new Course("Introduction to Cobol", "Learn the basics of Cobol programming language"));
         cobolCourses.add(new Course("Advanced Cobol", "Advanced concepts and features of Cobol programming language"));
         HashSet<String> cobolTags = new HashSet<>(Arrays.asList("Business Applications", "Legacy Systems", "Mainframe Programming"));
-        ProgrammingLanguage cobol = new ProgrammingLanguage("Cobol", "Cobol is a high-level programming language designed for business applications.", cobolCourses, cobolTags, 0);
+        ProgrammingLanguage cobol = new ProgrammingLanguage("Cobol", "Cobol is a high-level programming language designed for business applications.", cobolCourses, cobolTags, R.drawable.logo_cobol);
         lenguajes.add(cobol);
 
         // Lenguaje Fortran
@@ -581,7 +581,7 @@ public class LoginActivity extends AppCompatActivity {
         fortranCourses.add(new Course("Introduction to Fortran", "Learn the basics of Fortran programming language"));
         fortranCourses.add(new Course("Advanced Fortran", "Advanced concepts and features of Fortran programming language"));
         HashSet<String> fortranTags = new HashSet<>(Arrays.asList("Scientific Computing", "Numerical Analysis", "High-Performance Computing"));
-        ProgrammingLanguage fortran = new ProgrammingLanguage("Fortran", "Fortran is a general-purpose, imperative programming language that is particularly suited to numeric and scientific computing.", fortranCourses, fortranTags, 0);
+        ProgrammingLanguage fortran = new ProgrammingLanguage("Fortran", "Fortran is a general-purpose, imperative programming language that is particularly suited to numeric and scientific computing.", fortranCourses, fortranTags, R.drawable.logo_fortran);
         lenguajes.add(fortran);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
