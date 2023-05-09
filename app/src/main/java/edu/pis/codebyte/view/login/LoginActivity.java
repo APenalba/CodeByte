@@ -354,47 +354,51 @@ public class LoginActivity extends AppCompatActivity {
         // Lenguaje C
         String descripcionC = "C es un lenguaje de programación de bajo nivel utilizado para programar sistemas operativos, controladores de dispositivos y otros programas que requieren un acceso directo a la memoria y al hardware.";
         ArrayList<Course> cursosC = new ArrayList<>();
-        cursosC.add(new Course("Introducción a C", "Aprende los fundamentos de la programación en C"));
-        cursosC.add(new Course("Estructuras de datos en C", "Aprende a trabajar con estructuras de datos en C"));
+        cursosC.add(new Course("Introducción a C", "Aprende los fundamentos de la programación en C", "C"));
+        cursosC.add(new Course("Estructuras de datos en C", "Aprende a trabajar con estructuras de datos en C", "C"));
         HashSet<String> tagsC = new HashSet<>();
         tagsC.add("Bajo Nivel");
         tagsC.add("Lenguaje Imperativo");
-        lenguajes.add(new ProgrammingLanguage("C", descripcionC, cursosC, tagsC, R.drawable.logo_c));
+        ProgrammingLanguage c = new ProgrammingLanguage("C", descripcionC, cursosC, tagsC, R.drawable.logo_c);
+        lenguajes.add(c);
 
         // Lenguaje C++
         String descripcionCpp = "C++ es un lenguaje de programación de alto nivel utilizado para el desarrollo de aplicaciones de software, videojuegos y otros programas complejos.";
         ArrayList<Course> cursosCpp = new ArrayList<>();
-        cursosCpp.add(new Course("Introducción a C++", "Aprende los fundamentos de la programación en C++"));
-        cursosCpp.add(new Course("Programación orientada a objetos en C++", "Aprende a programar utilizando la metodología de programación orientada a objetos en C++"));
+        cursosCpp.add(new Course("Introducción a C++", "Aprende los fundamentos de la programación en C++", "C++"));
+        cursosCpp.add(new Course("Programación orientada a objetos en C++", "Aprende a programar utilizando la metodología de programación orientada a objetos en C++","C++"));
         HashSet<String> tagsCpp = new HashSet<>();
         tagsCpp.add("Alto Nivel");
         tagsCpp.add("OOP");
-        lenguajes.add(new ProgrammingLanguage("C++", descripcionCpp, cursosCpp, tagsCpp, R.drawable.logo_cpp));
+        ProgrammingLanguage cpp = new ProgrammingLanguage("C++", descripcionCpp, cursosCpp, tagsCpp, R.drawable.logo_cpp);
+        lenguajes.add(cpp);
 
         // Lenguaje C#
         String descripcionCSharp = "C# es un lenguaje de programación de alto nivel desarrollado por Microsoft. Es utilizado principalmente para el desarrollo de aplicaciones en la plataforma .NET.";
         ArrayList<Course> cursosCSharp = new ArrayList<>();
-        cursosCSharp.add(new Course("Introducción a C#", "Aprende los fundamentos de la programación en C#"));
-        cursosCSharp.add(new Course("Programación orientada a objetos en C#", "Aprende a programar utilizando la metodología de programación orientada a objetos en C#"));
+        cursosCSharp.add(new Course("Introducción a C#", "Aprende los fundamentos de la programación en C#","C#"));
+        cursosCSharp.add(new Course("Programación orientada a objetos en C#", "Aprende a programar utilizando la metodología de programación orientada a objetos en C#","C#"));
         HashSet<String> tagsCSharp = new HashSet<>();
         tagsCSharp.add("Alto Nivel");
         tagsCSharp.add("OOP");
-        lenguajes.add(new ProgrammingLanguage("C#", descripcionCSharp, cursosCSharp, tagsCSharp, R.drawable.logo_csh));
+        ProgrammingLanguage csh = new ProgrammingLanguage("C#", descripcionCSharp, cursosCSharp, tagsCSharp, R.drawable.logo_csh);
+        lenguajes.add(csh);
 
         // Lenguaje Java
         String descripcionJava = "Java es un lenguaje de programación de alto nivel utilizado principalmente para el desarrollo de aplicaciones empresariales y de servidores.";
         ArrayList<Course> cursosJava = new ArrayList<>();
-        cursosJava.add(new Course("Introducción a Java", "Aprende los fundamentos de la programación en Java"));
-        cursosJava.add(new Course("Programación orientada a objetos en Java", "Aprende a programar utilizando la metodología de programación orientada a objetos en Java"));
+        cursosJava.add(new Course("Introducción a Java", "Aprende los fundamentos de la programación en Java","Java"));
+        cursosJava.add(new Course("Programación orientada a objetos en Java", "Aprende a programar utilizando la metodología de programación orientada a objetos en Java","Java"));
         HashSet<String> tagsJava = new HashSet<>();
         tagsJava.add("Alto Nivel");
         tagsJava.add("OOP");
-        lenguajes.add(new ProgrammingLanguage("Java", descripcionJava, cursosJava, tagsJava, R.drawable.logo_java));
+        ProgrammingLanguage java = new ProgrammingLanguage("Java", descripcionJava, cursosJava, tagsJava, R.drawable.logo_java);
+        lenguajes.add(java);
 
         // Kotlin
         ArrayList<Course> kotlinCourses = new ArrayList<>();
-        kotlinCourses.add(new Course("Curso de Kotlin básico", "Introducción a Kotlin"));
-        kotlinCourses.add(new Course("Curso de Kotlin avanzado", "Programación orientada a objetos en Kotlin"));
+        kotlinCourses.add(new Course("Curso de Kotlin básico", "Introducción a Kotlin", "Kotlin"));
+        kotlinCourses.add(new Course("Curso de Kotlin avanzado", "Programación orientada a objetos en Kotlin", "Kotlin"));
         HashSet<String> kotlinTags = new HashSet<>();
         kotlinTags.add("OOP");
         kotlinTags.add("Lenguaje Funcional");
@@ -403,8 +407,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // Python
         ArrayList<Course> pythonCourses = new ArrayList<>();
-        pythonCourses.add(new Course("Curso de Python básico", "Introducción a Python"));
-        pythonCourses.add(new Course("Curso de Python avanzado", "Programación orientada a objetos en Python"));
+        pythonCourses.add(new Course("Curso de Python básico", "Introducción a Python", "Python"));
+        pythonCourses.add(new Course("Curso de Python avanzado", "Programación orientada a objetos en Python","Python"));
         HashSet<String> pythonTags = new HashSet<>();
         pythonTags.add("Lenguaje Funcional");
         ProgrammingLanguage python = new ProgrammingLanguage("Python", "Python es un lenguaje de programación interpretado, orientado a objetos y de alto nivel. Es un lenguaje fácil de aprender y muy versátil, utilizado en una amplia variedad de aplicaciones, desde el desarrollo web hasta la inteligencia artificial.", pythonCourses, pythonTags, R.drawable.logo_python);
@@ -412,8 +416,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // JavaScript
         ArrayList<Course> jsCourses = new ArrayList<>();
-        jsCourses.add(new Course("Curso de JavaScript básico", "Introducción a JavaScript"));
-        jsCourses.add(new Course("Curso de JavaScript avanzado", "Programación orientada a objetos en JavaScript"));
+        jsCourses.add(new Course("Curso de JavaScript básico", "Introducción a JavaScript","JavaScript"));
+        jsCourses.add(new Course("Curso de JavaScript avanzado", "Programación orientada a objetos en JavaScript","JavaScript"));
         HashSet<String> jsTags = new HashSet<>();
         jsTags.add("Alto Nivel");
         ProgrammingLanguage javascript = new ProgrammingLanguage("JavaScript", "JavaScript es un lenguaje de programación interpretado, de alto nivel y orientado a objetos. Es utilizado principalmente para el desarrollo web, pero también se puede utilizar en el lado del servidor y en el desarrollo de aplicaciones móviles.", jsCourses, jsTags, R.drawable.logo_js);
@@ -421,8 +425,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // TypeScript
         ArrayList<Course> tsCourses = new ArrayList<>();
-        tsCourses.add(new Course("Curso de TypeScript básico", "Introducción a TypeScript"));
-        tsCourses.add(new Course("Curso de TypeScript avanzado", "Programación orientada a objetos en TypeScript"));
+        tsCourses.add(new Course("Curso de TypeScript básico", "Introducción a TypeScript","TypeScript"));
+        tsCourses.add(new Course("Curso de TypeScript avanzado", "Programación orientada a objetos en TypeScript","TypeScript"));
         HashSet<String> tsTags = new HashSet<>();
         tsTags.add("Alto Nivel");
         ProgrammingLanguage typescript = new ProgrammingLanguage("TypeScript", "TypeScript es un lenguaje de programación de código abierto que se construye sobre JavaScript, añadiendo nuevas características y mejorando la seguridad del código. Es un lenguaje estáticamente tipado que se compila a JavaScript.", tsCourses, tsTags, R.drawable.logo_ts);
@@ -430,48 +434,48 @@ public class LoginActivity extends AppCompatActivity {
 
         // Lenguaje R
         ArrayList<Course> rCourses = new ArrayList<>();
-        rCourses.add(new Course("Introduction to R", "A beginner's guide to R programming"));
-        rCourses.add(new Course("Data Visualization in R", "Learn to create data visualizations using R"));
+        rCourses.add(new Course("Introduction to R", "A beginner's guide to R programming","R"));
+        rCourses.add(new Course("Data Visualization in R", "Learn to create data visualizations using R","R"));
         HashSet<String> rTags = new HashSet<>(Arrays.asList("Data Science", "Statistics", "Data Visualization"));
         ProgrammingLanguage r = new ProgrammingLanguage("R", "R is a programming language and free software environment for statistical computing and graphics.", rCourses, rTags, R.drawable.logo_r);
         lenguajes.add(r);
 
         // Lenguaje Rust
         ArrayList<Course> rustCourses = new ArrayList<>();
-        rustCourses.add(new Course("Rust Basics", "Introduction to Rust programming language"));
-        rustCourses.add(new Course("Advanced Rust", "Advanced concepts and features of Rust programming language"));
+        rustCourses.add(new Course("Rust Basics", "Introduction to Rust programming language","Rust"));
+        rustCourses.add(new Course("Advanced Rust", "Advanced concepts and features of Rust programming language","Rust"));
         HashSet<String> rustTags = new HashSet<>(Arrays.asList("Systems Programming", "Memory Safety", "Concurrency"));
         ProgrammingLanguage rust = new ProgrammingLanguage("Rust", "Rust is a systems programming language focused on safety, speed, and concurrency.", rustCourses, rustTags, R.drawable.logo_rust);
         lenguajes.add(rust);
 
         // Lenguaje MATLAB
         ArrayList<Course> matlabCourses = new ArrayList<>();
-        matlabCourses.add(new Course("Introduction to MATLAB", "Learn the basics of MATLAB programming language"));
-        matlabCourses.add(new Course("MATLAB for Engineers", "Advanced MATLAB concepts for engineering applications"));
+        matlabCourses.add(new Course("Introduction to MATLAB", "Learn the basics of MATLAB programming language","MATLAB"));
+        matlabCourses.add(new Course("MATLAB for Engineers", "Advanced MATLAB concepts for engineering applications","MATLAB"));
         HashSet<String> matlabTags = new HashSet<>(Arrays.asList("Numerical Computing", "Engineering", "Scientific Computing"));
         ProgrammingLanguage matlab = new ProgrammingLanguage("MATLAB", "MATLAB is a high-performance language for technical computing.", matlabCourses, matlabTags, R.drawable.logo_matlab);
         lenguajes.add(matlab);
 
         // Lenguaje PHP
         ArrayList<Course> phpCourses = new ArrayList<>();
-        phpCourses.add(new Course("PHP Basics", "Introduction to PHP programming language"));
-        phpCourses.add(new Course("PHP Web Development", "Building web applications using PHP"));
+        phpCourses.add(new Course("PHP Basics", "Introduction to PHP programming language","PHP"));
+        phpCourses.add(new Course("PHP Web Development", "Building web applications using PHP","PHP"));
         HashSet<String> phpTags = new HashSet<>(Arrays.asList("Web Development", "Server-Side Scripting", "Database Integration"));
         ProgrammingLanguage php = new ProgrammingLanguage("PHP", "PHP is a popular general-purpose scripting language that is especially suited to web development.", phpCourses, phpTags, R.drawable.logo_php);
         lenguajes.add(php);
 
         // Lenguaje HTML
         ArrayList<Course> htmlCourses = new ArrayList<>();
-        htmlCourses.add(new Course("HTML Fundamentals", "Introduction to HTML markup language"));
-        htmlCourses.add(new Course("CSS Basics", "Introduction to CSS styling language"));
+        htmlCourses.add(new Course("HTML Fundamentals", "Introduction to HTML markup language","HTML"));
+        htmlCourses.add(new Course("CSS Basics", "Introduction to CSS styling language","HTML"));
         HashSet<String> htmlTags = new HashSet<>(Arrays.asList("Web Development", "Front-End Development", "Markup Languages"));
         ProgrammingLanguage html = new ProgrammingLanguage("HTML", "HTML is the standard markup language for creating web pages, and CSS is used to style them.", htmlCourses, htmlTags, R.drawable.logo_html);
         lenguajes.add(html);
 
         // Lenguaje Go
         ArrayList<Course> goCourses = new ArrayList<>();
-        goCourses.add(new Course("Go Basics", "Introduction to Go programming language"));
-        goCourses.add(new Course("Advanced Go", "Advanced concepts and features of Go programming language"));
+        goCourses.add(new Course("Go Basics", "Introduction to Go programming language","Go"));
+        goCourses.add(new Course("Advanced Go", "Advanced concepts and features of Go programming language","Go"));
         HashSet<String> goTags = new HashSet<>(Arrays.asList("Systems Programming", "Concurrent Programming"));
         ProgrammingLanguage go = new ProgrammingLanguage("Go", "Go is a statically typed, compiled language designed for efficient and concurrent programming.", goCourses, goTags, R.drawable.logo_go);
         lenguajes.add(go);
@@ -479,48 +483,48 @@ public class LoginActivity extends AppCompatActivity {
         // Lenguaje Objective-C
         String descripcionObjC = "Objective-C is a general-purpose, object-oriented programming language that adds Smalltalk-style messaging to the C programming language.";
         ArrayList<Course> objCCourses = new ArrayList<>();
-        objCCourses.add(new Course("Objective-C Basics", "Introduction to Objective-C programming language"));
-        objCCourses.add(new Course("Objective-C for iOS Development", "Building iOS applications using Objective-C"));
+        objCCourses.add(new Course("Objective-C Basics", "Introduction to Objective-C programming language","Objective-C"));
+        objCCourses.add(new Course("Objective-C for iOS Development", "Building iOS applications using Objective-C","Objective-C"));
         HashSet<String> objCTags = new HashSet<>(Arrays.asList("iOS Development", "Object-Oriented Programming"));
         ProgrammingLanguage objC = new ProgrammingLanguage("Objective-C", descripcionObjC, objCCourses, objCTags, R.drawable.logo_obj_c);
         lenguajes.add(objC);
 
         // Lenguaje Ruby
         ArrayList<Course> rubyCourses = new ArrayList<>();
-        rubyCourses.add(new Course("Ruby Basics", "Introduction to Ruby programming language"));
-        rubyCourses.add(new Course("Ruby on Rails", "Building web applications using Ruby on Rails framework"));
+        rubyCourses.add(new Course("Ruby Basics", "Introduction to Ruby programming language","Ruby"));
+        rubyCourses.add(new Course("Ruby on Rails", "Building web applications using Ruby on Rails framework","Ruby"));
         HashSet<String> rubyTags = new HashSet<>(Arrays.asList("Web Development", "Scripting", "Object-Oriented Programming"));
         ProgrammingLanguage ruby = new ProgrammingLanguage("Ruby", "Ruby is a dynamic, reflective, object-oriented, general-purpose programming language.", rubyCourses, rubyTags, R.drawable.logo_ruby);
         lenguajes.add(ruby);
 
         // Lenguaje SQL
         ArrayList<Course> sqlCourses = new ArrayList<>();
-        sqlCourses.add(new Course("SQL Fundamentals", "Introduction to SQL programming language"));
-        sqlCourses.add(new Course("Advanced SQL", "Advanced concepts of SQL and database management"));
+        sqlCourses.add(new Course("SQL Fundamentals", "Introduction to SQL programming language","SQL"));
+        sqlCourses.add(new Course("Advanced SQL", "Advanced concepts of SQL and database management","SQL"));
         HashSet<String> sqlTags = new HashSet<>(Arrays.asList("Database Management", "Query Language"));
         ProgrammingLanguage sql = new ProgrammingLanguage("SQL", "SQL is a domain-specific language used in programming and designed for managing data held in a relational database management system.", sqlCourses, sqlTags, R.drawable.logo_sql);
         lenguajes.add(sql);
 
         // Lenguaje Swift
         ArrayList<Course> swiftCourses = new ArrayList<>();
-        swiftCourses.add(new Course("Swift Basics", "Introduction to Swift programming language"));
-        swiftCourses.add(new Course("iOS App Development with Swift", "Building iOS applications using Swift"));
+        swiftCourses.add(new Course("Swift Basics", "Introduction to Swift programming language","Swift"));
+        swiftCourses.add(new Course("iOS App Development with Swift", "Building iOS applications using Swift","Swift"));
         HashSet<String> swiftTags = new HashSet<>(Arrays.asList("iOS Development", "Object-Oriented Programming"));
         ProgrammingLanguage swift = new ProgrammingLanguage("Swift", "Swift is a powerful and intuitive programming language created by Apple for building iOS, macOS, watchOS, and tvOS apps.", swiftCourses, swiftTags, R.drawable.logo_swift);
         lenguajes.add(swift);
 
         // Lenguaje Scala
         ArrayList<Course> scalaCourses = new ArrayList<>();
-        scalaCourses.add(new Course("Scala Basics", "Introduction to Scala programming language"));
-        scalaCourses.add(new Course("Functional Programming in Scala", "Learn functional programming concepts in Scala"));
+        scalaCourses.add(new Course("Scala Basics", "Introduction to Scala programming language","Scala"));
+        scalaCourses.add(new Course("Functional Programming in Scala", "Learn functional programming concepts in Scala","Scala"));
         HashSet<String> scalaTags = new HashSet<>(Arrays.asList("Functional Programming", "JVM", "Concurrency"));
         ProgrammingLanguage scala = new ProgrammingLanguage("Scala", "Scala is a modern multi-paradigm programming language designed to express common programming patterns in a concise, elegant, and type-safe way.", scalaCourses, scalaTags, R.drawable.logo_scala);
         lenguajes.add(scala);
 
         // Lenguaje Pascal
         ArrayList<Course> pascalCourses = new ArrayList<>();
-        pascalCourses.add(new Course("Pascal Basics", "Introduction to Pascal programming language"));
-        pascalCourses.add(new Course("Data Structures in Pascal", "Learn about data structures in Pascal"));
+        pascalCourses.add(new Course("Pascal Basics", "Introduction to Pascal programming language","Pascal"));
+        pascalCourses.add(new Course("Data Structures in Pascal", "Learn about data structures in Pascal","Pascal"));
         HashSet<String> pascalTags = new HashSet<>();
         pascalTags.add("Structured Programming");
         pascalTags.add("Algorithm Design");
@@ -529,40 +533,40 @@ public class LoginActivity extends AppCompatActivity {
 
         // Lenguaje Elixir
         ArrayList<Course> elixirCourses = new ArrayList<>();
-        elixirCourses.add(new Course("Elixir Basics", "Introduction to Elixir programming language"));
-        elixirCourses.add(new Course("Concurrent Programming with Elixir", "Learn concurrent programming using Elixir"));
+        elixirCourses.add(new Course("Elixir Basics", "Introduction to Elixir programming language","Elixir"));
+        elixirCourses.add(new Course("Concurrent Programming with Elixir", "Learn concurrent programming using Elixir","Elixir"));
         HashSet<String> elixirTags = new HashSet<>(Arrays.asList("Functional Programming", "Concurrency", "Scalability"));
         ProgrammingLanguage elixir = new ProgrammingLanguage("Elixir", "Elixir is a functional, concurrent, and extensible programming language built on the Erlang virtual machine (BEAM).", elixirCourses, elixirTags, R.drawable.logo_elixir);
         lenguajes.add(elixir);
 
         // Lenguaje Erlang
         ArrayList<Course> erlangCourses = new ArrayList<>();
-        erlangCourses.add(new Course("Erlang Basics", "Introduction to Erlang programming language"));
-        erlangCourses.add(new Course("OTP Framework in Erlang", "Learn to build fault-tolerant systems with OTP in Erlang"));
+        erlangCourses.add(new Course("Erlang Basics", "Introduction to Erlang programming language","Erlang"));
+        erlangCourses.add(new Course("OTP Framework in Erlang", "Learn to build fault-tolerant systems with OTP in Erlang","Erlang"));
         HashSet<String> erlangTags = new HashSet<>(Arrays.asList("Concurrent Programming", "Fault-Tolerant Systems", "Telecommunications"));
         ProgrammingLanguage erlang = new ProgrammingLanguage("Erlang", "Erlang is a general-purpose, concurrent, and functional programming language used primarily in telecommunication, banking, and e-commerce.", erlangCourses, erlangTags, R.drawable.logo_erlang);
         lenguajes.add(erlang);
 
         // Lenguaje Scheme
         ArrayList<Course> schemeCourses = new ArrayList<>();
-        schemeCourses.add(new Course("Scheme Basics", "Introduction to Scheme programming language"));
-        schemeCourses.add(new Course("Functional Programming in Scheme", "Learn functional programming concepts in Scheme"));
+        schemeCourses.add(new Course("Scheme Basics", "Introduction to Scheme programming language","Scheme"));
+        schemeCourses.add(new Course("Functional Programming in Scheme", "Learn functional programming concepts in Scheme","Scheme"));
         HashSet<String> schemeTags = new HashSet<>(Arrays.asList("Lisp", "Functional Programming", "Language Design"));
         ProgrammingLanguage scheme = new ProgrammingLanguage("Scheme", "Scheme is a dialect of the Lisp programming language known for its simplicity and elegance. It is often used for teaching programming and implementing programming language concepts.", schemeCourses, schemeTags, R.drawable.logo_scheme);
         lenguajes.add(scheme);
 
         // Lenguaje Postscript
         ArrayList<Course> postscriptCourses = new ArrayList<>();
-        postscriptCourses.add(new Course("Introduction to Postscript", "Learn the basics of Postscript language"));
-        postscriptCourses.add(new Course("Advanced Postscript", "Advanced concepts and features of Postscript language"));
+        postscriptCourses.add(new Course("Introduction to Postscript", "Learn the basics of Postscript Postscript","Scheme"));
+        postscriptCourses.add(new Course("Advanced Postscript", "Advanced concepts and features of Postscript language","Postscript"));
         HashSet<String> postscriptTags = new HashSet<>(Arrays.asList("Page Description Language", "Printing", "Graphics"));
         ProgrammingLanguage postscript = new ProgrammingLanguage("Postscript", "Postscript is a programming language that is primarily used for describing the appearance of printed pages.", postscriptCourses, postscriptTags, R.drawable.logo_postiscript);
         lenguajes.add(postscript);
 
         // Lenguaje Basic
         ArrayList<Course> basicCourses = new ArrayList<>();
-        basicCourses.add(new Course("Introduction to Basic", "Learn the basics of Basic programming language"));
-        basicCourses.add(new Course("Advanced Basic", "Advanced concepts and features of Basic programming language"));
+        basicCourses.add(new Course("Introduction to Basic", "Learn the basics of Basic programming language","Basic"));
+        basicCourses.add(new Course("Advanced Basic", "Advanced concepts and features of Basic programming language","Basic"));
         HashSet<String> basicTags = new HashSet<>();
         basicTags.add("Beginner");
         ProgrammingLanguage basic = new ProgrammingLanguage("Basic", "Basic is a family of general-purpose programming languages that are simple to learn and widely used.", basicCourses, basicTags, R.drawable.logo_basic);
@@ -570,16 +574,16 @@ public class LoginActivity extends AppCompatActivity {
 
         // Lenguaje Cobol
         ArrayList<Course> cobolCourses = new ArrayList<>();
-        cobolCourses.add(new Course("Introduction to Cobol", "Learn the basics of Cobol programming language"));
-        cobolCourses.add(new Course("Advanced Cobol", "Advanced concepts and features of Cobol programming language"));
+        cobolCourses.add(new Course("Introduction to Cobol", "Learn the basics of Cobol programming language","Cobol"));
+        cobolCourses.add(new Course("Advanced Cobol", "Advanced concepts and features of Cobol programming language","Cobol"));
         HashSet<String> cobolTags = new HashSet<>(Arrays.asList("Business Applications", "Legacy Systems", "Mainframe Programming"));
         ProgrammingLanguage cobol = new ProgrammingLanguage("Cobol", "Cobol is a high-level programming language designed for business applications.", cobolCourses, cobolTags, R.drawable.logo_cobol);
         lenguajes.add(cobol);
 
         // Lenguaje Fortran
         ArrayList<Course> fortranCourses = new ArrayList<>();
-        fortranCourses.add(new Course("Introduction to Fortran", "Learn the basics of Fortran programming language"));
-        fortranCourses.add(new Course("Advanced Fortran", "Advanced concepts and features of Fortran programming language"));
+        fortranCourses.add(new Course("Introduction to Fortran", "Learn the basics of Fortran programming language","Fortran"));
+        fortranCourses.add(new Course("Advanced Fortran", "Advanced concepts and features of Fortran programming language","Fortran"));
         HashSet<String> fortranTags = new HashSet<>(Arrays.asList("Scientific Computing", "Numerical Analysis", "High-Performance Computing"));
         ProgrammingLanguage fortran = new ProgrammingLanguage("Fortran", "Fortran is a general-purpose, imperative programming language that is particularly suited to numeric and scientific computing.", fortranCourses, fortranTags, R.drawable.logo_fortran);
         lenguajes.add(fortran);
@@ -604,7 +608,7 @@ public class LoginActivity extends AppCompatActivity {
 
             // Agregar los cursos al lenguaje
             for (Course course : language.getCourses()) {
-                DocumentReference courseDocRef = coursesCollectionRef.document();
+                DocumentReference courseDocRef = coursesCollectionRef.document(course.getName());
                 Map<String, Object> courseData = new HashMap<>();
                 courseData.put("descripcion", course.getDescription());
                 courseDocRef.set(courseData);

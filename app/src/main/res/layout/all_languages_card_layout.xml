@@ -79,7 +79,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/languageImage_allLanguagesFragment_imageView"
         app:layout_constraintTop_toBottomOf="@+id/languageName_allLanguagesFragment_textView"
-        app:trackColor="?attr/colorSurface"
+        app:trackColor="@color/lightpurple_codebyte"
         app:trackCornerRadius="4dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

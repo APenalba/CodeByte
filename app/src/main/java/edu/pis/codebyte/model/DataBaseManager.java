@@ -38,6 +38,7 @@ public class DataBaseManager {
     private OnLoadUserPictureUrlListener userPictureUrlListener;
     private OnLoadUserProviderListener providerListener;
     private OnLoadProgrammingLanguages languagesListener;
+    private OnLoadUserListener userListener;
 
 
 
@@ -53,6 +54,10 @@ public class DataBaseManager {
         public void onLoadProgrammingLanguages(ArrayList<ProgrammingLanguage> languages);
     }
 
+    public interface OnLoadUserListener {
+        void onLoadUser(User user);
+    }
+
     private DataBaseManager() {
         db = FirebaseFirestore.getInstance();
     }
@@ -64,6 +69,10 @@ public class DataBaseManager {
 
     public void setProviderListener(OnLoadUserProviderListener providerListener) {
         this.providerListener = providerListener;
+    }
+
+    public void setUserListener(OnLoadUserListener userListener) {
+        this.userListener = userListener;
     }
 
     public void setOnLoadUserPicture(OnLoadUserPictureUrlListener listener) {
@@ -102,6 +111,18 @@ public class DataBaseManager {
                     Log.d(TAG, "Ya existe un usuario con ID" + uId);
                 }
                 return null;
+            }
+        });
+    }
+
+    public void getUserFromDatabase(String uId) {
+        getUserDocument(uId, new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    userListener.onLoadUser(new User(uId, document.getString("username"), document.getString("email"), document.getString("profileImageURL"), document.getString("provider")));
+                }
             }
         });
     }
@@ -309,11 +330,11 @@ public class DataBaseManager {
                 });
     }
 
-    public void registrarTemaCompletado(String uId, String idTema) {
+    public void registrarTemaCompletado(String uId, String lesson) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // Agregar un tema completado al progreso del usuario
-        db.collection("Progreso").document(uId).collection("TemasCompletados").document(idTema).set(new HashMap<String, Object>())
+        db.collection("Progreso").document(uId).collection("TemasCompletados").document(lesson).set(new HashMap<String, Object>())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -338,7 +359,6 @@ public class DataBaseManager {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-
                             String languageName = document.getId();
                             String languageDescription = document.getString("descripcion").trim();
                             int resourceImageId = document.getLong("resourceImageId").intValue();
@@ -346,7 +366,14 @@ public class DataBaseManager {
                             HashSet<String> tags_set = new HashSet<>();
                             tags_set.addAll(tags);
                             ProgrammingLanguage programmingLanguage = new ProgrammingLanguage(languageName, languageDescription, tags_set, resourceImageId);
-                            //ProgrammingLanguage programmingLanguage = new ProgrammingLanguage(languageName, languageDescription,courses, resourceImageId);
+                            document.getReference().collection("courses").get().addOnCompleteListener(task_aux -> {
+                                if(task_aux.isSuccessful()) {
+                                    for(QueryDocumentSnapshot document_aux :task.getResult()) {
+                                        Course course = new Course(document.getId(), document.getString("description"), languageName);
+                                        programmingLanguage.addCourse(course);
+                                    }
+                                }
+                            });
                             programmingLanguages.add(programmingLanguage);
                         }
                         languagesListener.onLoadProgrammingLanguages(programmingLanguages);
@@ -354,18 +381,7 @@ public class DataBaseManager {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
                 });
-
-
     }
 
-    private void loadLanguageCourses(QueryDocumentSnapshot doc, ProgrammingLanguage pl) {
-        doc.getReference().collection("courses").get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                for( QueryDocumentSnapshot document :task.getResult()) {
-                    Course course = new Course(document.getId(), document.getString("description"));
-                    pl.addCourse(course);
-                }
-            }
-        });
-    }
+
 }

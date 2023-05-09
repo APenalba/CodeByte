@@ -18,7 +18,7 @@ import edu.pis.codebyte.model.ProgrammingLanguagesAdapter;
 import edu.pis.codebyte.view.main.MainActivity;
 
 
-public class AllLanguagesFragment extends Fragment {
+public class AllLanguagesFragment extends Fragment implements ProgrammingLanguagesAdapter.OnLanguageSelectedListener {
 
     private RecyclerView recyclerView;
     private ProgrammingLanguagesAdapter adapter;
@@ -60,7 +60,7 @@ public class AllLanguagesFragment extends Fragment {
     private void updateRecyclerView() {
         System.out.println(languages);
         if( languages != null) {
-            adapter = new ProgrammingLanguagesAdapter(languages, ProgrammingLanguagesAdapter.ViewType.ALL_LANGUAGES_VIEW_TYPE);
+            adapter = new ProgrammingLanguagesAdapter(languages, ProgrammingLanguagesAdapter.ViewType.ALL_LANGUAGES_VIEW_TYPE, this);
         } else {
             ArrayList<ProgrammingLanguage> programmingLanguagesList = new ArrayList<>();
             programmingLanguagesList.add(new ProgrammingLanguage("Java","", R.drawable.logo_java));
@@ -70,7 +70,7 @@ public class AllLanguagesFragment extends Fragment {
             programmingLanguagesList.add(new ProgrammingLanguage("C","", R.drawable.logo_c));
             programmingLanguagesList.add(new ProgrammingLanguage("JavaScript","", R.drawable.logo_js));
             programmingLanguagesList.add(new ProgrammingLanguage("C#","", R.drawable.logo_csh));
-            adapter = new ProgrammingLanguagesAdapter(programmingLanguagesList, ProgrammingLanguagesAdapter.ViewType.ALL_LANGUAGES_VIEW_TYPE);
+            adapter = new ProgrammingLanguagesAdapter(programmingLanguagesList, ProgrammingLanguagesAdapter.ViewType.ALL_LANGUAGES_VIEW_TYPE, this);
         }
         recyclerView.setAdapter(adapter);
     }
@@ -81,4 +81,8 @@ public class AllLanguagesFragment extends Fragment {
         updateRecyclerView();
     }
 
+    @Override
+    public void onLanguageSelected(ProgrammingLanguage language) {
+
+    }
 }

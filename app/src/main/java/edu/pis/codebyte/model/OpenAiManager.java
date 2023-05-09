@@ -1,16 +1,12 @@
 package edu.pis.codebyte.model;
 
 
-import androidx.annotation.NonNull;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
-import okhttp3.Call;
-import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -19,59 +15,61 @@ import okhttp3.Response;
 
 public class OpenAiManager {
 
+    public interface OnResultLoadedListener {
+        void onResultLoaded(String result);
+    }
+
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");
 
     OkHttpClient client = new OkHttpClient();
+    OnResultLoadedListener listener;
 
     public OpenAiManager() {
 
     }
 
-    public void callAPI(String prompt) {
-        // TODO: okhttp setup
-
-        JSONObject jsonBody = new JSONObject();
-        try {
-            jsonBody.put("model","text-davinei-903");
-            jsonBody.put("prompt",prompt);
-            jsonBody.put("max_tokens",4900) ;
-            jsonBody.put("temperature",0);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        RequestBody requestBody = RequestBody.create(jsonBody.toString(), JSON);
-        Request request = new Request.Builder()
-                .url("https://api.openai.com/v1/completions")
-                .header("Authorization", "Bearer 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")
-                .post(requestBody)
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                //TODO
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.body().string());
-                        JSONArray jsonArray = jsonObject.getJSONArray("choices");
-                        String result = jsonArray.getJSONObject(0).getString("text");
-
-
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                }else {
-                    //TODO
-                }
-
-            }
-        });
+    public OnResultLoadedListener getListener() {
+        return listener;
     }
+
+    public void setListener(OnResultLoadedListener listener) {
+        this.listener = listener;
+    }
+
+    public void sendPromptTask () {
+        String apiKey = "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";
+        String model = "davinci";
+
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = new FormBody.Builder()
+                .add("model", model)
+                .add("prompt", "Generate a test question with 4 answers.\\n- The answer should be interpreted by a program. Write the question and answers on the first line separated by ';'.\\n- Write the correct answer on the next line.\\n\\n- Difficulty: Hard\\n")
+                .add("temperature", "0.5")
+                .build();
+
+        Request request = new Request.Builder()
+                .url("https://api.openai.com/v1/engines/" + model + "/completions")
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer " + apiKey)
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+            JSONObject jsonObject = new JSONObject(response.body().string());
+            String generatedText = jsonObject.getJSONArray("choices").getJSONObject(0).getString("text");
+            System.out.println(generatedText);
+
+
+
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

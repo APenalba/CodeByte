@@ -10,8 +10,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.CodeByte"
-
         tools:targetApi="31">
+        <activity
+            android:name=".view.challenges.DailyChallengeActivity"
+            android:exported="false" />
         <activity
             android:name=".view.lesson.LessonActivity"
             android:exported="false" />
@@ -26,10 +28,10 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

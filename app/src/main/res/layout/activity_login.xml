@@ -11,7 +11,7 @@
         android:layout_width="196dp"
         android:layout_height="22dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="44dp"
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/forgot_password"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
@@ -37,6 +37,7 @@
         app:layout_constraintHorizontal_bias="0.106"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/forgotPassword_textView"
+        app:layout_constraintVertical_bias="0.459"
         tools:ignore="TextSizeCheck,VisualLintBounds" />
 
     <TextView

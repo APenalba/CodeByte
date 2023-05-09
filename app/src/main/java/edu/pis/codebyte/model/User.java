@@ -8,6 +8,7 @@ public class User {
     private String uImageURL;
     private String email;
     private String provider;
+    private UserProgress userProgress;
 
     public User(String uId, String username, String email, String uImageURL, String provider) {
         this.uId = uId;

@@ -30,12 +30,23 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
     private static final int HOME_VIEW_TYPE = 0;
     private static final int ALL_LANGUAGES_VIEW_TYPE = 1;
 
-    public static class HomeRecyclerViewViewHolder extends RecyclerView.ViewHolder {
+    public interface OnLanguageSelectedListener {
+        void onLanguageSelected(ProgrammingLanguage language);
+    }
+
+    private final OnLanguageSelectedListener languageSelectedListener;
+
+    public static class HomeRecyclerViewViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView languageImage;
 
         public HomeRecyclerViewViewHolder(View itemView) {
             super(itemView);
             languageImage = itemView.findViewById(R.id.languageImage);
+        }
+
+        @Override
+        public void onClick(View v) {
+
         }
     }
 
@@ -63,10 +74,11 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
         }
     }
 
-    public ProgrammingLanguagesAdapter(ArrayList<ProgrammingLanguage> programmingLanguagesList, ViewType viewType) {
+    public ProgrammingLanguagesAdapter(ArrayList<ProgrammingLanguage> programmingLanguagesList, ViewType viewType, OnLanguageSelectedListener languageSelectedListener) {
         this.programmingLanguagesList = programmingLanguagesList;
         selectedLanguage = programmingLanguagesList.get(0);
         this.viewType = viewType;
+        this.languageSelectedListener = languageSelectedListener;
     }
 
     @NonNull
@@ -98,6 +110,7 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
                     public void onClick(View view) {
                         selectedLanguage = programmingLanguageHome;
                         notifyDataSetChanged();
+                        languageSelectedListener.onLanguageSelected(selectedLanguage);
                     }
                 });
 
@@ -126,7 +139,7 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
                     @Override
                     public void onClick(View view) {
                         selectedLanguage = programmingLanguageAllLanguages;
-                        notifyDataSetChanged();
+                        languageSelectedListener.onLanguageSelected(selectedLanguage);
                     }
                 });
 

@@ -1,11 +1,14 @@
 package edu.pis.codebyte.view.home;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,16 +19,19 @@ import java.util.ArrayList;
 import edu.pis.codebyte.R;
 import edu.pis.codebyte.model.ProgrammingLanguage;
 import edu.pis.codebyte.model.ProgrammingLanguagesAdapter;
+import edu.pis.codebyte.view.challenges.DailyChallengeActivity;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapter.OnLanguageSelectedListener {
     private RecyclerView recyclerView;
     private ProgrammingLanguagesAdapter adapter;
-    private Button btn_start;
+    private ProgrammingLanguage selectedLanguage;
+    private Button allLanguages_button;
+    private ProgressBar progressBar;
 
     public HomeFragment() {
     }
@@ -59,12 +65,36 @@ public class HomeFragment extends Fragment {
         programmingLanguagesList.add(new ProgrammingLanguage("C#","", R.drawable.logo_csh));
 
 
-        adapter = new ProgrammingLanguagesAdapter(programmingLanguagesList, ProgrammingLanguagesAdapter.ViewType.HOME_VIEW_TYPE);
+        adapter = new ProgrammingLanguagesAdapter(programmingLanguagesList, ProgrammingLanguagesAdapter.ViewType.HOME_VIEW_TYPE, this);
         recyclerView.setAdapter(adapter);
-        recyclerView.scrollToPosition(programmingLanguagesList.size() / 2);
 
+        Button dailyChallenge = rootView.findViewById(R.id.start_home_button);
+        dailyChallenge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), DailyChallengeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        progressBar = rootView.findViewById(R.id.home_progressBar);
+        progressBar.bringToFront();
+
+        Button todosLosLenguajes = rootView.findViewById(R.id.allLanguages_home_button);
+        todosLosLenguajes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
         return rootView;
     }
 
 
+    @Override
+    public void onLanguageSelected(ProgrammingLanguage language) {
+        ImageView selectedLanguageImage = getView().findViewById(R.id.selectedLanguage_home_imageView);
+        this.selectedLanguage = language;
+        selectedLanguageImage.setImageResource(language.getImageResourceId());
+    }
 }
