@@ -13,14 +13,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -29,33 +27,31 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 
 public class DataBaseManager {
     private static DataBaseManager dbm;
     private FirebaseFirestore db;
-    private OnLoadUserPictureUrlListener userPictureUrlListener;
-    private OnLoadUserProviderListener providerListener;
-    private OnLoadProgrammingLanguages languagesListener;
+    private OnLoadUserProgressListener userProgressListener;
+    private OnLoadProgrammingLanguagesListener languagesListener;
     private OnLoadUserListener userListener;
 
-
-
-    public interface OnLoadUserPictureUrlListener {
-        public void onLoadUserPictureUrl(String pictureUrl);
-    }
-
-    public interface OnLoadUserProviderListener {
-        public void onLoadUserProvider(String userProvider);
-    }
-
-    public interface OnLoadProgrammingLanguages {
-        public void onLoadProgrammingLanguages(ArrayList<ProgrammingLanguage> languages);
+    public interface OnLoadProgrammingLanguagesListener {
+        void onLoadProgrammingLanguages(ArrayList<ProgrammingLanguage> languages);
     }
 
     public interface OnLoadUserListener {
         void onLoadUser(User user);
+        void onLoadUserImageURL(String imageURL);
+        void onLoadUserProvider(String userProvider);
+        void onLoadUserUsername(String username);
+        void onLoadUserEmail(String email);
+    }
+
+    public interface OnLoadUserProgressListener {
+        void onLoadUserProgress(UserProgress up);
     }
 
     private DataBaseManager() {
@@ -66,20 +62,14 @@ public class DataBaseManager {
         if (dbm == null) dbm = new DataBaseManager();
         return dbm;
     }
-
-    public void setProviderListener(OnLoadUserProviderListener providerListener) {
-        this.providerListener = providerListener;
-    }
-
-    public void setUserListener(OnLoadUserListener userListener) {
+    public void setOnLoadUserListener(OnLoadUserListener userListener) {
         this.userListener = userListener;
     }
-
-    public void setOnLoadUserPicture(OnLoadUserPictureUrlListener listener) {
-        this.userPictureUrlListener = listener;
+    public void setOnLoadUserProgressListener(OnLoadUserProgressListener listener) {
+        this.userProgressListener = listener;
     }
 
-    public void setOnLoadProgrammingLanguages(OnLoadProgrammingLanguages listener) {
+    public void setOnLoadProgrammingLanguagesListener(OnLoadProgrammingLanguagesListener listener) {
         this.languagesListener = listener;
     }
 
@@ -93,6 +83,7 @@ public class DataBaseManager {
     public void addUserToDatabase(String uId, String username, String email, String provider) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collection = db.collection("users");
+        CollectionReference progressCollection = db.collection("progress");
 
         DocumentReference document = collection.document(uId);
         db.runTransaction(new Transaction.Function<Void>() {
@@ -113,9 +104,23 @@ public class DataBaseManager {
                 return null;
             }
         });
+        DocumentReference progressDocument = progressCollection.document(uId);
+
     }
 
     public void getUserFromDatabase(String uId) {
+        getUserDocument(uId, new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    userListener.onLoadUser(new User(uId, document.getString("username"), document.getString("email"), document.getString("profileImageURL"), document.getString("provider")));
+                }
+            }
+        });
+    }
+
+    public void getUserProgressFromDatabase(String uId) {
         getUserDocument(uId, new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -141,7 +146,8 @@ public class DataBaseManager {
         docRef.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "Username del usuario con ID \" + uId + \"actualizado correctamente");
+                Log.d(TAG, "Username del usuario con ID " + uId + " actualizado correctamente");
+                userListener.onLoadUserUsername(new_username);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -167,7 +173,8 @@ public class DataBaseManager {
         docRef.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "Email del usuario con ID \" + uId + \"actualizado correctamente");
+                Log.d(TAG, "Email del usuario con ID " + uId + "actualizado correctamente");
+                userListener.onLoadUserEmail(new_email);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -216,13 +223,14 @@ public class DataBaseManager {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Imagen del usuario con ID \" + uId + \"actualizada correctamente");
+                        Log.d(TAG, "Imagen del usuario con ID " + uId + "actualizada correctamente");
+                        userListener.onLoadUserImageURL(imageUrl);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error al actualizar la imagen del usuario con ID \" + uId", e);
+                        Log.w(TAG, "Error al actualizar la imagen del usuario con ID " + uId, e);
                     }
                 });
 
@@ -271,61 +279,23 @@ public class DataBaseManager {
                 });
     }
 
-    public void loadImageURL() {
-        dbm.getUserDocument(FirebaseAuth.getInstance().getCurrentUser().getUid(), new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    // Crear objeto User con los datos del usuario de Firestore
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        String profileImageURL = document.getString("profileImageURL");
-                        //imageURL.setValue(profileImageURL);ç
-                        userPictureUrlListener.onLoadUserPictureUrl(profileImageURL);
-                    }
-                } else {
-                    // Error al obtener datos del usuario de Firestore
-                }
-            }
-        });
-    }
-
-    public void loadUserProvider() {
-        dbm.getUserDocument(FirebaseAuth.getInstance().getCurrentUser().getUid(), new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    // Crear objeto User con los datos del usuario de Firestore
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        String provider = document.getString("provider");
-                        //imageURL.setValue(profileImageURL);ç
-                        providerListener.onLoadUserProvider(provider);
-                    }
-                } else {
-                    // Error al obtener datos del usuario de Firestore
-                }
-            }
-        });
-    }
-
     public void recuperarTemasCompletados(String uId) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        // Recuperar los temas completados del usuario
-        db.collection("Progreso").document(uId).collection("TemasCompletados").get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            Log.d(TAG, "Tema completado: " + documentSnapshot.getId());
+        db.collection("progress")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        UserProgress up = new UserProgress();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            List<String> completedLessons = (List<String>) document.get("completedLessons");
+                            String courseName = document.getId();
+                            String language = document.getString("language");
+                            for (String lesson : completedLessons) {
+                                up.addLessonToProgress(lesson, courseName, language);
+                            }
                         }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error al recuperar el progreso del usuario", e);
+                        userProgressListener.onLoadUserProgress(up);
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
                     }
                 });
     }
@@ -334,7 +304,7 @@ public class DataBaseManager {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // Agregar un tema completado al progreso del usuario
-        db.collection("Progreso").document(uId).collection("TemasCompletados").document(lesson).set(new HashMap<String, Object>())
+        db.collection("Progreso").document(uId).collection("CursosCompletados").document(lesson).set(new HashMap<String, Object>())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -354,7 +324,7 @@ public class DataBaseManager {
 
         ArrayList<ProgrammingLanguage> programmingLanguages = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("ProgrammingLanguages")
+        db.collection("programmingLanguages")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -368,8 +338,13 @@ public class DataBaseManager {
                             ProgrammingLanguage programmingLanguage = new ProgrammingLanguage(languageName, languageDescription, tags_set, resourceImageId);
                             document.getReference().collection("courses").get().addOnCompleteListener(task_aux -> {
                                 if(task_aux.isSuccessful()) {
+                                    Course course = new Course(document.getId(), document.getString("description"), languageName);
                                     for(QueryDocumentSnapshot document_aux :task.getResult()) {
-                                        Course course = new Course(document.getId(), document.getString("description"), languageName);
+                                        document_aux.getReference().collection("lesson").get().addOnCompleteListener(task_aux_2 -> {
+                                            if(task_aux_2.isSuccessful()) {
+                                                Lesson lesson = new Lesson(document_aux.getId(), document_aux.getString("lesson"), course);
+                                            }
+                                        });
                                         programmingLanguage.addCourse(course);
                                     }
                                 }
@@ -382,6 +357,4 @@ public class DataBaseManager {
                     }
                 });
     }
-
-
 }

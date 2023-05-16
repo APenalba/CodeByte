@@ -18,15 +18,17 @@ public class LessonActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lesson);
 
-        LinearProgressIndicator progressBar = findViewById(R.id.languageProgress_allLanguagesFragment_progressBar);
-        progressBar.setProgressCompat(35, true);
+        LinearProgressIndicator progressBar = findViewById(R.id.languageProgress_lessonActivity_progressBar);
+        progressBar.setProgressCompat(32, true);
+        progressBar.setIndicatorColor(getResources().getColor(R.color.purple_codebyte));
+        progressBar.setTrackColor(getResources().getColor(R.color.lightpurple_codebyte));
 
         TextView textView = findViewById(R.id.textView2);
         textView.setText(obtenerTextoFormateado(getResources().getString(R.string.texto_ejemplo_leccion)));
     }
 
     private Spanned obtenerTextoFormateado(String texto) {
-        String textoFormateado = texto.replaceAll("\\*(.*?)\\*", "<strong><b>$1</b></strong>");
+        String textoFormateado = texto.replaceAll("\\*(.*?)\\*", "<b>$1</b>");
         textoFormateado = textoFormateado.replaceAll("\"(.*?)\"", "<i>$1</i>");
         return Html.fromHtml(textoFormateado, Html.FROM_HTML_OPTION_USE_CSS_COLORS);
     }

@@ -90,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         .setDisplayName(username)
                                         .build();
                                 user.updateProfile(profileUpdates);
-                                dbm.addUserToDatabase(user.getUid(), user.getDisplayName(), user.getEmail(), "email_password");
+                                dbm.addUserToDatabase(user.getUid(), username, user.getEmail(), "email_password");
                                 goToLogIn();
 
                             } else {

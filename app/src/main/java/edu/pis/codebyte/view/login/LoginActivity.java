@@ -42,6 +42,7 @@ import java.util.Map;
 import edu.pis.codebyte.R;
 import edu.pis.codebyte.model.Course;
 import edu.pis.codebyte.model.DataBaseManager;
+import edu.pis.codebyte.model.Lesson;
 import edu.pis.codebyte.model.LoginUtils;
 import edu.pis.codebyte.model.ProgrammingLanguage;
 import edu.pis.codebyte.model.exceptions.InvalidEmailException;
@@ -77,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
         dbm = DataBaseManager.getInstance();
         prefs = getSharedPreferences(PREFERENCES_FILE, MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
+        checkSession();
         activity_setup();
         recuperaPassword_button = findViewById(R.id.recuperaPassword_bttn);
         recuperaPassword_button.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        checkSession();
+        mAuth.signOut();
     }
 
 
@@ -237,13 +239,6 @@ public class LoginActivity extends AppCompatActivity {
                                         dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(),mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail(), "github.com");
                                     }
                                     goToHome();
-                                    // User is signed in.
-                                    // IdP data available in
-                                    // authResult.getAdditionalUserInfo().getProfile().
-                                    // The OAuth access token can also be retrieved:
-                                    // ((OAuthCredential)authResult.getCredential()).getAccessToken().
-                                    // The OAuth secret can be retrieved by calling:
-                                    // ((OAuthCredential)authResult.getCredential()).getSecret().
                                 }
                             })
                     .addOnFailureListener(
@@ -260,13 +255,6 @@ public class LoginActivity extends AppCompatActivity {
                             new OnSuccessListener<AuthResult>() {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
-                                    // User is signed in.
-                                    // IdP data available in
-                                    // authResult.getAdditionalUserInfo().getProfile().
-                                    // The OAuth access token can also be retrieved:
-                                    // ((OAuthCredential)authResult.getCredential()).getAccessToken().
-                                    // The OAuth secret can be retrieved by calling:
-                                    // ((OAuthCredential)authResult.getCredential()).getSecret().
                                     if (authResult.getAdditionalUserInfo().isNewUser()) {
                                         dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(),mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail(), "github.com");
                                     }
@@ -354,6 +342,86 @@ public class LoginActivity extends AppCompatActivity {
         // Crear la lista de lenguajes
         ArrayList<ProgrammingLanguage> lenguajes = new ArrayList<>();
 
+        // Kotlin
+        ArrayList<Course> kotlinCourses = new ArrayList<>();
+        Course kotlinCourse = new Course("Curso de Kotlin básico", "Introducción a Kotlin", "Kotlin");
+        kotlinCourse.addLesson(new Lesson("Declaración de variables"," En Kotlin, puedes declarar una variable utilizando la palabra clave val o var. La diferencia entre ambas es que val declara una variable inmutable (no se puede cambiar después de asignar un valor), mientras que var declara una variable mutable (se puede cambiar su valor).", kotlinCourse));
+        kotlinCourse.addLesson(new Lesson("Inferencia de tipo","Kotlin tiene inferencia de tipo, lo que significa que no siempre es necesario especificar explícitamente el tipo de dato de una variable. El compilador de Kotlin puede deducir el tipo de dato en función del valor asignado.", kotlinCourse));
+        kotlinCourses.add(kotlinCourse);
+        kotlinCourse = new Course("Curso de Kotlin avanzado", "Programación orientada a objetos en Kotlin", "Kotlin");
+        kotlinCourse.addLesson(new Lesson("Clases","En Kotlin, las clases son la base de la POO. Se utilizan para definir modelos de objetos que encapsulan atributos (variables) y comportamientos (funciones) relacionados. Puedes crear una clase utilizando la palabra clave \"class\" seguida del nombre de la clase.", kotlinCourse));
+        kotlinCourse.addLesson(new Lesson("Objetos","Un objeto es una instancia de una clase. Puedes crear objetos utilizando la palabra clave \"val\" o \"var\" seguida del nombre del objeto, seguido por el operador de asignación y la llamada al constructor de la clase. Por ejemplo, si tienes una clase llamada \"Persona\", puedes crear un objeto llamado \"persona\" de la siguiente manera: \"val persona = Persona()\".", kotlinCourse));
+        kotlinCourses.add(kotlinCourse);
+        HashSet<String> kotlinTags = new HashSet<>();
+        kotlinTags.add("OOP");
+        kotlinTags.add("Lenguaje Funcional");
+        ProgrammingLanguage kotlin = new ProgrammingLanguage("Kotlin", "Kotlin es un lenguaje de programación multiplataforma, orientado a objetos y funcional. Es un lenguaje estáticamente tipado que se ejecuta en la JVM y que también se puede compilar a JavaScript o nativo.", kotlinCourses, kotlinTags, R.drawable.logo_kotlin);
+        lenguajes.add(kotlin);
+
+        //Java
+        ArrayList<Course> javaCourses = new ArrayList<>();
+        Course javaCourse = new Course("Curso de Java básico", "Introducción a Java", "Java");
+        javaCourse.addLesson(new Lesson("Declaración de variables", "En Java, puedes declarar una variable utilizando la palabra clave 'int', 'float', 'boolean', entre otros. Debes especificar el tipo de dato y luego el nombre de la variable.", javaCourse));
+        javaCourse.addLesson(new Lesson("Estructuras de control", "Java proporciona estructuras de control como 'if', 'for', 'while', entre otras, para controlar el flujo del programa.", javaCourse));
+        javaCourses.add(javaCourse);
+        javaCourse = new Course("Curso de Java avanzado", "Programación orientada a objetos en Java", "Java");
+        javaCourse.addLesson(new Lesson("Clases", "En Java, las clases son la base de la POO. Se utilizan para definir modelos de objetos que encapsulan atributos (variables) y comportamientos (métodos) relacionados. Puedes crear una clase utilizando la palabra clave 'class' seguida del nombre de la clase.", javaCourse));
+        javaCourse.addLesson(new Lesson("Herencia", "Java admite la herencia de clases mediante la palabra clave 'extends'. Puedes crear una clase base y luego crear subclases que hereden sus propiedades y métodos.", javaCourse));
+        javaCourses.add(javaCourse);
+        HashSet<String> javaTags = new HashSet<>();
+        javaTags.add("POO");
+        javaTags.add("Desarrollo de aplicaciones");
+        ProgrammingLanguage java = new ProgrammingLanguage("Java", "Java es un lenguaje de programación orientado a objetos ampliamente utilizado. Es un lenguaje de propósito general que se ejecuta en la JVM y es conocido por su portabilidad y seguridad.", javaCourses, javaTags, R.drawable.logo_java);
+        lenguajes.add(java);
+
+        // Python
+        ArrayList<Course> pythonCourses = new ArrayList<>();
+        Course pythonCourse = new Course("Curso de Python básico", "Introducción a Python", "Python");
+        pythonCourse.addLesson(new Lesson("Declaración de variables", "En Python, no es necesario declarar explícitamente el tipo de dato de una variable. Puedes asignar un valor directamente a una variable y el intérprete de Python deducirá el tipo de dato automáticamente.", pythonCourse));
+        pythonCourse.addLesson(new Lesson("Estructuras de control", "Python proporciona estructuras de control como 'if', 'for', 'while', entre otras, para controlar el flujo del programa.", pythonCourse));
+        pythonCourses.add(pythonCourse);
+        pythonCourse = new Course("Curso de Python avanzado", "Programación orientada a objetos en Python", "Python");
+        pythonCourse.addLesson(new Lesson("Clases", "En Python, las clases son la base de la POO. Se utilizan para definir modelos de objetos que encapsulan atributos (variables) y comportamientos (métodos) relacionados. Puedes crear una clase utilizando la palabra clave 'class' seguida del nombre de la clase.", pythonCourse));
+        pythonCourse.addLesson(new Lesson("Herencia", "Python admite la herencia de clases mediante la palabra clave 'extends'. Puedes crear una clase base y luego crear subclases que hereden sus propiedades y métodos.", pythonCourse));
+        pythonCourses.add(pythonCourse);
+        HashSet<String> pythonTags = new HashSet<>();
+        pythonTags.add("POO");
+        pythonTags.add("Inteligencia Artificial");
+        ProgrammingLanguage python = new ProgrammingLanguage("Python", "Python es un lenguaje de programación interpretado, de alto nivel, orientado a objetos y funcional. Es conocido por su sintaxis clara y concisa, lo que lo hace fácil de aprender y leer.", pythonCourses, pythonTags, R.drawable.logo_python);
+        lenguajes.add(python);
+
+        //JavaScript
+        ArrayList<Course> jsCourses = new ArrayList<>();
+        Course jsCourse = new Course("Curso de JavaScript básico", "Introducción a JavaScript", "JavaScript");
+        jsCourse.addLesson(new Lesson("Declaración de variables", "En JavaScript, puedes declarar una variable utilizando la palabra clave 'var', 'let' o 'const'. La diferencia entre ellas es que 'var' es una variable de alcance global o de función, 'let' es una variable de alcance de bloque y 'const' es una variable inmutable.", jsCourse));
+        jsCourse.addLesson(new Lesson("Estructuras de control", "JavaScript proporciona estructuras de control como 'if', 'for', 'while', entre otras, para controlar el flujo del programa.", jsCourse));
+        jsCourses.add(jsCourse);
+        jsCourse = new Course("Curso de JavaScript avanzado", "Programación orientada a objetos en JavaScript", "JavaScript");
+        jsCourse.addLesson(new Lesson("Clases", "En JavaScript, las clases son la base de la POO. Se utilizan para definir modelos de objetos que encapsulan atributos (variables) y comportamientos (métodos) relacionados. Puedes crear una clase utilizando la palabra clave 'class' seguida del nombre de la clase.", jsCourse));
+        jsCourse.addLesson(new Lesson("Herencia", "JavaScript admite la herencia de clases mediante la palabra clave 'extends'. Puedes crear una clase base y luego crear subclases que hereden sus propiedades y métodos.", jsCourse));
+        jsCourses.add(jsCourse);
+        HashSet<String> jsTags = new HashSet<>();
+        jsTags.add("POO");
+        jsTags.add("Desarrollo web");
+        ProgrammingLanguage javascript = new ProgrammingLanguage("JavaScript", "JavaScript es un lenguaje de programación interpretado, orientado a objetos y utilizado principalmente para el desarrollo web. Es compatible con la mayoría de los navegadores web y se utiliza para agregar interactividad y funcionalidad a los sitios web.", jsCourses, jsTags, R.drawable.logo_js);
+        lenguajes.add(javascript);
+
+        //C++
+        ArrayList<Course> cppCourses = new ArrayList<>();
+        Course cppCourse = new Course("Curso de C++ básico", "Introducción a C++", "C++");
+        cppCourse.addLesson(new Lesson("Declaración de variables", "En C++, puedes declarar una variable utilizando el tipo de dato seguido del nombre de la variable. Debes especificar explícitamente el tipo de dato que contendrá la variable.", cppCourse));
+        cppCourse.addLesson(new Lesson("Estructuras de control", "C++ proporciona estructuras de control como 'if', 'for', 'while', entre otras, para controlar el flujo del programa.", cppCourse));
+        cppCourses.add(cppCourse);
+        cppCourse = new Course("Curso de C++ avanzado", "Programación orientada a objetos en C++", "C++");
+        cppCourse.addLesson(new Lesson("Clases", "En C++, las clases son la base de la POO. Se utilizan para definir modelos de objetos que encapsulan atributos (variables) y comportamientos (métodos) relacionados. Puedes crear una clase utilizando la palabra clave 'class' seguida del nombre de la clase.", cppCourse));
+        cppCourse.addLesson(new Lesson("Herencia", "C++ admite la herencia de clases mediante la palabra clave 'extends'. Puedes crear una clase base y luego crear subclases que hereden sus propiedades y métodos.", cppCourse));
+        cppCourses.add(cppCourse);
+        HashSet<String> cppTags = new HashSet<>();
+        cppTags.add("POO");
+        cppTags.add("Desarrollo de juegos");
+        ProgrammingLanguage cpp = new ProgrammingLanguage("C++", "C++ es un lenguaje de programación de propósito general y de alto rendimiento. Es ampliamente utilizado en el desarrollo de juegos, sistemas embebidos y aplicaciones que requieren un alto nivel de control del hardware.", cppCourses, cppTags, R.drawable.logo_cpp);
+        lenguajes.add(cpp);
+
         // Lenguaje C
         String descripcionC = "C es un lenguaje de programación de bajo nivel utilizado para programar sistemas operativos, controladores de dispositivos y otros programas que requieren un acceso directo a la memoria y al hardware.";
         ArrayList<Course> cursosC = new ArrayList<>();
@@ -366,7 +434,7 @@ public class LoginActivity extends AppCompatActivity {
         lenguajes.add(c);
 
         // Lenguaje C++
-        String descripcionCpp = "C++ es un lenguaje de programación de alto nivel utilizado para el desarrollo de aplicaciones de software, videojuegos y otros programas complejos.";
+        /*String descripcionCpp = "C++ es un lenguaje de programación de alto nivel utilizado para el desarrollo de aplicaciones de software, videojuegos y otros programas complejos.";
         ArrayList<Course> cursosCpp = new ArrayList<>();
         cursosCpp.add(new Course("Introducción a C++", "Aprende los fundamentos de la programación en C++", "C++"));
         cursosCpp.add(new Course("Programación orientada a objetos en C++", "Aprende a programar utilizando la metodología de programación orientada a objetos en C++","C++"));
@@ -374,7 +442,7 @@ public class LoginActivity extends AppCompatActivity {
         tagsCpp.add("Alto Nivel");
         tagsCpp.add("OOP");
         ProgrammingLanguage cpp = new ProgrammingLanguage("C++", descripcionCpp, cursosCpp, tagsCpp, R.drawable.logo_cpp);
-        lenguajes.add(cpp);
+        lenguajes.add(cpp);*/
 
         // Lenguaje C#
         String descripcionCSharp = "C# es un lenguaje de programación de alto nivel desarrollado por Microsoft. Es utilizado principalmente para el desarrollo de aplicaciones en la plataforma .NET.";
@@ -388,7 +456,7 @@ public class LoginActivity extends AppCompatActivity {
         lenguajes.add(csh);
 
         // Lenguaje Java
-        String descripcionJava = "Java es un lenguaje de programación de alto nivel utilizado principalmente para el desarrollo de aplicaciones empresariales y de servidores.";
+        /*String descripcionJava = "Java es un lenguaje de programación de alto nivel utilizado principalmente para el desarrollo de aplicaciones empresariales y de servidores.";
         ArrayList<Course> cursosJava = new ArrayList<>();
         cursosJava.add(new Course("Introducción a Java", "Aprende los fundamentos de la programación en Java","Java"));
         cursosJava.add(new Course("Programación orientada a objetos en Java", "Aprende a programar utilizando la metodología de programación orientada a objetos en Java","Java"));
@@ -396,10 +464,10 @@ public class LoginActivity extends AppCompatActivity {
         tagsJava.add("Alto Nivel");
         tagsJava.add("OOP");
         ProgrammingLanguage java = new ProgrammingLanguage("Java", descripcionJava, cursosJava, tagsJava, R.drawable.logo_java);
-        lenguajes.add(java);
+        lenguajes.add(java);*/
 
         // Kotlin
-        ArrayList<Course> kotlinCourses = new ArrayList<>();
+        /*ArrayList<Course> kotlinCourses = new ArrayList<>();
         kotlinCourses.add(new Course("Curso de Kotlin básico", "Introducción a Kotlin", "Kotlin"));
         kotlinCourses.add(new Course("Curso de Kotlin avanzado", "Programación orientada a objetos en Kotlin", "Kotlin"));
         HashSet<String> kotlinTags = new HashSet<>();
@@ -407,24 +475,8 @@ public class LoginActivity extends AppCompatActivity {
         kotlinTags.add("Lenguaje Funcional");
         ProgrammingLanguage kotlin = new ProgrammingLanguage("Kotlin", "Kotlin es un lenguaje de programación multiplataforma, orientado a objetos y funcional. Es un lenguaje estáticamente tipado que se ejecuta en la JVM y que también se puede compilar a JavaScript o nativo.", kotlinCourses, kotlinTags, R.drawable.logo_kotlin);
         lenguajes.add(kotlin);
+        */
 
-        // Python
-        ArrayList<Course> pythonCourses = new ArrayList<>();
-        pythonCourses.add(new Course("Curso de Python básico", "Introducción a Python", "Python"));
-        pythonCourses.add(new Course("Curso de Python avanzado", "Programación orientada a objetos en Python","Python"));
-        HashSet<String> pythonTags = new HashSet<>();
-        pythonTags.add("Lenguaje Funcional");
-        ProgrammingLanguage python = new ProgrammingLanguage("Python", "Python es un lenguaje de programación interpretado, orientado a objetos y de alto nivel. Es un lenguaje fácil de aprender y muy versátil, utilizado en una amplia variedad de aplicaciones, desde el desarrollo web hasta la inteligencia artificial.", pythonCourses, pythonTags, R.drawable.logo_python);
-        lenguajes.add(python);
-
-        // JavaScript
-        ArrayList<Course> jsCourses = new ArrayList<>();
-        jsCourses.add(new Course("Curso de JavaScript básico", "Introducción a JavaScript","JavaScript"));
-        jsCourses.add(new Course("Curso de JavaScript avanzado", "Programación orientada a objetos en JavaScript","JavaScript"));
-        HashSet<String> jsTags = new HashSet<>();
-        jsTags.add("Alto Nivel");
-        ProgrammingLanguage javascript = new ProgrammingLanguage("JavaScript", "JavaScript es un lenguaje de programación interpretado, de alto nivel y orientado a objetos. Es utilizado principalmente para el desarrollo web, pero también se puede utilizar en el lado del servidor y en el desarrollo de aplicaciones móviles.", jsCourses, jsTags, R.drawable.logo_js);
-        lenguajes.add(javascript);
 
         // TypeScript
         ArrayList<Course> tsCourses = new ArrayList<>();
@@ -592,7 +644,7 @@ public class LoginActivity extends AppCompatActivity {
         lenguajes.add(fortran);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference languagesCollectionRef = db.collection("ProgrammingLanguages");
+        CollectionReference languagesCollectionRef = db.collection("programmingLanguages");
 
         for (ProgrammingLanguage language : lenguajes) {
             String languageId = language.getName(); // Utilizamos el nombre del lenguaje como ID del documento
@@ -615,6 +667,15 @@ public class LoginActivity extends AppCompatActivity {
                 Map<String, Object> courseData = new HashMap<>();
                 courseData.put("descripcion", course.getDescription());
                 courseDocRef.set(courseData);
+
+                // Crear la colección de lessons para el lenguaje
+                CollectionReference lessonCollectionRef = courseDocRef.collection("lessons");
+                for (Lesson lesson : course.getLessons()) {
+                    DocumentReference lessonDocRef = lessonCollectionRef.document(lesson.getName());
+                    Map<String, Object> lessonData = new HashMap<>();
+                    lessonData.put("descripcion", lesson.getLesson());
+                    lessonDocRef.set(lessonData);
+                }
             }
 
             // Subir los datos del lenguaje a Firestore

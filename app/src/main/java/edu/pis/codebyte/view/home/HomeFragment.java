@@ -1,6 +1,5 @@
 package edu.pis.codebyte.view.home;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,7 +29,6 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
     private RecyclerView recyclerView;
     private ProgrammingLanguagesAdapter adapter;
     private ProgrammingLanguage selectedLanguage;
-    private Button allLanguages_button;
     private ProgressBar progressBar;
 
     public HomeFragment() {
@@ -45,7 +43,6 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
         super.onCreate(savedInstanceState);
     }
 
-    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,6 +50,11 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
 
+        //TODO:
+        //  -Cargar lenguajes
+        //  -Cargar lenguajes en curso
+        //  -Si hay lenguajes en curso mostrarlos
+        //  -Si no hay lenguajes en curso cambiar el textView a lenguajes recomendados y mostrar el siguiente recycler view
         recyclerView = rootView.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         ArrayList<ProgrammingLanguage> programmingLanguagesList = new ArrayList<>();
@@ -63,8 +65,6 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
         programmingLanguagesList.add(new ProgrammingLanguage("C","", R.drawable.logo_c));
         programmingLanguagesList.add(new ProgrammingLanguage("JavaScript","", R.drawable.logo_js));
         programmingLanguagesList.add(new ProgrammingLanguage("C#","", R.drawable.logo_csh));
-
-
         adapter = new ProgrammingLanguagesAdapter(programmingLanguagesList, ProgrammingLanguagesAdapter.ViewType.HOME_VIEW_TYPE, this);
         recyclerView.setAdapter(adapter);
 
