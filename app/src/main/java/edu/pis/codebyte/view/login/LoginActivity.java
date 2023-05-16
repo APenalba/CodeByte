@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     private DataBaseManager dbm;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +82,9 @@ public class LoginActivity extends AppCompatActivity {
         recuperaPassword_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                method();
+                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -123,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void activity_setup() {
 
-        email_text = (TextView) findViewById(R.id.email_emailText);
+        email_text = (TextView) findViewById(R.id.recupera_email_editText);
         password_text = (TextView) findViewById(R.id.password_editText);
         keepSession_cb = (CheckBox) findViewById(R.id.keepSession_checkBox);
 
@@ -137,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login_button_setup() {
-        login_button = (Button) findViewById(R.id.login_bttn);
+        login_button = (Button) findViewById(R.id.recupera_pwd_bttn);
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -32,6 +32,11 @@
     </string-array>
     <string name="lenguaje">Lenguaje actual</string>
     <string name="start">Start</string>
+    <string name="introduce_correo">Introduce tu correo</string>
+    <string name="recupera_pwd">Recupera tu contraseña</string>
+    <string name="recupera">Recuperar</string>
+
+
 
 
     <!--Content Descriptions-->

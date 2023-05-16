@@ -12,6 +12,9 @@
         android:theme="@style/Theme.CodeByte"
         tools:targetApi="31">
         <activity
+            android:name=".view.login.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.challenges.DailyChallengeActivity"
             android:exported="false" />
         <activity
