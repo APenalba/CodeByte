@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button signup_button;
     private Button google_button;
     private Button github_button;
-    private Button recuperaPassword_button; //TODO
+    private Button recuperaPassword_button;
     private TextView email_text;
     private TextView password_text;
     private CheckBox keepSession_cb;
@@ -138,7 +138,6 @@ public class LoginActivity extends AppCompatActivity {
         google_button_setup();
         github_button_setup();
 
-        //TODO
         recuperaPassword_button = findViewById(R.id.recuperaPassword_bttn);
     }
 
