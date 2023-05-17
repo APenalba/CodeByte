@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SpinnerTheme" parent="Widget.AppCompat.Spinner">
+        <item name="android:dropDownVerticalOffset">-96dp</item>
+    </style>
+</resources>

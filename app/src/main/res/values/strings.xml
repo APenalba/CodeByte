@@ -24,10 +24,19 @@
     <string name="envia">Envía</string>
     <string name="cancelar">Cancelar</string>
     <string name="nuevo_nombre_usuario_hint">Nuevo nombre de usuario </string>
+    <string name="contrasena_actual_hint">Contraseña actual</string>
+    <string name="nueva_contrasena_hint">Nueva contraseña</string>
     <string-array name="idiomas">
         <item>Castellano</item>
         <item>Catalán</item>
     </string-array>
+    <string name="lenguaje">Lenguaje actual</string>
+    <string name="start">Start</string>
+    <string name="introduce_correo">Introduce tu correo</string>
+    <string name="recupera_pwd">Recupera tu contraseña</string>
+    <string name="recupera">Recuperar</string>
+
+
 
 
     <!--Content Descriptions-->
@@ -37,6 +46,38 @@
     <string name="cd_PROFILEACTIVITY_profile_picture">Foto de perfil del usuario</string>
     <string name="cd_PROFILEACTIVITY_logo_add_photo_asset">Icono-boton para cambiar la foto de perfil</string>
     <string name="boton_cambiar_foto_perfil">Boton cambiar foto perfil</string>
+    <string name="error_empty_password">Error contraseña vacia</string>
+    <string name="error_empty_email">Error contraseña vacia</string>
+    <string name="nuevo_email_hint">Email nuevo</string>
+    <string name="password_hint">Contraseña actual</string>
+    <string name="enviar_problema_hint">Indicanos aqui el problema</string>
+    <string name="home">Home</string>
+    <string name="notifications">Notificaciones</string>
+    <string name="profile">Perfil</string>
+    <string name="statistics">Estadisticas</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="all_lenguajes">All lenguajes</string>
+    <string name="change_email_dialog_title">Cambiar email</string>
+    <string name="change_email_dialog_hint">Nuevo correo</string>
+    <string name="change_email_dialog_password_hint">Contraseña</string>
+    <string name="change_email_dialog_confirm_password_hint">Repite la contraseña</string>
+    <string name="change_email_dialog_positive_button">Aceptar</string>
+    <string name="change_email_dialog_password_mismatch_error">Las contraseñas no coinciden</string>
+    <string name="change_email_dialog_negative_button">Cancelar</string>
+    <string name="change_password_dialog_title">Cambiar contraseña</string>
+    <string name="change_password_dialog_current_password_hint">Contraseña</string>
+    <string name="change_password_dialog_new_password_hint">Nueva contraseña</string>
+    <string name="change_password_dialog_confirm_password_hint">Confirma la nueva contraseña</string>
+    <string name="change_password_dialog_positive_button">Aceptar</string>
+    <string name="change_password_dialog_password_mismatch_error">Las contraseñas no coinciden</string>
+    <string name="change_password_dialog_negative_button">Cancelar</string>
+    <string name="first_fragment_label" />
+    <string name="second_fragment_label" />
+    <string name="spanish">Español</string>
+    <string name="catalan">Catalan</string>
+    <string name="python">Python</string>
+    <string name="texto_ejemplo_leccion">Para declarar (crear) una *variable*, debes darle un nombre. En *Python* no hace falta especificar el tipo de variable que trabajarás. Para dar un valor, usamos el operando \'*=*\' y asignamos a la derecha del igual un valor.</string>
 
 
 </resources>

@@ -4,30 +4,39 @@ import edu.pis.codebyte.model.challenges.Challenge;
 
 public class Lesson {
 
-    private String id;
     private String name;
     private String lesson;
-
+    private Course course;
     private Challenge challenge;
 
-    public Lesson(String name, String lesson, Challenge challenge) {
+    public Lesson(String name, String lesson, Course course, Challenge challenge) {
         this.name = name;
         this.lesson = lesson;
+        this.course = course;
         this.challenge = challenge;
     }
 
-    public Lesson(String name, String lesson) {
+    public Lesson(String name, String lesson, Course course) {
         this.name = name;
         this.lesson = lesson;
         this.challenge = null;
+        this.course = course;
     }
 
-    public String getId() {
-        return id;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Challenge getChallenge() {
+        return challenge;
+    }
+
+    public void setChallenge(Challenge challenge) {
+        this.challenge = challenge;
     }
 
     public String getName() {

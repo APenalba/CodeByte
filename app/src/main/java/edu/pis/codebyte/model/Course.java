@@ -1,34 +1,34 @@
 package edu.pis.codebyte.model;
 
-import androidx.annotation.Nullable;
-
 import java.util.ArrayList;
 
 public class Course {
 
-    private String id;
     private String name;
+    private String programmingLanguage;
     private String description;
     private ArrayList<Lesson> lessons;
 
-    public Course(String name, String description, ArrayList<Lesson> lessons) {
+    public Course(String name, String description, String programmingLanguage, ArrayList<Lesson> lessons) {
         this.name = name;
         this.description = description;
         this.lessons = lessons;
+        this.programmingLanguage = programmingLanguage;
     }
 
-    public Course(String name, String description) {
+    public Course(String name, String description, String programmingLanguage) {
         this.name = name;
         this.description = description;
         this.lessons = new ArrayList<>();
+        this.programmingLanguage = programmingLanguage;
     }
 
-    public String getId() {
-        return id;
+    public String getProgrammingLanguage() {
+        return programmingLanguage;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setProgrammingLanguage(String programmingLanguage) {
+        this.programmingLanguage = programmingLanguage;
     }
 
     public String getName() {
@@ -63,16 +63,4 @@ public class Course {
         this.lessons.remove(lesson);
     }
 
-    @Override
-    public boolean equals(@Nullable Object obj) {
-
-        if (obj == this) {
-            return true;
-        }
-
-        Course course = obj instanceof  Course? ((Course) obj) : null;
-        if (course == null) return false;
-        return this.id == course.id;
-
-    }
 }
