@@ -36,6 +36,11 @@
     <string name="recupera_pwd">Recupera tu contraseña</string>
     <string name="recupera">Recuperar</string>
 
+    <string name="capitulo_prueba">Capitulo X: Prueba</string>
+    <string name="descripcion_capitulo_prueba">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Cras tincidunt ligula erat, nec pharetra augue viverra ac. Vivamus tempor sed libero eu sollicitudin.
+        Donec ac eleifend quam. Nam aliquet erat ut aliquet posuere. Donec porttitor in elit ac iaculis.
+        Quisque at tortor pulvinar sem tempus congue vel eu leo. </string>
 
 
 
