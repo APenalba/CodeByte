@@ -8,7 +8,7 @@ public class User {
     private String uImageURL;
     private String email;
     private String provider;
-    private UserProgress userProgress;
+    private UserProgress progress;
 
     public User(String uId, String username, String email, String uImageURL, String provider) {
         this.uId = uId;
@@ -16,6 +16,7 @@ public class User {
         this.email = email;
         this.uImageURL = uImageURL;
         this.provider = provider;
+        progress = new UserProgress(this.uId);
     }
 
     public String getProvider() {
@@ -56,5 +57,21 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setProgress(UserProgress up) {
+        this.progress = up;
+    }
+    public void addLanguageToProgress(String language) {
+        progress.addLanguageToProgress(language);
+    }
+    public void addCourseToProgress(String course, String language) {
+        progress.addCourseToProgress(course, language);
+    }
+    public void addLessonToProgress(String lessonName, String courseName, String language) {
+        progress.addLessonToProgress(lessonName, courseName, language);
+    }
+    public UserProgress getProgress() {
+        return progress;
     }
 }

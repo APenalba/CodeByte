@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -18,21 +17,13 @@ import java.util.ArrayList;
 import edu.pis.codebyte.R;
 import edu.pis.codebyte.model.DataBaseManager;
 import edu.pis.codebyte.model.ProgrammingLanguage;
-import edu.pis.codebyte.view.allLanguages.AllLanguagesFragment;
-import edu.pis.codebyte.view.home.HomeFragment;
-import edu.pis.codebyte.view.profile.ProfileFragment;
-import edu.pis.codebyte.viewmodel.main.MainViewModel;
+import edu.pis.codebyte.view.main.allLanguages.AllLanguagesFragment;
+import edu.pis.codebyte.view.main.home.HomeFragment;
+import edu.pis.codebyte.view.main.profile.ProfileFragment;
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, DataBaseManager.OnLoadProgrammingLanguagesListener {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 
-    private ArrayList<Fragment> fragments;
-    public String uId;
-    public String uEmail;
-    public String uUsername;
-    public String uProvider;
-    public String uImageURL;
     private static MutableLiveData<ArrayList<ProgrammingLanguage>> languages = new MutableLiveData<>();
-    private MainViewModel mainViewModel;
     private DataBaseManager dbm;
 
 
@@ -45,63 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         setContentView(R.layout.activity_main);
 
         dbm = DataBaseManager.getInstance();
-        mainViewModel = MainViewModel.getInstance();
-
-        userSetUp();
-
-        loadProgrammingLanguages();
         navigationBar_setup();
-    }
-
-    private void userSetUp() {
-        this.uId = mainViewModel.getuId();
-
-        uEmail = "loading...";
-        final Observer<String> observeruEmail = new Observer<String>() {
-            @Override
-            public void onChanged(String new_uEmail) {
-                uEmail = new_uEmail;
-            }
-        };
-        mainViewModel.getuEmail().observe(this, observeruEmail);
-
-        uUsername = "loading...";
-        final Observer<String> observeruUsername = new Observer<String>() {
-            @Override
-            public void onChanged(String new_uUsername) {
-                uUsername = new_uUsername;
-            }
-        };
-        mainViewModel.getuUsername().observe(this, observeruUsername);
-
-        uProvider = "loading...";
-        final Observer<String> observeruProvider = new Observer<String>() {
-            @Override
-            public void onChanged(String new_uProvider) {
-                uProvider = new_uProvider;
-            }
-        };
-        mainViewModel.getuProvider().observe(this, observeruProvider);
-
-        uImageURL = "";
-        final Observer<String> observeruImageURL = new Observer<String>() {
-            @Override
-            public void onChanged(String new_uImageURL) {
-                uImageURL = new_uImageURL;
-            }
-        };
-        mainViewModel.getuImageURL().observe(this, observeruImageURL);
-    }
-
-    private void loadProgrammingLanguages() {
-        languages = new MutableLiveData<>();
-        dbm.setOnLoadProgrammingLanguagesListener(this);
-        dbm.loadProgrammingLanguages();
-    }
-
-    @Override
-    public void onLoadProgrammingLanguages(ArrayList<ProgrammingLanguage> languages) {
-        MainActivity.languages.setValue(languages);
     }
 
     private void navigationBar_setup() {
@@ -144,10 +79,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
-    }
-
-    public static MutableLiveData<ArrayList<ProgrammingLanguage>> getLanguages() {
-        return languages;
     }
 
 }

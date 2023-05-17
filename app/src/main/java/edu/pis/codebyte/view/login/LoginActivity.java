@@ -47,6 +47,7 @@ import edu.pis.codebyte.model.LoginUtils;
 import edu.pis.codebyte.model.ProgrammingLanguage;
 import edu.pis.codebyte.model.exceptions.InvalidEmailException;
 import edu.pis.codebyte.model.exceptions.InvalidPasswordException;
+import edu.pis.codebyte.view.forgotPassword.ForgotPasswordActivity;
 import edu.pis.codebyte.view.main.MainActivity;
 import edu.pis.codebyte.view.register.RegisterActivity;
 

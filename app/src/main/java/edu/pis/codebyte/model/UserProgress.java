@@ -6,7 +6,9 @@ import java.util.Hashtable;
 public class UserProgress {
 
     Hashtable<String,Hashtable<String, HashSet<String>>> progress;
-    public UserProgress() {
+    private String uId;
+    public UserProgress(String uId) {
+        this.uId = uId;
         progress = new Hashtable<>();
     }
     public void addLanguageToProgress(String language) {
@@ -26,5 +28,15 @@ public class UserProgress {
         // nada. Al menos asi funcionaban los sets de python, aqui espero que tambien :D
         progress.get(language).get(courseName).add(lessonName);
     }
+
+    public HashSet<String> getStartedProgrammingLanguages() {
+        return new HashSet<>(progress.keySet());
+    }
+
+    public HashSet<String> getStartedCoursesFromLanguage(String language) {
+        if (progress.get(language) == null) return new HashSet<>();
+        return  new HashSet<>(progress.get(language).keySet());
+    }
+
 
 }
