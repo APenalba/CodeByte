@@ -1,4 +1,4 @@
-package edu.pis.codebyte.view.profile;
+package edu.pis.codebyte.view.main.profile;
 
 import static android.app.Activity.RESULT_OK;
 

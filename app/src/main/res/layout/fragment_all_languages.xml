@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.allLanguages.AllLanguagesFragment">
+    tools:context=".view.main.allLanguages.AllLanguagesFragment">
 
     <TextView
         android:id="@+id/allLanguage_textView"
@@ -39,10 +39,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/allLanguage_fragment_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="525dp"
+        android:layout_height="680dp"
+        android:layout_marginTop="5dp"
         android:foregroundGravity="left"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="w,1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

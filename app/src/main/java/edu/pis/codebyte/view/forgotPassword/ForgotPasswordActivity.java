@@ -1,4 +1,4 @@
-package edu.pis.codebyte.view.login;
+package edu.pis.codebyte.view.forgotPassword;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import edu.pis.codebyte.R;
 import edu.pis.codebyte.model.LoginUtils;
 import edu.pis.codebyte.model.exceptions.InvalidEmailException;
+import edu.pis.codebyte.view.login.LoginActivity;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 

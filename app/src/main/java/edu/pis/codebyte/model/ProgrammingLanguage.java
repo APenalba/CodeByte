@@ -101,6 +101,7 @@ public class ProgrammingLanguage {
         this.imageResourceId = imageResourceId;
     }
     public int getImageResourceId() {
+        if (this.imageResourceId == 0) return R.drawable.logo__256;
         return this.imageResourceId;
     }
 

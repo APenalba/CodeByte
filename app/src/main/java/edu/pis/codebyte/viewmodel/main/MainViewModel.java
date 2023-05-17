@@ -19,13 +19,23 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Hashtable;
 
 import edu.pis.codebyte.model.DataBaseManager;
 import edu.pis.codebyte.model.ProgrammingLanguage;
 import edu.pis.codebyte.model.User;
-import edu.pis.codebyte.model.UserProgress;
 
-public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadProgrammingLanguagesListener, DataBaseManager.OnLoadUserListener, DataBaseManager.OnLoadUserProgressListener {
+public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadProgrammingLanguagesListener, DataBaseManager.OnLoadUserListener {
+
+    public interface LanguagesUpdateListener {
+        void updateLanguageList(ArrayList<Hashtable<String, String>> new_languageList);
+    }
+
+    public interface OnUpdateProgressListener {
+        void onUpdateProgressListener();
+    }
+
 
     private static MainViewModel mainViewModel;
 
@@ -33,13 +43,14 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
 
 
     private static String uId;
+    private User user;
     private MutableLiveData<String> uEmail;
     private MutableLiveData<String> uImageURL;
     private MutableLiveData<String> uProvider;
     private MutableLiveData<String> uUsername;
-
-    private MutableLiveData<UserProgress> userProgress;
-    private MutableLiveData<ArrayList<ProgrammingLanguage>> languages;
+    private ArrayList<ProgrammingLanguage> languages;
+    private LanguagesUpdateListener languageListListener;
+    private OnUpdateProgressListener onUpdateProgressListener;
     private DataBaseManager dbm;
     private FirebaseUser firebaseUser;
 
@@ -48,19 +59,17 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         dbm.setOnLoadUserListener(this);
         dbm.setOnLoadProgrammingLanguagesListener(this);
-        dbm.setOnLoadUserProgressListener(this);
 
         uId = firebaseUser.getUid();
+        user = null;
         uEmail = new MutableLiveData<>("LOADING...");
-        uImageURL = new MutableLiveData<>();
         uProvider = new MutableLiveData<>("LOADING...");
         uUsername = new MutableLiveData<>("LOADING...");
-        userProgress = new MutableLiveData<>();
-        languages = new MutableLiveData<>();
+        uImageURL = new MutableLiveData<>();
+        languages = null;
 
         dbm.loadProgrammingLanguages();
-        dbm.getUserFromDatabase(uId);
-        dbm.getUserProgressFromDatabase(uId);
+        dbm.loadUserFromDatabase(uId);
     }
 
     public static MainViewModel getInstance(){
@@ -73,27 +82,24 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
 
     @Override
     public void onLoadProgrammingLanguages(ArrayList<ProgrammingLanguage> languages) {
-        this.languages.setValue(languages);
+        this.languages = languages;
+        if (languageListListener != null) languageListListener.updateLanguageList(this.getLanguages());
     }
 
     @Override
     public void onLoadUser(User user) {
+        this.user = user;
         uEmail.setValue(user.getEmail());
         uImageURL.setValue(user.getuImageURL());
         uProvider.setValue(user.getProvider());
         uUsername.setValue(user.getUsername());
+        if (onUpdateProgressListener != null) onUpdateProgressListener.onUpdateProgressListener();
     }
 
     @Override
     public void onLoadUserImageURL(String imageURL) {
         this.uImageURL.setValue(imageURL);
     }
-
-    @Override
-    public void onLoadUserProvider(String userProvider) {
-        this.uProvider.setValue(userProvider);
-    }
-
     @Override
     public void onLoadUserUsername(String username) {
         this.uUsername.setValue(username);
@@ -104,13 +110,11 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
         this.uEmail.setValue(email);
     }
 
-    @Override
-    public void onLoadUserProgress(UserProgress up) {
-        this.userProgress.setValue(up);
+    public void setLanguageListListener(LanguagesUpdateListener listener) {
+        this.languageListListener = listener;
     }
-
-    public String getuId() {
-        return uId;
+    public void setCurrentLanguagesUpdateListener (OnUpdateProgressListener listener) {
+        this.onUpdateProgressListener = listener;
     }
 
     public MutableLiveData<String> getuEmail() {
@@ -129,12 +133,23 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
         return uUsername;
     }
 
-    public MutableLiveData<UserProgress> getUserProgress() {
-        return userProgress;
+    public ArrayList<Hashtable<String, String>> getLanguages() {
+        if (this.languages == null) return null;
+        ArrayList<Hashtable<String, String>> programmingLanguages = new ArrayList<>();
+        for (ProgrammingLanguage p : this.languages) {
+            Hashtable<String, String> propiedades = new Hashtable<>();
+            propiedades.put("name", p.getName());
+            propiedades.put("imageResourceId", String.valueOf(p.getImageResourceId()));
+            propiedades.put("description", p.getDescription());
+            propiedades.put("tags", p.getTags().toString());
+            programmingLanguages.add(propiedades);
+        }
+        return programmingLanguages;
     }
 
-    public MutableLiveData<ArrayList<ProgrammingLanguage>> getLanguages() {
-        return languages;
+    public HashSet<String> getuCurrentLanguages () {
+        if(user == null) return null;
+        return user.getProgress().getStartedProgrammingLanguages();
     }
 
     public void changeuUsername(String new_username, View view) {
@@ -225,7 +240,7 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
     }
 
     public void changeuImageURL(Uri imagenPerfilUri, Context context) {
-        dbm.subirImagenPerfil(firebaseUser.getUid(), imagenPerfilUri, url -> {
+        dbm.subirImagenPerfilStorage(firebaseUser.getUid(), imagenPerfilUri, url -> {
                     // La imagen se subió exitosamente y se obtuvo la URL
                     dbm.updateUserImageUrl(firebaseUser.getUid(), url.toString());
                 });
