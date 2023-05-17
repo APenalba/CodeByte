@@ -26,7 +26,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
@@ -35,18 +34,18 @@ import edu.pis.codebyte.R;
 import edu.pis.codebyte.model.LoginUtils;
 import edu.pis.codebyte.model.exceptions.InvalidEmailException;
 import edu.pis.codebyte.model.exceptions.WeakPasswordException;
-import edu.pis.codebyte.viewmodel.profile.ProfileViewModel;
+import edu.pis.codebyte.viewmodel.main.MainViewModel;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class ProfileFragment extends Fragment {
 
+    private MainViewModel mainViewModel;
     private TextView username_textView;
     private TextView email_textView;
     private Button enviaProblema_button;
     private EditText problema;
     private Spinner idioma;
     private ImageView userImage;
-    private ProfileViewModel profileVM;
     private String userProvider;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri mImageUri;
@@ -60,18 +59,19 @@ public class ProfileFragment extends Fragment {
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        profileVM = new ViewModelProvider(this).get(ProfileViewModel.class);
         view_setup(view);
         return view;
     }
 
     private void view_setup(View view) {
+
+        mainViewModel = MainViewModel.getInstance();
         getUserProvider(view);
         username_textView_setup(view);
         email_textView_setup(view);
@@ -81,6 +81,21 @@ public class ProfileFragment extends Fragment {
         enviarProblema_button_setup(view);
         language_button_setup(view);
         //idioma = view.findViewById(R.id.spinner_idiomas);
+    }
+
+    /**
+     * Este método obtiene el proveedor de autenticación del usuario
+     */
+    private void getUserProvider(View view) {
+        final Observer<String> observeruProvider = new Observer<String>() {
+            @Override
+            public void onChanged(String newUserProvider) {
+                userProvider = newUserProvider;
+                cambiarPassword_button_setup(view);
+                cambiarEmail_button_setup(view);
+            }
+        };
+        mainViewModel.getuProvider().observe(getViewLifecycleOwner(),observeruProvider);
     }
 
     /**
@@ -94,8 +109,10 @@ public class ProfileFragment extends Fragment {
                 username_textView.setText(username);
             }
         };
-        profileVM.getUsername().observe(getViewLifecycleOwner(), observerUsername);
+        mainViewModel.getuUsername().observe(getViewLifecycleOwner(), observerUsername);
+
     }
+
 
     /**
      * Este metodo inicializa el textView que muestra el correo electrónico
@@ -108,7 +125,7 @@ public class ProfileFragment extends Fragment {
                 email_textView.setText(email);
             }
         };
-        profileVM.getEmail().observe(getViewLifecycleOwner(), observerEmail);
+        mainViewModel.getuEmail().observe(getViewLifecycleOwner(), observerEmail);
     }
 
     /**
@@ -122,7 +139,7 @@ public class ProfileFragment extends Fragment {
                 openFileChooser();
             }
         });
-        final Observer<String> observerPfp = new Observer<String>() {
+        final Observer<String> observeruImageURL = new Observer<String>() {
             @Override
             public void onChanged(String pfpUrl) {
                 if (pfpUrl != null && !pfpUrl.isEmpty()) {
@@ -130,7 +147,7 @@ public class ProfileFragment extends Fragment {
                 }
             }
         };
-        profileVM.getImageURL().observe(getViewLifecycleOwner(), observerPfp);
+        mainViewModel.getuImageURL().observe(getViewLifecycleOwner(), observeruImageURL);
     }
 
     /**
@@ -214,7 +231,7 @@ public class ProfileFragment extends Fragment {
                     Snackbar.make(view, "Ingrese el problema que tiene", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                profileVM.enviarComentario(problemaText,enviaProblema_button);
+                mainViewModel.enviarComentario(problemaText,enviaProblema_button);
                 problema.setText("");
             }
         });
@@ -269,7 +286,7 @@ public class ProfileFragment extends Fragment {
                     Snackbar.make(getView(), "Ingrese un nombre de usuario válido", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                profileVM.cambiarNombreUsuario(newUsername, getView());
+                mainViewModel.changeuUsername(newUsername, getView());
             }
         });
 
@@ -333,7 +350,7 @@ public class ProfileFragment extends Fragment {
                     //Toast.makeText(mContext, e.toString(), Toast.LENGTH_SHORT).show();
                     Snackbar.make(getView(), e.toString(), Snackbar.LENGTH_SHORT).show();
                 }
-                profileVM.cambiarCorreoElectronico(newEmail, password, mContext);
+                mainViewModel.changeuEmail(newEmail, password, mContext);
             }
         });
         builder.setNegativeButton(R.string.change_email_dialog_negative_button, new DialogInterface.OnClickListener() {
@@ -392,7 +409,7 @@ public class ProfileFragment extends Fragment {
                 }
                 try {
                     LoginUtils.isSecurePassword(newPassword);
-                    profileVM.cambiarContrasena(currentPassword, newPassword, mContext);
+                    mainViewModel.changeuPassword(currentPassword, newPassword, mContext);
                 } catch (WeakPasswordException e) {
                     //Toast.makeText(mContext, e.toString(), Toast.LENGTH_SHORT).show();
                     Snackbar.make(inputConfirmPassword, e.toString(), Snackbar.LENGTH_SHORT).show();
@@ -424,26 +441,6 @@ public class ProfileFragment extends Fragment {
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
-
-
-    /**
-     * Este método obtiene el proveedor de autenticación del usuario
-     */
-    private void getUserProvider(View view) {
-        final Observer<String> observerProvider = new Observer<String>() {
-            @Override
-            public void onChanged(String newUserProvider) {
-                userProvider = newUserProvider;
-                // Llamo aqui a estos metodos porque necesitan saber el
-                // userProvider ya que este determinara si los botones deben funcionar o no
-                cambiarPassword_button_setup(view);
-                cambiarEmail_button_setup(view);
-            }
-        };
-
-        profileVM.getUserProvider().observe(getViewLifecycleOwner(),observerProvider);
-    }
-
     /**
      * Este método se llama cuando se selecciona una imagen en el selector de imágenes
      */
@@ -456,10 +453,10 @@ public class ProfileFragment extends Fragment {
             mImageUri = data.getData();
 
             // Cargar la imagen en el ImageView
-            Picasso.get().load(mImageUri).transform(new CropCircleTransformation()).into(userImage);
+            //Picasso.get().load(mImageUri).transform(new CropCircleTransformation()).into(userImage);
 
             // Subir la imagen al servidor
-            profileVM.cambiarImagenPerfil(mImageUri, mContext);
+            mainViewModel.changeuImageURL(mImageUri, mContext);
         }
     }
 }
