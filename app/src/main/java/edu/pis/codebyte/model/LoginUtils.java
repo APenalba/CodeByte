@@ -13,7 +13,7 @@ public class LoginUtils {
         if (index > 0) {
             username = email.substring(0, index);
         } else {
-            // Si el correo no tiene '@', utilizar todo el correo electrónico
+            // Si el correo no tiene '@', utilizar tod0 el correo electrónico
             username = email;
         }
         // Eliminar caracteres no alfanuméricos y convertir a minúsculas
