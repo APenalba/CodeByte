@@ -51,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
         signUp_button = findViewById(R.id.reg_signup_bttn);
         login_button = findViewById(R.id.reg_login_bttn);
         terminosYcondiciones = findViewById(R.id.terminosCondiciones_checkBox);
-        progressBar = findViewById(R.id.languageProgress_allLanguagesFragment_progressBar);
+        progressBar = findViewById(R.id.titleBar_allLanguagesFragment);
         progressBar.bringToFront();
         progressBar.setVisibility(View.GONE);
         signUp_button.setOnClickListener(new View.OnClickListener() {

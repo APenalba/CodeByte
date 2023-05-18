@@ -74,4 +74,14 @@ public class User {
     public UserProgress getProgress() {
         return progress;
     }
+
+    public float getUserProgressOfLanguage(ProgrammingLanguage pg) {
+        float pro = progress.calcProgress(pg);
+        System.out.println("Progreso del lenguage = " + pro );
+        return pro;
+    }
+
+    public float getUserProgressOfLanguage(Course c) {
+        return this.progress.calcProgress(c);
+    }
 }

@@ -67,7 +67,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/languageProgress_allLanguagesFragment_progressBar"
+        android:id="@+id/titleBar_allLanguagesFragment"
         android:layout_width="295dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"

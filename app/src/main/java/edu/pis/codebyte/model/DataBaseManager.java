@@ -12,13 +12,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -44,8 +47,11 @@ public class DataBaseManager {
 
     public interface OnLoadUserListener {
         void onLoadUser(User user);
+
         void onLoadUserImageURL(String imageURL);
+
         void onLoadUserUsername(String username);
+
         void onLoadUserEmail(String email);
         //void onLoadUserProgress();
     }
@@ -58,6 +64,7 @@ public class DataBaseManager {
         if (dbm == null) dbm = new DataBaseManager();
         return dbm;
     }
+
     public void setOnLoadUserListener(OnLoadUserListener userListener) {
         this.userListener = userListener;
     }
@@ -68,13 +75,13 @@ public class DataBaseManager {
 
     /**
      * Este metodo añade un usuario a la coleccion "users" de Firestore
+     *
      * @param uId
      * @param username
      * @param email
      * @param provider (google.com / github.com / email_password)
      */
     public void addUserToDatabase(String uId, String username, String email, String provider) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersCollection = db.collection("users");
         CollectionReference progressCollection = db.collection("progress");
 
@@ -88,16 +95,16 @@ public class DataBaseManager {
                 DocumentSnapshot snapshot = transaction.get(userDocument);
                 if (!snapshot.exists()) {
                     CollectionReference progressCollectionRef = userDocument.collection("progress");
-                    DocumentReference progresoCourseTest = progressCollectionRef.document("Curso de prueba");
+                    DocumentReference progresoCourseTest = progressCollectionRef.document("null");
                     Map<String, Object> progresoCourseData = new HashMap<>();
-                    progresoCourseData.put("language", "Lenguage de prueba");
-                    progresoCourseData.put("lessons", Arrays.asList(""));
+                    progresoCourseData.put("language", "null");
+                    progresoCourseData.put("lessons", Arrays.asList("null"));
                     progresoCourseTest.set(progresoCourseData);
 
                     Map<String, Object> user = new HashMap<>();
                     user.put("username", username);
                     user.put("email", email);
-                    user.put("profileImageURL", "" );
+                    user.put("profileImageURL", "");
                     user.put("provider", provider);
                     transaction.set(userDocument, user);
                     Log.d(TAG, "Usuario con ID " + uId + " añadido a la base de datos");
@@ -110,11 +117,10 @@ public class DataBaseManager {
     }
 
     public void loadUserFromDatabase(String uId) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(uId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     User user = new User(uId, document.getString("username"), document.getString("email"), document.getString("profileImageURL"), document.getString("provider"));
                     userListener.onLoadUser(user);
@@ -126,6 +132,7 @@ public class DataBaseManager {
                                         List<String> completedLessons = (List<String>) document_aux.get("lessons");
                                         String courseName = document_aux.getId();
                                         String language = document_aux.getString("language");
+                                        if (courseName == null || language == null) break;
                                         for (String lesson : completedLessons) {
                                             up.addLessonToProgress(lesson, courseName, language);
                                         }
@@ -143,6 +150,7 @@ public class DataBaseManager {
 
     /**
      * Actualiza el username de un usuario
+     *
      * @param uId
      * @param new_username
      */
@@ -169,11 +177,11 @@ public class DataBaseManager {
 
     /**
      * Este metodo actualiza el correo de un usuario
+     *
      * @param uId
      * @param new_email
      */
     public void updateUserEmail(String uId, String new_email) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(uId);
 
         Map<String, Object> updates = new HashMap<>();
@@ -195,6 +203,7 @@ public class DataBaseManager {
 
     /**
      * Metodo para subir una imagen a Firebase Storage
+     *
      * @param uId
      * @param imagenPerfilUri
      * @param successListener
@@ -218,11 +227,11 @@ public class DataBaseManager {
 
     /**
      * Metodo para actualizar la imagen de un usuario
+     *
      * @param uId
      * @param imageUrl
      */
     public void updateUserImageUrl(String uId, String imageUrl) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference userRef = db.collection("users").document(uId);
 
         Map<String, Object> updates = new HashMap<>();
@@ -247,13 +256,13 @@ public class DataBaseManager {
 
     /**
      * Este metodo añade a la coleccion "comments" de Firestore un comentario o problema indicado por un usuario
+     *
      * @param usuario
      * @param comentario
      * @param fecha
      * @param view
      */
     public void agregarComentario(String usuario, String comentario, Date fecha, View view) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         Map<String, Object> comentarioData = new HashMap<>();
         comentarioData.put("usuario", usuario);
@@ -266,42 +275,26 @@ public class DataBaseManager {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         //Toast.makeText(context, "Problema enviado correctamente", Toast.LENGTH_SHORT).show();
-                        Snackbar.make(view, "Problema enviado correctamente",Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view, "Problema enviado correctamente", Snackbar.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         //Toast.makeText(context, "Problema al enviar el problema", Toast.LENGTH_SHORT).show();
-                        Snackbar.make(view, "Problema al enviar el problema",Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view, "Problema al enviar el problema", Snackbar.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    public void registrarTemaCompletado(String uId, String lesson) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        // Agregar un tema completado al progreso del usuario
-        db.collection("Progreso").document(uId).collection("CursosCompletados").document(lesson).set(new HashMap<String, Object>())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Tema completado añadido al progreso del usuario");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error al añadir el tema completado al progreso del usuario", e);
-                    }
-                });
-
+    public void registrarLeccionEnProgresso(String uId, String lesson, String course, String language) {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("lessons", FieldValue.arrayUnion("nuevo_valor"));
+        db.collection("users").document(uId).collection("progress").document(course).update(updates);
     }
 
-    public void loadProgrammingLanguages(){
-
+    public void loadProgrammingLanguages() {
         ArrayList<ProgrammingLanguage> programmingLanguages = new ArrayList<>();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("programmingLanguages")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -310,29 +303,48 @@ public class DataBaseManager {
                             String languageName = document.getId();
                             String languageDescription = document.getString("descripcion").trim();
                             int resourceImageId = document.getLong("resourceImageId").intValue();
-                            ArrayList<String> tags =(ArrayList<String>) document.get("tags");
-                            HashSet<String> tags_set = new HashSet<>();
-                            tags_set.addAll(tags);
-                            ProgrammingLanguage programmingLanguage = new ProgrammingLanguage(languageName, languageDescription, tags_set, resourceImageId);
-                            document.getReference().collection("courses").get().addOnCompleteListener(task_aux -> {
-                                if(task_aux.isSuccessful()) {
-                                    Course course = new Course(document.getId(), document.getString("description"), languageName);
-                                    for(QueryDocumentSnapshot document_aux :task.getResult()) {
-                                        document_aux.getReference().collection("lesson").get().addOnCompleteListener(task_aux_2 -> {
-                                            if(task_aux_2.isSuccessful()) {
-                                                Lesson lesson = new Lesson(document_aux.getId(), document_aux.getString("lesson"), course);
+                            ArrayList<String> tags = (ArrayList<String>) document.get("tags");
+                            HashSet<String> tags_set = new HashSet<>(tags);
+
+                            ArrayList<Course> arrayList = new ArrayList<>();
+                            document.getReference().collection("courses").get().addOnCompleteListener(task2 -> {
+                                if (task2.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document2 : task2.getResult()) {
+                                        Course course = new Course(document2.getId(), document2.getString("description"), languageName);
+                                        arrayList.add(course);
+                                        document2.getReference().collection("lessons").get().addOnCompleteListener(task3 -> {
+                                            if (task3.isSuccessful()) {
+                                                for (QueryDocumentSnapshot document3 : task3.getResult()) {
+                                                    Lesson lesson = new Lesson(document3.getId(), document3.getString("lesson"), course);
+                                                    course.addLesson(lesson);
+                                                }
+                                                // Verificar si todas las lecciones se han agregado al curso
+                                                if (arrayList.indexOf(course) == arrayList.size() - 1) {
+                                                    // Todas las lecciones han sido agregadas, llamar a onLoadProgrammingLanguages
+                                                    ProgrammingLanguage programmingLanguage = new ProgrammingLanguage(languageName, languageDescription, arrayList, tags_set, resourceImageId);
+                                                    programmingLanguages.add(programmingLanguage);
+                                                    if (programmingLanguages.size() == task.getResult().size()) {
+                                                        languagesListener.onLoadProgrammingLanguages(programmingLanguages);
+                                                    }
+                                                }
+                                            } else {
+                                                Log.d(TAG, "Error getting lessons: ", task3.getException());
                                             }
                                         });
-                                        programmingLanguage.addCourse(course);
                                     }
+                                } else {
+                                    Log.d(TAG, "Error getting courses: ", task2.getException());
                                 }
                             });
-                            programmingLanguages.add(programmingLanguage);
                         }
-                        languagesListener.onLoadProgrammingLanguages(programmingLanguages);
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
+                })
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "Error loading programming languages: ", e);
                 });
+        System.out.println();
     }
+
 }

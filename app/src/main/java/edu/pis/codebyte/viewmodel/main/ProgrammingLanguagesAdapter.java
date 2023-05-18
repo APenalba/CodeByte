@@ -50,7 +50,7 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
             image = itemView.findViewById(R.id.languageImage_allLanguagesFragment_imageView);
             progress = itemView.findViewById(R.id.languageProgress_allLanguagesFragment_textView);
             description = itemView.findViewById(R.id.languageDescription_allLanguagesFragment_textView);
-            progressBar = itemView.findViewById(R.id.languageProgress_allLanguagesFragment_progressBar);
+            progressBar = itemView.findViewById(R.id.titleBar_allLanguagesFragment);
             itemView.setOnClickListener(this);
         }
 
@@ -114,6 +114,7 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
                     }
                 }
                 if (programmingLanguage == null) programmingLanguage = allProgrammingLanguageList.get(position % allProgrammingLanguageList.size());
+                languageSelectedListener.onLanguageSelected(programmingLanguage);
                 HomeRecyclerViewViewHolder homeRecyclerViewViewHolderHolder = (HomeRecyclerViewViewHolder) holder;
                 homeRecyclerViewViewHolderHolder.languageImage.setImageResource(Integer.parseInt(Objects.requireNonNull(programmingLanguage.get("imageResourceId"))));
                 homeRecyclerViewViewHolderHolder.languageImage.setTag(programmingLanguage.get("name"));

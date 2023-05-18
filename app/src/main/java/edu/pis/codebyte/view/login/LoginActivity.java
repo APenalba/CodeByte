@@ -275,6 +275,7 @@ public class LoginActivity extends AppCompatActivity {
     private void keepSession() {
 
         SharedPreferences.Editor editor = prefs.edit();
+        keepSession_cb = (CheckBox) findViewById(R.id.keepSession_checkBox);
         editor.putBoolean("saveSession", keepSession_cb.isChecked());
         editor.apply();
 

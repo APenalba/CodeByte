@@ -4,10 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.Hashtable;
 
@@ -41,6 +44,10 @@ public class AllLanguagesFragment extends Fragment implements ProgrammingLanguag
         View rootView = inflater.inflate(R.layout.fragment_all_languages, container, false);
         mainViewModel = MainViewModel.getInstance();
 
+        LinearProgressIndicator titleBar = rootView.findViewById(R.id.titleBar_allLanguagesFragment);
+        titleBar.setProgressCompat(86, true);
+        titleBar.setIndicatorColor(getResources().getColor(R.color.black));
+        titleBar.setTrackColor(getResources().getColor(R.color.grey_progressbar));;
         recyclerView_setup(rootView);
         return rootView;
     }

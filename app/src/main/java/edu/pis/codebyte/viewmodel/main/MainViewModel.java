@@ -29,13 +29,13 @@ import edu.pis.codebyte.model.User;
 public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadProgrammingLanguagesListener, DataBaseManager.OnLoadUserListener {
 
     public interface LanguagesUpdateListener {
+
         void updateLanguageList(ArrayList<Hashtable<String, String>> new_languageList);
     }
-
     public interface OnUpdateProgressListener {
+
         void onUpdateProgressListener();
     }
-
 
     private static MainViewModel mainViewModel;
 
@@ -43,6 +43,7 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
 
 
     private static String uId;
+
     private User user;
     private MutableLiveData<String> uEmail;
     private MutableLiveData<String> uImageURL;
@@ -53,7 +54,6 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
     private OnUpdateProgressListener onUpdateProgressListener;
     private DataBaseManager dbm;
     private FirebaseUser firebaseUser;
-
     public MainViewModel() {
         dbm = DataBaseManager.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -100,11 +100,11 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
     public void onLoadUserImageURL(String imageURL) {
         this.uImageURL.setValue(imageURL);
     }
+
     @Override
     public void onLoadUserUsername(String username) {
         this.uUsername.setValue(username);
     }
-
     @Override
     public void onLoadUserEmail(String email) {
         this.uEmail.setValue(email);
@@ -113,10 +113,10 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
     public void setLanguageListListener(LanguagesUpdateListener listener) {
         this.languageListListener = listener;
     }
+
     public void setCurrentLanguagesUpdateListener (OnUpdateProgressListener listener) {
         this.onUpdateProgressListener = listener;
     }
-
     public MutableLiveData<String> getuEmail() {
         return uEmail;
     }
@@ -150,6 +150,19 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
     public HashSet<String> getuCurrentLanguages () {
         if(user == null) return null;
         return user.getProgress().getStartedProgrammingLanguages();
+    }
+
+    public float getUserProgressOfLanguage(String languageName) {
+        System.out.println(languageName +  "----------------------");
+        if (languages == null) return 0;
+        if (user == null) return 0;
+        for (ProgrammingLanguage pg : languages) {
+            if (pg.getName().equals(languageName)) {
+                return user.getUserProgressOfLanguage(pg);
+            }
+        }
+        return 0;
+
     }
 
     public void changeuUsername(String new_username, View view) {

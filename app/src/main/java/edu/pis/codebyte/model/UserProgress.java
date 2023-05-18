@@ -1,5 +1,6 @@
 package edu.pis.codebyte.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
 
@@ -39,4 +40,40 @@ public class UserProgress {
     }
 
 
+    public float calcProgress(ProgrammingLanguage pg) {
+        float prog = 0;
+        if (!progress.containsKey(pg.getName())) return 0;
+
+        ArrayList<Course> courses = pg.getCourses();
+        int coursesSize = courses.size();
+        if (coursesSize == 0) return 100;
+        Hashtable<String, HashSet<String>> coursesProgress = progress.get(pg.getName());
+        for (Course course: pg.getCourses()) {
+            if(coursesProgress.containsKey(course.getName())) {
+                float courseProgress = calcProgress(course);
+                System.out.println("Progreso del curso " + course.getName() +  " = " + courseProgress);
+                prog += courseProgress / coursesSize;
+            }
+        }
+        return prog;
+    }
+
+    public float calcProgress(Course course) {
+        float prog = 0;
+        Hashtable<String, HashSet<String>> coursesProgress = progress.get(course.getProgrammingLanguage());
+        if (!coursesProgress.containsKey(course.getName())) return 0;
+
+        int courseSize = course.getLessons().size();
+        if (courseSize == 0) return 100;
+
+        HashSet<String> lessonsProgress = coursesProgress.get(course.getName());
+        if (lessonsProgress.size() == 0) return 0;
+
+        for (Lesson lesson : course.getLessons()) {
+            if (lessonsProgress.contains(lesson.getName())) {
+                prog += 100 / courseSize;
+            }
+        }
+        return prog;
+    }
 }

@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -27,12 +29,14 @@ import edu.pis.codebyte.viewmodel.main.ProgrammingLanguagesAdapter;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapter.OnLanguageSelectedListener, MainViewModel.OnUpdateProgressListener {
+public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapter.OnLanguageSelectedListener, MainViewModel.OnUpdateProgressListener, MainViewModel.LanguagesUpdateListener {
     private RecyclerView recyclerView;
     private ProgrammingLanguagesAdapter adapter;
     private MainViewModel mainViewModel;
     private Hashtable<String, String> selectedLanguage;
-    private ProgressBar progressBar;
+    private ProgressBar loadingBar;
+    private LinearProgressIndicator progressBar;
+    private ProgressBar titleBar;
     private HashSet<String> currentUserLanguages;
     private View rootView;
 
@@ -56,9 +60,14 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
         mainViewModel = MainViewModel.getInstance();
         mainViewModel.setCurrentLanguagesUpdateListener(this);
+        mainViewModel.setLanguageListListener(this);
 
-        progressBar = rootView.findViewById(R.id.home_progressBar);
-        progressBar.bringToFront();
+        loadingBar = rootView.findViewById(R.id.home_progressBar);
+        loadingBar.bringToFront();
+
+        progressBar = rootView.findViewById(R.id.languageProgress_homeFragment);
+
+        titleBar = rootView.findViewById(R.id.titleBar_homeFragment);
 
         recyclerViewSetUp();
 
@@ -79,6 +88,7 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
         ImageView selectedLanguageImage = getView().findViewById(R.id.selectedLanguage_home_imageView);
         this.selectedLanguage = language;
         selectedLanguageImage.setImageResource(Integer.parseInt(language.get("imageResourceId")));
+        progressBar.setProgressCompat((int) mainViewModel.getUserProgressOfLanguage(language.get("name")), true);
     }
 
     private HashSet<String> getDefaultCurrentLanguagesList() {
@@ -98,7 +108,7 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
         if (currentUserLanguages == null || currentUserLanguages.size() == 0) {
             currentUserLanguages = getDefaultCurrentLanguagesList();
         }
-        else progressBar.setVisibility(View.GONE);
+        else loadingBar.setVisibility(View.GONE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         adapter = new ProgrammingLanguagesAdapter(this, new ArrayList<>(currentUserLanguages), mainViewModel.getLanguages());
         recyclerView.setAdapter(adapter);
@@ -106,6 +116,11 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
 
     @Override
     public void onUpdateProgressListener() {
+        recyclerViewSetUp();
+    }
+
+    @Override
+    public void updateLanguageList(ArrayList<Hashtable<String, String>> new_languageList) {
         recyclerViewSetUp();
     }
 }
