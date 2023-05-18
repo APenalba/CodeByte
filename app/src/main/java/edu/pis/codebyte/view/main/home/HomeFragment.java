@@ -70,13 +70,6 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
             }
         });
 
-        Button todosLosLenguajes = rootView.findViewById(R.id.allLanguages_home_button);
-        todosLosLenguajes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progressBar.setVisibility(View.GONE);
-            }
-        });
         return rootView;
     }
 

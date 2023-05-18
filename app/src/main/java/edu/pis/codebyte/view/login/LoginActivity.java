@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         recuperaPassword_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //method();
                 Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                 startActivity(intent);
                 finish();
