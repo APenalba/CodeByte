@@ -36,9 +36,11 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
     private Hashtable<String, String> selectedLanguage;
     private ProgressBar loadingBar;
     private LinearProgressIndicator progressBar;
-    private ProgressBar titleBar;
+    private LinearProgressIndicator titleBar;
     private HashSet<String> currentUserLanguages;
     private View rootView;
+    private boolean loaded = false;
+
 
 
     public HomeFragment() {
@@ -64,10 +66,14 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
 
         loadingBar = rootView.findViewById(R.id.home_progressBar);
         loadingBar.bringToFront();
+        loadingBar.setVisibility((loaded)? View.GONE : View.VISIBLE);
 
         progressBar = rootView.findViewById(R.id.languageProgress_homeFragment);
 
         titleBar = rootView.findViewById(R.id.titleBar_homeFragment);
+        titleBar.setIndicatorColor(getResources().getColor(R.color.black));
+        titleBar.setTrackColor(getResources().getColor(R.color.grey_progressbar));;
+        titleBar.setProgressCompat(40, true);
 
         recyclerViewSetUp();
 
@@ -122,5 +128,6 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
     @Override
     public void updateLanguageList(ArrayList<Hashtable<String, String>> new_languageList) {
         recyclerViewSetUp();
+        loaded = true;
     }
 }
