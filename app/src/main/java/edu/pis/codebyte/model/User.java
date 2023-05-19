@@ -84,4 +84,8 @@ public class User {
     public float getUserProgressOfLanguage(Course c) {
         return this.progress.calcProgress(c);
     }
+
+    public Course getLastCourse(ProgrammingLanguage language) {
+        return progress.getLastCourse(language);
+    }
 }

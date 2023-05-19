@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -75,6 +76,11 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
         titleBar.setTrackColor(getResources().getColor(R.color.grey_progressbar));;
         titleBar.setProgressCompat(40, true);
 
+        TextView title = rootView.findViewById(R.id.allLanguage_textView2);
+        title.setText("Lenguajes recomendados");
+        title.setTextSize(30);
+        titleBar.setProgressCompat(100, true);
+
         recyclerViewSetUp();
 
         Button dailyChallenge = rootView.findViewById(R.id.start_home_button);
@@ -95,6 +101,17 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
         this.selectedLanguage = language;
         selectedLanguageImage.setImageResource(Integer.parseInt(language.get("imageResourceId")));
         progressBar.setProgressCompat((int) mainViewModel.getUserProgressOfLanguage(language.get("name")), true);
+        updateCourseView(language);
+    }
+
+    private void updateCourseView(Hashtable<String, String> language) {
+        Hashtable<String, String> course = mainViewModel.getLastCourse(language.get("name"));
+        TextView courseTitle = getView().findViewById(R.id.courseTitle_homeFragment_textView);
+        TextView courseDescription = getView().findViewById(R.id.ourseDescription_homeFragment_textView);
+        if(course != null) {
+            courseTitle.setText(course.get("name"));
+            courseDescription.setText(course.get("description"));
+        }
     }
 
     private HashSet<String> getDefaultCurrentLanguagesList() {
@@ -114,7 +131,13 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
         if (currentUserLanguages == null || currentUserLanguages.size() == 0) {
             currentUserLanguages = getDefaultCurrentLanguagesList();
         }
-        else loadingBar.setVisibility(View.GONE);
+        else {
+            loadingBar.setVisibility(View.GONE);
+            TextView title = rootView.findViewById(R.id.allLanguage_textView2);
+            title.setTextSize(34);
+            title.setText("En curso");
+            titleBar.setProgressCompat(40, true);
+        }
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         adapter = new ProgrammingLanguagesAdapter(this, new ArrayList<>(currentUserLanguages), mainViewModel.getLanguages());
         recyclerView.setAdapter(adapter);

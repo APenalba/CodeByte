@@ -13,6 +13,7 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -21,22 +22,27 @@ import edu.pis.codebyte.R;
 public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final OnLanguageSelectedListener languageSelectedListener;
-    private ArrayList<Hashtable<String, String>> allProgrammingLanguageList;
-    private ArrayList<String> currentUserLanguages;
+    private List<Hashtable<String, String>> allProgrammingLanguageList;
+    private List<String> currentUserLanguages;
     private Hashtable<String, String> selectedLanguage;
     private final ViewType viewType;
+
     public enum ViewType { HOME_VIEW_TYPE, ALL_LANGUAGES_VIEW_TYPE; }
 
-    public interface OnLanguageSelectedListener { void onLanguageSelected(Hashtable<String, String> language); }
+    public interface OnLanguageSelectedListener {
+        void onLanguageSelected(Hashtable<String, String> language);
+    }
 
-    public static class HomeRecyclerViewViewHolder extends RecyclerView.ViewHolder{
+    public static class HomeRecyclerViewViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView languageImage;
+
         public HomeRecyclerViewViewHolder(View itemView) {
             super(itemView);
             languageImage = itemView.findViewById(R.id.languageImage);
         }
     }
+
     public static class AllLanguagesRecyclerViewViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ImageView image;
@@ -44,6 +50,7 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
         public TextView description;
         public TextView name;
         public LinearProgressIndicator progressBar;
+
         public AllLanguagesRecyclerViewViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.languageName_allLanguagesFragment_textView);
@@ -60,36 +67,28 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
         }
 
     }
-    public ProgrammingLanguagesAdapter(OnLanguageSelectedListener languageSelectedListener, ArrayList<Hashtable<String, String>> languages) {
-        allProgrammingLanguageList = languages;
-        if (allProgrammingLanguageList == null) allProgrammingLanguageList = this.getDefaultLanguagesList();
 
+    public ProgrammingLanguagesAdapter(OnLanguageSelectedListener languageSelectedListener, List<Hashtable<String, String>> languages) {
+        allProgrammingLanguageList = languages != null ? languages : getDefaultLanguagesList();
         this.viewType = ViewType.ALL_LANGUAGES_VIEW_TYPE;
         this.languageSelectedListener = languageSelectedListener;
     }
 
-    public ProgrammingLanguagesAdapter(OnLanguageSelectedListener languageSelectedListener, ArrayList<String> currentUserLanguages, ArrayList<Hashtable<String, String>> languages) {
-        allProgrammingLanguageList = languages;
-        if (allProgrammingLanguageList == null) allProgrammingLanguageList = this.getDefaultLanguagesList();
+    public ProgrammingLanguagesAdapter(OnLanguageSelectedListener languageSelectedListener, List<String> currentUserLanguages, List<Hashtable<String, String>> languages) {
+        allProgrammingLanguageList = languages != null ? languages : getDefaultLanguagesList();
         this.currentUserLanguages = currentUserLanguages;
-
-
-        for (Hashtable<String, String> hashtable : allProgrammingLanguageList) {
-            if (hashtable.get("name").equals(currentUserLanguages.get(0))) {
-                selectedLanguage = hashtable;
-                break;
-            }
-        }
-        if (selectedLanguage == null) selectedLanguage = allProgrammingLanguageList.get(0);
+        selectedLanguage = findSelectedLanguage(currentUserLanguages.get(0));
+        if (selectedLanguage == null)
+            selectedLanguage = allProgrammingLanguageList.get(0);
         this.viewType = ViewType.HOME_VIEW_TYPE;
         this.languageSelectedListener = languageSelectedListener;
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int param_viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        switch (viewType) {
+        switch (this.viewType) {
             case HOME_VIEW_TYPE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_recyclerview_layout, parent, false);
                 return new HomeRecyclerViewViewHolder(view);
@@ -97,23 +96,18 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.all_languages_card_layout, parent, false);
                 return new AllLanguagesRecyclerViewViewHolder(view);
             default:
-                throw new IllegalArgumentException("Invalid view type: " + viewType);
+                throw new IllegalArgumentException("Invalid view type: " + this.viewType);
         }
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Hashtable<String, String> programmingLanguage = null;
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Hashtable<String, String> programmingLanguage;
         switch (viewType) {
             case HOME_VIEW_TYPE:
-                String name = currentUserLanguages.get(position);
-                for (Hashtable<String, String> hashtable : allProgrammingLanguageList) {
-                    if (hashtable.get("name").equals(name)) {
-                        programmingLanguage = hashtable;
-                        break;
-                    }
-                }
-                if (programmingLanguage == null) programmingLanguage = allProgrammingLanguageList.get(position % allProgrammingLanguageList.size());
+                programmingLanguage = findSelectedLanguage(currentUserLanguages.get(position));
+                if (programmingLanguage == null)
+                    programmingLanguage = allProgrammingLanguageList.get(position % allProgrammingLanguageList.size());
                 languageSelectedListener.onLanguageSelected(programmingLanguage);
                 HomeRecyclerViewViewHolder homeRecyclerViewViewHolderHolder = (HomeRecyclerViewViewHolder) holder;
                 homeRecyclerViewViewHolderHolder.languageImage.setImageResource(Integer.parseInt(Objects.requireNonNull(programmingLanguage.get("imageResourceId"))));
@@ -146,7 +140,6 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
                 allLanguagesHolder.progress.setText(String.format("%s%%", Integer.toString(randNumber)));
                 allLanguagesHolder.description.setText(programmingLanguage.get("description"));
 
-
                 Hashtable<String, String> finalProgrammingLanguage1 = programmingLanguage;
                 allLanguagesHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -172,11 +165,20 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
             default:
                 return 0;
         }
-        //return Integer.MAX_VALUE;
     }
 
-    private ArrayList<Hashtable<String, String>> getDefaultLanguagesList() {
-        ArrayList<Hashtable<String, String>> languageList = new ArrayList<>();
+    private Hashtable<String, String> findSelectedLanguage(String languageName) {
+        for (Hashtable<String, String> hashtable : allProgrammingLanguageList) {
+            if (hashtable.get("name").equals(languageName)) {
+                return hashtable;
+            }
+        }
+        return null;
+    }
+
+    private List<Hashtable<String, String>> getDefaultLanguagesList() {
+        List<Hashtable<String, String>> languageList = new ArrayList<>();
+
         Hashtable<String, String> java = new Hashtable<>();
         java.put("name", "Java");
         java.put("imageResourceId", String.valueOf(R.drawable.logo_java));

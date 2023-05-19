@@ -25,9 +25,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -83,73 +85,93 @@ public class DataBaseManager {
      */
     public void addUserToDatabase(String uId, String username, String email, String provider) {
         CollectionReference usersCollection = db.collection("users");
-        CollectionReference progressCollection = db.collection("progress");
-
         DocumentReference userDocument = usersCollection.document(uId);
-        DocumentReference userProgressDocument = progressCollection.document(uId);
 
+        userDocument.get().addOnSuccessListener(documentSnapshot -> {
+            if (!documentSnapshot.exists()) {
+                DocumentReference progressDocument = userDocument.collection("progress").document("null");
 
-        db.runTransaction(new Transaction.Function<Void>() {
-            @Override
-            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
-                DocumentSnapshot snapshot = transaction.get(userDocument);
-                if (!snapshot.exists()) {
-                    CollectionReference progressCollectionRef = userDocument.collection("progress");
-                    DocumentReference progresoCourseTest = progressCollectionRef.document("null");
-                    Map<String, Object> progresoCourseData = new HashMap<>();
-                    progresoCourseData.put("language", "null");
-                    progresoCourseData.put("lessons", Arrays.asList("null"));
-                    progresoCourseTest.set(progresoCourseData);
+                Map<String, Object> progresoCourseData = new HashMap<>();
+                progresoCourseData.put("language", "null");
+                progresoCourseData.put("lessons", Collections.singletonList("null"));
 
+                progressDocument.set(progresoCourseData).addOnSuccessListener(aVoid -> {
                     Map<String, Object> user = new HashMap<>();
                     user.put("username", username);
                     user.put("email", email);
                     user.put("profileImageURL", "");
                     user.put("provider", provider);
-                    transaction.set(userDocument, user);
-                    Log.d(TAG, "Usuario con ID " + uId + " añadido a la base de datos");
-                } else {
-                    Log.d(TAG, "Ya existe un usuario con ID" + uId);
-                }
-                return null;
+
+                    userDocument.set(user).addOnSuccessListener(aVoid1 -> {
+                        Log.d(TAG, "Usuario con ID " + uId + " añadido a la base de datos");
+                    }).addOnFailureListener(e -> {
+                        Log.d(TAG, "Error al guardar los datos del usuario: ", e);
+                    });
+                }).addOnFailureListener(e -> {
+                    Log.d(TAG, "Error al guardar el progreso del usuario: ", e);
+                });
+            } else {
+                Log.d(TAG, "Ya existe un usuario con ID " + uId);
             }
+        }).addOnFailureListener(e -> {
+            Log.d(TAG, "Error al comprobar si el usuario existe: ", e);
         });
     }
 
+
     public void loadUserFromDatabase(String uId) {
-        db.collection("users").document(uId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    User user = new User(uId, document.getString("username"), document.getString("email"), document.getString("profileImageURL"), document.getString("provider"));
-                    userListener.onLoadUser(user);
-                    document.getReference().collection("progress").get()
-                            .addOnCompleteListener(task2 -> {
-                                if (task2.isSuccessful()) {
-                                    UserProgress up = new UserProgress(uId);
-                                    for (QueryDocumentSnapshot document_aux : task2.getResult()) {
-                                        List<String> completedLessons = (List<String>) document_aux.get("lessons");
-                                        String courseName = document_aux.getId();
-                                        String language = document_aux.getString("language");
-                                        if (courseName == null || language == null) break;
+        db.collection("users").document(uId).get()
+                .addOnSuccessListener(userDocumentSnapshot -> {
+                    String username = userDocumentSnapshot.getString("username");
+                    String email = userDocumentSnapshot.getString("email");
+                    String profileImageURL = userDocumentSnapshot.getString("profileImageURL");
+                    String provider = userDocumentSnapshot.getString("provider");
+
+                    User user = new User(uId, username, email, profileImageURL, provider);
+
+                    userDocumentSnapshot.getReference().collection("progress").get()
+                            .addOnSuccessListener(progressQuerySnapshot -> {
+                                UserProgress userProgress = new UserProgress(uId);
+
+                                for (QueryDocumentSnapshot progressDocument : progressQuerySnapshot) {
+                                    List<String> completedLessons = (List<String>) progressDocument.get("lessons");
+                                    String courseName = progressDocument.getId();
+                                    String language = progressDocument.getString("language");
+
+                                    if (courseName == null || language == null) {
+                                        break;
+                                    }
+
+                                    if (completedLessons != null) {
                                         for (String lesson : completedLessons) {
-                                            up.addLessonToProgress(lesson, courseName, language);
+                                            userProgress.addLessonToProgress(lesson, courseName, language);
                                         }
                                     }
-                                    user.setProgress(up);
-                                    userListener.onLoadUser(user);
-                                } else {
-                                    Log.d(TAG, "Error getting documents: ", task2.getException());
                                 }
+
+                                user.setProgress(userProgress);
+                                userListener.onLoadUser(user);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.d(TAG, "Error getting progress documents: ", e);
                             });
-                }
-            }
-        });
+
+                })
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "Error getting user document: ", e);
+                });
     }
+
+
 
     /**
      * Actualiza el username de un usuario
+     *
+     * @param uId
+     * @param new_username
+     */
+    /**
+     * Este método actualiza el nombre de usuario de un usuario
      *
      * @param uId
      * @param new_username
@@ -160,19 +182,16 @@ public class DataBaseManager {
         Map<String, Object> updates = new HashMap<>();
         updates.put("username", new_username);
 
-        docRef.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "Username del usuario con ID " + uId + " actualizado correctamente");
-                userListener.onLoadUserUsername(new_username);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error al actualizar el username del usuario con ID " + uId, e);
-            }
-        });
+        docRef.update(updates)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Username del usuario con ID " + uId + " actualizado correctamente");
+                    userListener.onLoadUserUsername(new_username);
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error al actualizar el username del usuario con ID " + uId, e);
+                });
     }
+
 
 
     /**
@@ -212,18 +231,22 @@ public class DataBaseManager {
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference userImageRef = storageRef.child("userImages/" + uId + ".jpg");
 
-        userImageRef.putFile(imagenPerfilUri)
-                .addOnSuccessListener(taskSnapshot -> {
-                    Log.d(TAG, "Imagen subida correctamente");
-                    userImageRef.getDownloadUrl().addOnSuccessListener(successListener);
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error al subir la imagen a la base de datos", e);
-                    }
-                });
+        UploadTask uploadTask = userImageRef.putFile(imagenPerfilUri);
+
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            Log.d(TAG, "Imagen subida correctamente");
+            userImageRef.getDownloadUrl().addOnSuccessListener(successListener);
+        }).addOnFailureListener(e -> {
+            Log.e(TAG, "Error al subir la imagen a la base de datos", e);
+        });
+
+        // Agregar seguimiento de progreso (opcional)
+        uploadTask.addOnProgressListener(snapshot -> {
+            double progress = (100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
+            Log.d(TAG, "Progreso de carga: " + progress + "%");
+        });
     }
+
 
     /**
      * Metodo para actualizar la imagen de un usuario
@@ -238,21 +261,15 @@ public class DataBaseManager {
         updates.put("profileImageURL", imageUrl);
 
         userRef.update(updates)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Imagen del usuario con ID " + uId + "actualizada correctamente");
-                        userListener.onLoadUserImageURL(imageUrl);
-                    }
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Imagen del usuario con ID " + uId + " actualizada correctamente");
+                    userListener.onLoadUserImageURL(imageUrl);
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error al actualizar la imagen del usuario con ID " + uId, e);
-                    }
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error al actualizar la imagen del usuario con ID " + uId, e);
                 });
-
     }
+
 
     /**
      * Este metodo añade a la coleccion "comments" de Firestore un comentario o problema indicado por un usuario
@@ -263,7 +280,6 @@ public class DataBaseManager {
      * @param view
      */
     public void agregarComentario(String usuario, String comentario, Date fecha, View view) {
-
         Map<String, Object> comentarioData = new HashMap<>();
         comentarioData.put("usuario", usuario);
         comentarioData.put("comentario", comentario);
@@ -271,21 +287,14 @@ public class DataBaseManager {
 
         db.collection("comments")
                 .add(comentarioData)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        //Toast.makeText(context, "Problema enviado correctamente", Toast.LENGTH_SHORT).show();
-                        Snackbar.make(view, "Problema enviado correctamente", Snackbar.LENGTH_SHORT).show();
-                    }
+                .addOnSuccessListener(documentReference -> {
+                    Snackbar.make(view, "Problema enviado correctamente", Snackbar.LENGTH_SHORT).show();
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //Toast.makeText(context, "Problema al enviar el problema", Toast.LENGTH_SHORT).show();
-                        Snackbar.make(view, "Problema al enviar el problema", Snackbar.LENGTH_SHORT).show();
-                    }
+                .addOnFailureListener(e -> {
+                    Snackbar.make(view, "Problema al enviar el problema", Snackbar.LENGTH_SHORT).show();
                 });
     }
+
 
     public void registrarLeccionEnProgresso(String uId, String lesson, String course, String language) {
         Map<String, Object> updates = new HashMap<>();
@@ -310,7 +319,7 @@ public class DataBaseManager {
                             document.getReference().collection("courses").get().addOnCompleteListener(task2 -> {
                                 if (task2.isSuccessful()) {
                                     for (QueryDocumentSnapshot document2 : task2.getResult()) {
-                                        Course course = new Course(document2.getId(), document2.getString("description"), languageName);
+                                        Course course = new Course(document2.getId(), document2.getString("descripcion"), languageName);
                                         arrayList.add(course);
                                         document2.getReference().collection("lessons").get().addOnCompleteListener(task3 -> {
                                             if (task3.isSuccessful()) {
@@ -344,7 +353,6 @@ public class DataBaseManager {
                 .addOnFailureListener(e -> {
                     Log.d(TAG, "Error loading programming languages: ", e);
                 });
-        System.out.println();
     }
 
 }

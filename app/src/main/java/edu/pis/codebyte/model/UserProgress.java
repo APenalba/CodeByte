@@ -76,4 +76,18 @@ public class UserProgress {
         }
         return prog;
     }
+
+    public Course getLastCourse(ProgrammingLanguage language) {
+        ArrayList<Course> courses = language.getCourses();
+        int coursesSize = courses.size();
+        if (coursesSize == 0) return null;
+        if (!progress.containsKey(language.getName())) return language.getCourses().get(0);
+        Hashtable<String, HashSet<String>> coursesProgress = progress.get(language.getName());
+        for (Course course: courses) {
+            if(this.calcProgress(course) != 100) {
+                return course;
+            }
+        }
+        return null;
+    }
 }

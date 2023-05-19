@@ -13,7 +13,7 @@ public class LoginUtils {
         if (index > 0) {
             username = email.substring(0, index);
         } else {
-            // Si el correo no tiene '@', utilizar tod0 el correo electrónico
+            // Si el correo no tiene '@', utilizar todo el correo electrónico
             username = email;
         }
         // Eliminar caracteres no alfanuméricos y convertir a minúsculas
@@ -23,7 +23,7 @@ public class LoginUtils {
 
     public static boolean isValidEmail(String email) throws InvalidEmailException {
         // Expresión regular para validar el formato del email
-        String emailRegex = "^[\\w-_.+]*[\\w-_.]@([\\w]+\\.)+[\\w]+[\\w]$";;
+        String emailRegex = "^[\\w-_.+]*[\\w-_.]@([\\w]+\\.)+[\\w]+[\\w]$";
         // Validar el email utilizando la expresión regular
         if (!email.matches(emailRegex)) {
             throw new InvalidEmailException("El email proporcionado no es válido.");
@@ -37,16 +37,42 @@ public class LoginUtils {
             throw new WeakPasswordException("La contraseña debe tener al menos 8 caracteres.");
         }
         // Verificar que la contraseña tenga al menos una letra mayúscula, una letra minúscula y un número
-        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$";
-        if (!password.matches(passwordRegex)) {
+        if (!containsUpperCaseLetter(password) || !containsLowerCaseLetter(password) || !containsDigit(password)) {
             throw new WeakPasswordException("La contraseña debe tener al menos una letra mayúscula, una letra minúscula y un número.");
         }
         return true;
     }
 
+    private static boolean containsUpperCaseLetter(String password) {
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean containsLowerCaseLetter(String password) {
+        for (char c : password.toCharArray()) {
+            if (Character.isLowerCase(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean containsDigit(String password) {
+        for (char c : password.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean areTermsAndConditionsAccepted(boolean checked) throws TermsAndConditionsNotAcceptedException {
         if (!checked){
-            throw new TermsAndConditionsNotAcceptedException("Debes aceptar los terminos y condiciones");
+            throw new TermsAndConditionsNotAcceptedException("Debes aceptar los términos y condiciones.");
         }
         return true;
     }

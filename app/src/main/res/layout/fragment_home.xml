@@ -71,7 +71,7 @@
             app:srcCompat="@drawable/rectangulo" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/courseTitle_homeFragment_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -85,7 +85,7 @@
             app:layout_constraintTop_toTopOf="@+id/imageView4" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/ourseDescription_homeFragment_textView"
             android:layout_width="353dp"
             android:layout_height="142dp"
             android:layout_marginTop="8dp"
@@ -96,7 +96,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/imageView4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/courseTitle_homeFragment_textView"
             app:layout_constraintVertical_bias="0.0" />
 
         <Button
@@ -154,14 +154,15 @@
 
     <TextView
         android:id="@+id/allLanguage_textView2"
-        android:layout_width="143dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginBottom="4dp"
         android:fontFamily="@font/quicksand_bold"
-        android:text="@string/en_curso"
+        android:text="Lenguajes recomendados"
+        android:textAlignment="viewStart"
         android:textColor="#000000"
-        android:textSize="34sp"
+        android:textSize="30dp"
         app:layout_constraintBottom_toTopOf="@+id/titleBar_homeFragment"
         app:layout_constraintStart_toStartOf="parent" />
 

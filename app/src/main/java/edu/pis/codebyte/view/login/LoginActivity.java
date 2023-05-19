@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,22 +30,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.OAuthProvider;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.Objects;
 
 import edu.pis.codebyte.R;
-import edu.pis.codebyte.model.Course;
 import edu.pis.codebyte.model.DataBaseManager;
-import edu.pis.codebyte.model.Lesson;
 import edu.pis.codebyte.model.LoginUtils;
-import edu.pis.codebyte.model.ProgrammingLanguage;
 import edu.pis.codebyte.model.exceptions.InvalidEmailException;
 import edu.pis.codebyte.model.exceptions.InvalidPasswordException;
 import edu.pis.codebyte.view.forgotPassword.ForgotPasswordActivity;
@@ -69,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     private DataBaseManager dbm;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,33 +70,20 @@ public class LoginActivity extends AppCompatActivity {
         prefs = getSharedPreferences(PREFERENCES_FILE, MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
         checkSession();
-        activity_setup();
-        recuperaPassword_button = findViewById(R.id.recuperaPassword_bttn);
-        recuperaPassword_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //method();
-                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+        setupViews();
     }
+
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
         mAuth.signOut();
     }
 
-
-
     private void checkSession() {
-
         boolean saveSession = prefs.getBoolean("saveSession", false);
         if (saveSession) {
             if (mAuth.getCurrentUser() == null) {
-                String token = "";
-                prefs.getString("idToken",token);
+                String token = prefs.getString("idToken", "");
                 mAuth.signInWithCustomToken(token)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -114,231 +91,195 @@ public class LoginActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     goToHome();
                                 } else {
-                                    //Toast.makeText(LoginActivity.this, "Your session has expired", Toast.LENGTH_SHORT).show();
-                                    Snackbar.make(login_button, "Your session has expired", Snackbar.LENGTH_SHORT).show();
-
+                                    showSnackbar("Your session has expired");
                                 }
                             }
                         });
-            }else {
+            } else {
                 goToHome();
             }
-        }else {
+        } else {
             mAuth.signOut();
         }
     }
 
-    private void activity_setup() {
+    private void setupViews() {
+        email_text = findViewById(R.id.recupera_email_editText);
+        password_text = findViewById(R.id.password_editText);
+        keepSession_cb = findViewById(R.id.keepSession_checkBox);
 
-        email_text = (TextView) findViewById(R.id.recupera_email_editText);
-        password_text = (TextView) findViewById(R.id.password_editText);
-        keepSession_cb = (CheckBox) findViewById(R.id.keepSession_checkBox);
+        setupLoginButton();
+        setupSignupButton();
+        setupRecoverPassword();
+        setupGoogleButton();
+        setupGithubButton();
+    }
 
-        login_button_setup();
-        signup_button_setup();
-        google_button_setup();
-        github_button_setup();
-
+    private void setupRecoverPassword() {
         recuperaPassword_button = findViewById(R.id.recuperaPassword_bttn);
+        recuperaPassword_button.setOnClickListener(view -> goToNewActivity(ForgotPasswordActivity.class));
     }
 
-    private void login_button_setup() {
-        login_button = (Button) findViewById(R.id.recupera_pwd_bttn);
-        login_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                emailPassword_auth();
-            }
-        });
+    private void setupLoginButton() {
+        login_button = findViewById(R.id.recupera_pwd_bttn);
+        login_button.setOnClickListener(view -> emailPasswordAuth());
     }
 
-    private void signup_button_setup() {
-        signup_button = (Button) findViewById(R.id.signup_bttn);
-        signup_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToNewActivity(RegisterActivity.class);
-            }
-        });
+    private void setupSignupButton() {
+        signup_button = findViewById(R.id.signup_bttn);
+        signup_button.setOnClickListener(view -> goToNewActivity(RegisterActivity.class));
     }
 
-    private void google_button_setup() {
-        google_button = (Button) findViewById(R.id.google_bttn);
-        google_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                google_auth();
-            }
-        });
+    private void setupGoogleButton() {
+        google_button = findViewById(R.id.google_bttn);
+        google_button.setOnClickListener(view -> googleAuth());
     }
 
-    private void github_button_setup() {
-        github_button = (Button) findViewById(R.id.github_bttn);
-        github_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                github_auth();
-            }
-        });
-
+    private void setupGithubButton() {
+        github_button = findViewById(R.id.github_bttn);
+        github_button.setOnClickListener(view -> githubAuth());
     }
 
-    private void emailPassword_auth() {
-        String email = email_text.getText().toString();
-        String password = password_text.getText().toString();
+
+    private void emailPasswordAuth() {
+        String email = Objects.requireNonNull(email_text.getText()).toString();
+        String password = Objects.requireNonNull(password_text.getText()).toString();
         try {
             LoginUtils.isValidEmail(email);
-            if (password.isEmpty()) throw new InvalidPasswordException("Contraseña no valida");
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                goToHome();
-                            } else {
-                                //Toast.makeText(LoginActivity.this, "La autenticación falló.", Toast.LENGTH_SHORT).show();
-                                Snackbar.make( login_button, "La autenticación falló.", Snackbar.LENGTH_SHORT).show();
-
-                            }
-                        }
-                    });
+            if (TextUtils.isEmpty(password)) {
+                throw new InvalidPasswordException("Contraseña no válida");
+            }
+            authenticateWithEmailAndPassword(email, password);
         } catch (InvalidEmailException e) {
-            // Si el email no es válido, marcar el TextView de email con error y mostrar un mensaje de error
             email_text.setError("El email proporcionado no es válido.");
             email_text.requestFocus();
-            //Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-            Snackbar.make(login_button, e.toString(), Snackbar.LENGTH_SHORT).show();
+            showSnackbar(e.toString());
         } catch (InvalidPasswordException e) {
-            password_text.setError("La contraseña proporcionada no es valida.");
+            password_text.setError("La contraseña proporcionada no es válida.");
             password_text.requestFocus();
-            //Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-            Snackbar.make(login_button, e.toString(), Snackbar.LENGTH_SHORT).show();
+            showSnackbar(e.toString());
         }
     }
 
-    private void google_auth() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
-                requestIdToken(getString(R.string.default_web_client_id)).
-                requestEmail().build();
+    private void authenticateWithEmailAndPassword(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        goToHome();
+                    } else {
+                        showSnackbar("La autenticación falló.");
+                    }
+                });
+    }
+
+
+    private void googleAuth() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail().build();
         GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, gso);
         googleSignInClient.signOut();
         startActivityForResult(googleSignInClient.getSignInIntent(), GOOGLE_SIGN_IN);
     }
 
-    public void github_auth() {
+    public void githubAuth() {
         OAuthProvider.Builder provider = OAuthProvider.newBuilder("github.com");
         provider.addCustomParameter("login", "");
 
         Task<AuthResult> pendingResultTask = mAuth.getPendingAuthResult();
         if (pendingResultTask != null) {
-            pendingResultTask
-                    .addOnSuccessListener(
-                            new OnSuccessListener<AuthResult>() {
-                                @Override
-                                public void onSuccess(AuthResult authResult) {
-                                    if (authResult.getAdditionalUserInfo().isNewUser()) {
-                                        dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(),mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail(), "github.com");
-                                    }
-                                    goToHome();
-                                }
-                            })
-                    .addOnFailureListener(
-                            new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    // Handle failure.
-                                }
-                            });
+            handleAuthResult(pendingResultTask.getResult());
         } else {
-            mAuth
-                    .startActivityForSignInWithProvider(LoginActivity.this, provider.build())
-                    .addOnSuccessListener(
-                            new OnSuccessListener<AuthResult>() {
-                                @Override
-                                public void onSuccess(AuthResult authResult) {
-                                    if (authResult.getAdditionalUserInfo().isNewUser()) {
-                                        dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(),mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail(), "github.com");
-                                    }
-                                    goToHome();
-                                }
-                            })
-                    .addOnFailureListener(
-                            new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    // Handle failure.
-                                }
-                            });
+            mAuth.startActivityForSignInWithProvider(LoginActivity.this, provider.build())
+                    .addOnSuccessListener(this::handleAuthResult)
+                    .addOnFailureListener(this::handleAuthFailure);
         }
     }
 
-    private void keepSession() {
+    private void handleAuthResult(AuthResult authResult) {
+        if (authResult.getAdditionalUserInfo().isNewUser()) {
+            dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(), mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail(), "github.com");
+        }
+        goToHome();
+    }
 
+    private void handleAuthFailure(Exception e) {
+        // TODO: Manejar el fallo.
+    }
+
+
+    private void keepSession(boolean saveSession) {
         SharedPreferences.Editor editor = prefs.edit();
-        keepSession_cb = (CheckBox) findViewById(R.id.keepSession_checkBox);
-        editor.putBoolean("saveSession", keepSession_cb.isChecked());
-        editor.apply();
+        editor.putBoolean("saveSession", saveSession);
+        editor.commit();
 
-        if (mAuth.getCurrentUser() != null && keepSession_cb.isChecked()) {
+        if (mAuth.getCurrentUser() != null && saveSession) {
             mAuth.getCurrentUser().getIdToken(true)
-                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<GetTokenResult> task) {
-                            if (task.isSuccessful()) {
-                                String token = task.getResult().getToken();
-                                SharedPreferences.Editor editor = prefs.edit();
-                                editor.putString("idToken", token);
-                                editor.apply();
-                            } else {
-                                throw new RuntimeException("No se ha conseguido el user idToken");
-                            }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            String token = task.getResult().getToken();
+                            editor.putString("idToken", token);
+                            editor.commit();
+                        } else {
+                            throw new RuntimeException("No se ha conseguido el user idToken");
                         }
                     });
         }
     }
 
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GOOGLE_SIGN_IN) {
-
-            try {
-                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-                GoogleSignInAccount account = task.getResult();
-                if (account == null) {
-                    //TODO GESTIONAR ESTO
-                }
-                AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(),null);
-                mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            if (task.getResult().getAdditionalUserInfo().isNewUser()) {
-                                dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(),mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail(), "google.com");
-                            }
-                            goToHome();
-                        } else {
-                            //Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                            Snackbar.make(login_button, "Authentication failed.", Snackbar.LENGTH_SHORT).show();
-
-                        }
-                    }
-                });
-            } catch (Exception e) {
-                Log.w("ERROR", e.toString());
-            }
-
+            handleGoogleSignInResult(data);
         }
     }
 
+    private void handleGoogleSignInResult(Intent data) {
+        try {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            GoogleSignInAccount account = task.getResult();
+            if (account == null) {
+                // TODO: GESTIONAR ESTO
+            }
+            AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+            mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().getAdditionalUserInfo().isNewUser()) {
+                            dbm.addUserToDatabase(mAuth.getCurrentUser().getUid(), mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail(), "google.com");
+                        }
+                        goToHome();
+                    } else {
+                        showSnackbar("Authentication failed.");
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Log.w("ERROR", e.toString());
+        }
+    }
+
+
     private void goToNewActivity(Class<?> cls) {
-        keepSession();
+        keepSession(keepSession_cb.isChecked());
         Intent intent = new Intent(this, cls);
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-        this.onPause();
+        onPause();
     }
+
     private void goToHome() {
         goToNewActivity(MainActivity.class);
     }
+
+    private void showSnackbar(String message) {
+        Snackbar.make(login_button, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+}
+
+/*
 
     private void method() {
         // Crear la lista de lenguajes
@@ -436,7 +377,8 @@ public class LoginActivity extends AppCompatActivity {
         lenguajes.add(c);
 
         // Lenguaje C++
-        /*String descripcionCpp = "C++ es un lenguaje de programación de alto nivel utilizado para el desarrollo de aplicaciones de software, videojuegos y otros programas complejos.";
+        */
+/*String descripcionCpp = "C++ es un lenguaje de programación de alto nivel utilizado para el desarrollo de aplicaciones de software, videojuegos y otros programas complejos.";
         ArrayList<Course> cursosCpp = new ArrayList<>();
         cursosCpp.add(new Course("Introducción a C++", "Aprende los fundamentos de la programación en C++", "C++"));
         cursosCpp.add(new Course("Programación orientada a objetos en C++", "Aprende a programar utilizando la metodología de programación orientada a objetos en C++","C++"));
@@ -444,7 +386,8 @@ public class LoginActivity extends AppCompatActivity {
         tagsCpp.add("Alto Nivel");
         tagsCpp.add("OOP");
         ProgrammingLanguage cpp = new ProgrammingLanguage("C++", descripcionCpp, cursosCpp, tagsCpp, R.drawable.logo_cpp);
-        lenguajes.add(cpp);*/
+        lenguajes.add(cpp);*//*
+
 
         // Lenguaje C#
         String descripcionCSharp = "C# es un lenguaje de programación de alto nivel desarrollado por Microsoft. Es utilizado principalmente para el desarrollo de aplicaciones en la plataforma .NET.";
@@ -458,7 +401,8 @@ public class LoginActivity extends AppCompatActivity {
         lenguajes.add(csh);
 
         // Lenguaje Java
-        /*String descripcionJava = "Java es un lenguaje de programación de alto nivel utilizado principalmente para el desarrollo de aplicaciones empresariales y de servidores.";
+        */
+/*String descripcionJava = "Java es un lenguaje de programación de alto nivel utilizado principalmente para el desarrollo de aplicaciones empresariales y de servidores.";
         ArrayList<Course> cursosJava = new ArrayList<>();
         cursosJava.add(new Course("Introducción a Java", "Aprende los fundamentos de la programación en Java","Java"));
         cursosJava.add(new Course("Programación orientada a objetos en Java", "Aprende a programar utilizando la metodología de programación orientada a objetos en Java","Java"));
@@ -466,10 +410,12 @@ public class LoginActivity extends AppCompatActivity {
         tagsJava.add("Alto Nivel");
         tagsJava.add("OOP");
         ProgrammingLanguage java = new ProgrammingLanguage("Java", descripcionJava, cursosJava, tagsJava, R.drawable.logo_java);
-        lenguajes.add(java);*/
+        lenguajes.add(java);*//*
+
 
         // Kotlin
-        /*ArrayList<Course> kotlinCourses = new ArrayList<>();
+        */
+/*ArrayList<Course> kotlinCourses = new ArrayList<>();
         kotlinCourses.add(new Course("Curso de Kotlin básico", "Introducción a Kotlin", "Kotlin"));
         kotlinCourses.add(new Course("Curso de Kotlin avanzado", "Programación orientada a objetos en Kotlin", "Kotlin"));
         HashSet<String> kotlinTags = new HashSet<>();
@@ -477,7 +423,8 @@ public class LoginActivity extends AppCompatActivity {
         kotlinTags.add("Lenguaje Funcional");
         ProgrammingLanguage kotlin = new ProgrammingLanguage("Kotlin", "Kotlin es un lenguaje de programación multiplataforma, orientado a objetos y funcional. Es un lenguaje estáticamente tipado que se ejecuta en la JVM y que también se puede compilar a JavaScript o nativo.", kotlinCourses, kotlinTags, R.drawable.logo_kotlin);
         lenguajes.add(kotlin);
-        */
+        *//*
+
 
 
         // TypeScript
@@ -692,4 +639,4 @@ public class LoginActivity extends AppCompatActivity {
                     });
         }
     }
-}
+*/

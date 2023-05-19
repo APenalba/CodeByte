@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Hashtable;
 
+import edu.pis.codebyte.model.Course;
 import edu.pis.codebyte.model.DataBaseManager;
 import edu.pis.codebyte.model.ProgrammingLanguage;
 import edu.pis.codebyte.model.User;
@@ -31,12 +32,12 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
     public interface LanguagesUpdateListener {
 
         void updateLanguageList(ArrayList<Hashtable<String, String>> new_languageList);
+
     }
     public interface OnUpdateProgressListener {
-
         void onUpdateProgressListener();
-    }
 
+    }
     private static MainViewModel mainViewModel;
 
 
@@ -45,6 +46,7 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
     private static String uId;
 
     private User user;
+
     private MutableLiveData<String> uEmail;
     private MutableLiveData<String> uImageURL;
     private MutableLiveData<String> uProvider;
@@ -71,7 +73,6 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
         dbm.loadProgrammingLanguages();
         dbm.loadUserFromDatabase(uId);
     }
-
     public static MainViewModel getInstance(){
         if(mainViewModel == null || FirebaseAuth.getInstance().getCurrentUser().getUid() != uId) {
             mainViewModel = new MainViewModel();
@@ -105,11 +106,11 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
     public void onLoadUserUsername(String username) {
         this.uUsername.setValue(username);
     }
+
     @Override
     public void onLoadUserEmail(String email) {
         this.uEmail.setValue(email);
     }
-
     public void setLanguageListListener(LanguagesUpdateListener listener) {
         this.languageListListener = listener;
     }
@@ -117,10 +118,10 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
     public void setCurrentLanguagesUpdateListener (OnUpdateProgressListener listener) {
         this.onUpdateProgressListener = listener;
     }
+
     public MutableLiveData<String> getuEmail() {
         return uEmail;
     }
-
     public MutableLiveData<String> getuImageURL() {
         return uImageURL;
     }
@@ -163,6 +164,24 @@ public class MainViewModel extends ViewModel implements DataBaseManager.OnLoadPr
         }
         return 0;
 
+    }
+
+    public Hashtable<String, String> getLastCourse(String languageName) {
+        if(user == null || languages == null) return null;
+        Hashtable<String, String> courseData = new Hashtable<>();
+        for (ProgrammingLanguage pg : languages) {
+            if (pg.getName().equals(languageName)) {
+                Course course = user.getLastCourse(pg);
+                if (course != null) {
+                    courseData.put("name", course.getName());
+                    courseData.put("description", course.getDescription());
+                    return courseData;
+                }
+            }
+        }
+        courseData.put("name", "NotFound D:");
+        courseData.put("description", "No hemos encontrado el ultimo curso");
+        return courseData;
     }
 
     public void changeuUsername(String new_username, View view) {
