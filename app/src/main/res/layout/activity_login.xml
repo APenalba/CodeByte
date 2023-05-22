@@ -7,7 +7,7 @@
     tools:context=".view.login.LoginActivity">
 
     <TextView
-        android:id="@+id/forgotPassword_textView"
+        android:id="@+id/ForgotPassword_LessonActivity_textView"
         android:layout_width="196dp"
         android:layout_height="22dp"
         android:layout_marginStart="32dp"
@@ -16,14 +16,14 @@
         android:text="@string/forgot_password"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/recuperaPassword_bttn"
+        app:layout_constraintEnd_toStartOf="@+id/RecuperarContraseña_LessonActivity_bttn"
         app:layout_constraintHorizontal_bias="0.092"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/google_bttn"
+        app:layout_constraintTop_toBottomOf="@+id/Google_LessonActivity_buttn"
         tools:ignore="TextSizeCheck,VisualLintBounds" />
 
     <TextView
-        android:id="@+id/noCuenta_textView"
+        android:id="@+id/NonExistingAccount_LessonActivity_textView"
         android:layout_width="196dp"
         android:layout_height="22dp"
         android:layout_marginStart="32dp"
@@ -33,15 +33,15 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/signup_bttn"
+        app:layout_constraintEnd_toStartOf="@+id/SignUp_LessonActivity_bttn"
         app:layout_constraintHorizontal_bias="0.106"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/forgotPassword_textView"
+        app:layout_constraintTop_toBottomOf="@+id/ForgotPassword_LessonActivity_textView"
         app:layout_constraintVertical_bias="0.459"
         tools:ignore="TextSizeCheck,VisualLintBounds" />
 
     <TextView
-        android:id="@+id/intro_correo_textView"
+        android:id="@+id/MailText_ForgotPasswordLayout_textView"
         android:layout_width="253dp"
         android:layout_height="60dp"
         android:layout_marginTop="20dp"
@@ -52,11 +52,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.196"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo_imageView"
+        app:layout_constraintTop_toBottomOf="@+id/Logo_ForgotPasswordLayout_textView"
         tools:ignore="TextSizeCheck" />
 
     <TextView
-        android:id="@+id/recupera_textView"
+        android:id="@+id/ForgottenPassword_ForgotPasswordLayout_textView"
         android:layout_width="241dp"
         android:layout_height="25dp"
         android:fontFamily="@font/quicksand_bold"
@@ -66,11 +66,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.182"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/intro_correo_textView"
+        app:layout_constraintTop_toBottomOf="@+id/MailText_ForgotPasswordLayout_textView"
         tools:ignore="TextSizeCheck" />
 
     <TextView
-        android:id="@+id/email_textView"
+        android:id="@+id/Email_LessonActivity_textView"
         android:layout_width="241dp"
         android:layout_height="25dp"
         android:layout_marginTop="32dp"
@@ -81,11 +81,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recupera_textView"
+        app:layout_constraintTop_toBottomOf="@+id/ForgottenPassword_ForgotPasswordLayout_textView"
         tools:ignore="TextSizeCheck" />
 
     <TextView
-        android:id="@+id/password_textView"
+        android:id="@+id/Password_LessonActivity_textView"
         android:layout_width="241dp"
         android:layout_height="25dp"
         android:layout_marginTop="32dp"
@@ -96,11 +96,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recupera_email_editText"
+        app:layout_constraintTop_toBottomOf="@+id/RecuperarContraseña_ForgotPasswordLayout_editText"
         tools:ignore="TextSizeCheck" />
 
     <ImageView
-        android:id="@+id/logo_imageView"
+        android:id="@+id/Logo_ForgotPasswordLayout_textView"
         android:layout_width="102dp"
         android:layout_height="121dp"
         android:layout_marginTop="16dp"
@@ -113,7 +113,7 @@
         tools:ignore="ContentDescription,ImageContrastCheck" />
 
     <EditText
-        android:id="@+id/recupera_email_editText"
+        android:id="@+id/RecuperarContraseña_ForgotPasswordLayout_editText"
         android:layout_width="337dp"
         android:layout_height="48dp"
         android:layout_marginTop="4dp"
@@ -122,11 +122,11 @@
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_textView"
+        app:layout_constraintTop_toBottomOf="@+id/Email_LessonActivity_textView"
         tools:ignore="Autofill,DuplicateSpeakableTextCheck" />
 
     <EditText
-        android:id="@+id/password_editText"
+        android:id="@+id/EditarContraseña_LessonActivity_editText"
         android:layout_width="337dp"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
@@ -136,11 +136,11 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_textView"
+        app:layout_constraintTop_toBottomOf="@+id/Password_LessonActivity_textView"
         tools:ignore="DuplicateSpeakableTextCheck" />
 
     <Button
-        android:id="@+id/recupera_pwd_bttn"
+        android:id="@+id/RecuperarPassword_ForgotPasswordLayout_bttn"
         android:layout_width="343dp"
         android:layout_height="52dp"
         android:layout_marginTop="20dp"
@@ -149,11 +149,11 @@
         android:text="@string/login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_editText"
+        app:layout_constraintTop_toBottomOf="@+id/EditarContraseña_LessonActivity_editText"
         tools:ignore="DuplicateSpeakableTextCheck,VisualLintButtonSize" />
 
     <Button
-        android:id="@+id/github_bttn"
+        android:id="@+id/GitHub_LessonActivity_buttn"
         android:layout_width="157dp"
         android:layout_height="59dp"
         android:layout_marginTop="4dp"
@@ -163,10 +163,10 @@
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/github"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/keepSession_checkBox" />
+        app:layout_constraintTop_toBottomOf="@+id/KeepSession_LessonActivity_checkBox" />
 
     <Button
-        android:id="@+id/google_bttn"
+        android:id="@+id/Google_LessonActivity_buttn"
         android:layout_width="158dp"
         android:layout_height="57dp"
         android:layout_marginStart="32dp"
@@ -177,23 +177,23 @@
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/google"
         android:textColor="#1268B3"
-        app:layout_constraintEnd_toStartOf="@+id/github_bttn"
+        app:layout_constraintEnd_toStartOf="@+id/GitHub_LessonActivity_buttn"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/keepSession_checkBox" />
+        app:layout_constraintTop_toBottomOf="@+id/KeepSession_LessonActivity_checkBox" />
 
     <CheckBox
-        android:id="@+id/keepSession_checkBox"
+        android:id="@+id/KeepSession_LessonActivity_checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="@string/keep_session_bttn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recupera_pwd_bttn" />
+        app:layout_constraintTop_toBottomOf="@+id/RecuperarPassword_ForgotPasswordLayout_bttn" />
 
     <Button
-        android:id="@+id/recuperaPassword_bttn"
+        android:id="@+id/RecuperarContraseña_LessonActivity_bttn"
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -205,13 +205,13 @@
         android:text="@string/recupera_contraseña"
         android:textColor="@color/purple_codebyte"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/signup_bttn"
+        app:layout_constraintBottom_toTopOf="@+id/SignUp_LessonActivity_bttn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/github_bttn"
+        app:layout_constraintTop_toBottomOf="@+id/GitHub_LessonActivity_buttn"
         tools:ignore="MissingConstraints,VisualLintBounds" />
 
     <Button
-        android:id="@+id/signup_bttn"
+        android:id="@+id/SignUp_LessonActivity_bttn"
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -223,7 +223,7 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recuperaPassword_bttn"
+        app:layout_constraintTop_toBottomOf="@+id/RecuperarContraseña_LessonActivity_bttn"
         app:layout_constraintVertical_bias="1.0"
         tools:ignore="MissingConstraints,VisualLintBounds" />
 

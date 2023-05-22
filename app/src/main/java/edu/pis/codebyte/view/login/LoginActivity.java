@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -19,15 +18,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.transition.platform.MaterialFadeThrough;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.OAuthProvider;
 
@@ -104,9 +100,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupViews() {
-        email_text = findViewById(R.id.recupera_email_editText);
-        password_text = findViewById(R.id.password_editText);
-        keepSession_cb = findViewById(R.id.keepSession_checkBox);
+        email_text = findViewById(R.id.RecuperarContraseña_ForgotPasswordLayout_editText);
+        password_text = findViewById(R.id.EditarContraseña_LessonActivity_editText);
+        keepSession_cb = findViewById(R.id.KeepSession_LessonActivity_checkBox);
 
         setupLoginButton();
         setupSignupButton();
@@ -116,27 +112,27 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupRecoverPassword() {
-        recuperaPassword_button = findViewById(R.id.recuperaPassword_bttn);
+        recuperaPassword_button = findViewById(R.id.RecuperarContraseña_LessonActivity_bttn);
         recuperaPassword_button.setOnClickListener(view -> goToNewActivity(ForgotPasswordActivity.class));
     }
 
     private void setupLoginButton() {
-        login_button = findViewById(R.id.recupera_pwd_bttn);
+        login_button = findViewById(R.id.RecuperarPassword_ForgotPasswordLayout_bttn);
         login_button.setOnClickListener(view -> emailPasswordAuth());
     }
 
     private void setupSignupButton() {
-        signup_button = findViewById(R.id.signup_bttn);
+        signup_button = findViewById(R.id.SignUp_LessonActivity_bttn);
         signup_button.setOnClickListener(view -> goToNewActivity(RegisterActivity.class));
     }
 
     private void setupGoogleButton() {
-        google_button = findViewById(R.id.google_bttn);
+        google_button = findViewById(R.id.Google_LessonActivity_buttn);
         google_button.setOnClickListener(view -> googleAuth());
     }
 
     private void setupGithubButton() {
-        github_button = findViewById(R.id.github_bttn);
+        github_button = findViewById(R.id.GitHub_LessonActivity_buttn);
         github_button.setOnClickListener(view -> githubAuth());
     }
 

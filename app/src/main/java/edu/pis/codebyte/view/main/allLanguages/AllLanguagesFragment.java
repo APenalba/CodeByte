@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,7 +43,7 @@ public class AllLanguagesFragment extends Fragment implements ProgrammingLanguag
         View rootView = inflater.inflate(R.layout.fragment_all_languages, container, false);
         mainViewModel = MainViewModel.getInstance();
 
-        LinearProgressIndicator titleBar = rootView.findViewById(R.id.titleBar_allLanguagesFragment);
+        LinearProgressIndicator titleBar = rootView.findViewById(R.id.LoadingScreen_AlllanguagesFragment_titleBar);
         titleBar.setProgressCompat(86, true);
         titleBar.setIndicatorColor(getResources().getColor(R.color.black));
         titleBar.setTrackColor(getResources().getColor(R.color.grey_progressbar));;
@@ -58,7 +57,7 @@ public class AllLanguagesFragment extends Fragment implements ProgrammingLanguag
     }
 
     private void recyclerView_setup(View rootView) {
-        recyclerView = rootView.findViewById(R.id.allLanguage_fragment_recyclerView);
+        recyclerView = rootView.findViewById(R.id.LanguagesList_AlllanguagesFragment_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         updateRecyclerView();
     }

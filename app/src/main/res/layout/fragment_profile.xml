@@ -7,7 +7,7 @@
     tools:context=".view.main.profile.ProfileFragment">
 
     <ImageView
-        android:id="@+id/logo_profile_asset"
+        android:id="@+id/ProfileAssetLogo_ProfileFragment_imageView"
         android:layout_width="32dp"
         android:layout_height="31dp"
         android:layout_marginStart="16dp"
@@ -22,7 +22,7 @@
         app:srcCompat="@drawable/icon_profile" />
 
     <ImageView
-        android:id="@+id/userImage_ImageView"
+        android:id="@+id/UserImage_ProfileFragment_imageView"
         android:layout_width="0dp"
         android:layout_height="124dp"
         android:layout_marginStart="130dp"
@@ -36,7 +36,7 @@
         app:srcCompat="@drawable/default_user_image_foreground" />
 
     <TextView
-        android:id="@+id/username_textView"
+        android:id="@+id/Username_ProfileFragment_textView"
         android:layout_width="127dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -45,11 +45,11 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userImage_ImageView"
+        app:layout_constraintTop_toBottomOf="@+id/UserImage_ProfileFragment_imageView"
         tools:ignore="TextSizeCheck" />
 
     <TextView
-        android:id="@+id/correo_textView"
+        android:id="@+id/Mail_ProfileFragment_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -61,11 +61,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username_textView"
+        app:layout_constraintTop_toBottomOf="@+id/Username_ProfileFragment_textView"
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/cambiarUsername_button"
+        android:id="@+id/ChangeUsername_ProfileFragment_bttn"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -74,11 +74,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/correo_textView"
+        app:layout_constraintTop_toBottomOf="@+id/Mail_ProfileFragment_textView"
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/btn_contrasena"
+        android:id="@+id/ChangePassword_ProfileFragment_bttn"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
@@ -88,11 +88,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_correo"
+        app:layout_constraintTop_toBottomOf="@+id/ChangeMail_ProfileFragment_bttn"
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/btn_correo"
+        android:id="@+id/ChangeMail_ProfileFragment_bttn"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
@@ -101,7 +101,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cambiarUsername_button"
+        app:layout_constraintTop_toBottomOf="@+id/ChangeUsername_ProfileFragment_bttn"
         tools:ignore="TextContrastCheck" />
 
 
@@ -115,10 +115,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_contrasena">
+        app:layout_constraintTop_toBottomOf="@+id/ChangePassword_ProfileFragment_bttn">
 
         <Button
-            android:id="@+id/enviarProblema_button"
+            android:id="@+id/SendComment_ProfileFragment_bttn"
             android:layout_width="100dp"
             android:layout_height="48dp"
             android:backgroundTint="#9C5CF5"
@@ -137,10 +137,10 @@
             app:helperTextEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/report_problem_textView">
+            app:layout_constraintTop_toBottomOf="@+id/ReportProblem_ProfileFragment_textView">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/problema_editText"
+                android:id="@+id/Issue_ProfileFragment_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#FFFFFF"
@@ -157,7 +157,7 @@
 
 
         <TextView
-            android:id="@+id/report_problem_textView"
+            android:id="@+id/ReportProblem_ProfileFragment_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -170,7 +170,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
-        android:id="@+id/language_button"
+        android:id="@+id/ChangeLanguageButton_ProfileFragment_bttn"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"

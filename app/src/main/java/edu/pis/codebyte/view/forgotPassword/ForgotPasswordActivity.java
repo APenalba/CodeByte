@@ -28,8 +28,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.forgot_password_layout);
 
-        recuperarBtn = findViewById(R.id.recupera_pwd_bttn);
-        emailEditText = findViewById(R.id.recupera_email_editText);
+        recuperarBtn = findViewById(R.id.RecuperarPassword_ForgotPasswordLayout_bttn);
+        emailEditText = findViewById(R.id.RecuperarContraseña_ForgotPasswordLayout_editText);
         recuperarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

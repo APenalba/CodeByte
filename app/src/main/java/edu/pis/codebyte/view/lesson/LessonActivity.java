@@ -23,7 +23,7 @@ public class LessonActivity extends AppCompatActivity {
         progressBar.setIndicatorColor(getResources().getColor(R.color.purple_codebyte));
         progressBar.setTrackColor(getResources().getColor(R.color.lightpurple_codebyte));
 
-        TextView textView = findViewById(R.id.textView2);
+        TextView textView = findViewById(R.id.descriptionLanguage_LessonActivity_textView);
         textView.setText(obtenerTextoFormateado(getResources().getString(R.string.texto_ejemplo_leccion)));
     }
 

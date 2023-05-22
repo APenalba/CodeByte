@@ -16,7 +16,7 @@
         app:layout_constraintTop_toBottomOf="@+id/languageProgress_lessonActivity_progressBar">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/descriptionLanguage_LessonActivity_textView"
             android:layout_width="327dp"
             android:layout_height="97dp"
             android:layout_marginStart="24dp"
@@ -44,7 +44,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/allLanguage_textView"
+            android:id="@+id/LanguageTitle_AlllanguagesFragment_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/quicksand_bold"
@@ -55,7 +55,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/course_lesson_textview"
+            android:id="@+id/CourseLesson_LessonActivity_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"

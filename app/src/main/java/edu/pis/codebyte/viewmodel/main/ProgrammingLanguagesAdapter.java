@@ -39,7 +39,7 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public HomeRecyclerViewViewHolder(View itemView) {
             super(itemView);
-            languageImage = itemView.findViewById(R.id.languageImage);
+            languageImage = itemView.findViewById(R.id.LanguageImage_HomeRecycleViewLayout_imageView);
         }
     }
 
@@ -57,7 +57,7 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
             image = itemView.findViewById(R.id.languageImage_allLanguagesFragment_imageView);
             progress = itemView.findViewById(R.id.languageProgress_allLanguagesFragment_textView);
             description = itemView.findViewById(R.id.languageDescription_allLanguagesFragment_textView);
-            progressBar = itemView.findViewById(R.id.titleBar_allLanguagesFragment);
+            progressBar = itemView.findViewById(R.id.LoadingScreen_AlllanguagesFragment_titleBar);
             itemView.setOnClickListener(this);
         }
 

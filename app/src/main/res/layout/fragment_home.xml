@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/icon_home"
+        android:id="@+id/IconoMenuInicial_HomeFragment_imageView"
         android:layout_width="32dp"
         android:layout_height="31dp"
         android:layout_marginStart="16dp"
@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/List_HomeFragment_recyclerView"
             android:layout_width="260dp"
             android:layout_height="65dp"
             android:layout_marginEnd="4dp"
@@ -37,16 +37,16 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/selectedLanguage_home_imageView"
+            android:id="@+id/selectedLanguage_HomeFragment_imageView"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:layout_constraintEnd_toStartOf="@+id/recyclerView"
+            app:layout_constraintEnd_toStartOf="@+id/List_HomeFragment_recyclerView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/logo_python" />
 
         <ProgressBar
-            android:id="@+id/home_progressBar"
+            android:id="@+id/LoagingBar_HomeFragment_progressBar"
             android:layout_width="116dp"
             android:layout_height="127dp"
             android:layout_gravity="center"
@@ -57,7 +57,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/BackImage_HomeFragment_imageView"
             android:layout_width="392dp"
             android:layout_height="224dp"
             android:layout_marginStart="8dp"
@@ -66,12 +66,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.555"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+            app:layout_constraintTop_toBottomOf="@+id/List_HomeFragment_recyclerView"
             app:layout_constraintVertical_bias="0.558"
             app:srcCompat="@drawable/rectangulo" />
 
         <TextView
-            android:id="@+id/courseTitle_homeFragment_textView"
+            android:id="@+id/CourseTitle_homeFragment_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -82,10 +82,10 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView4" />
+            app:layout_constraintTop_toTopOf="@+id/BackImage_HomeFragment_imageView" />
 
         <TextView
-            android:id="@+id/ourseDescription_homeFragment_textView"
+            android:id="@+id/CourseDescription_homeFragment_textView"
             android:layout_width="353dp"
             android:layout_height="142dp"
             android:layout_marginTop="8dp"
@@ -93,14 +93,14 @@
             android:fontFamily="@font/quicksand_medium"
             android:text="@string/descripcion_capitulo_prueba"
             android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+            app:layout_constraintBottom_toBottomOf="@+id/BackImage_HomeFragment_imageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/courseTitle_homeFragment_textView"
+            app:layout_constraintTop_toBottomOf="@+id/CourseTitle_homeFragment_textView"
             app:layout_constraintVertical_bias="0.0" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/StartButton_HomeFragment_bttn"
             android:layout_width="200dp"
             android:layout_height="81dp"
             android:layout_marginBottom="8dp"
@@ -111,7 +111,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView4"
+            app:layout_constraintTop_toBottomOf="@+id/BackImage_HomeFragment_imageView"
             app:layout_constraintVertical_bias="0.757" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -125,7 +125,7 @@
             app:indicatorColor="@color/purple_codebyte"
             app:indicatorSize="15dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+            app:layout_constraintTop_toBottomOf="@+id/List_HomeFragment_recyclerView"
             app:trackColor="@color/lightpurple_codebyte"
             app:trackCornerRadius="4dp"
             app:trackThickness="15dp" />
@@ -133,7 +133,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/BackImage2_HomeFragment_imageView2"
         android:layout_width="356dp"
         android:layout_height="185dp"
         android:layout_marginEnd="8dp"
@@ -142,18 +142,18 @@
         app:srcCompat="@drawable/reto_diario" />
 
     <Button
-        android:id="@+id/start_home_button"
+        android:id="@+id/StartHome_HomeFragment_button"
         android:layout_width="113dp"
         android:layout_height="54dp"
         android:layout_marginStart="168dp"
         android:layout_marginBottom="24dp"
         android:backgroundTint="#7DD37F"
         android:text="@string/start"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintBottom_toBottomOf="@+id/BackImage2_HomeFragment_imageView2"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/allLanguage_textView2"
+        android:id="@+id/AllLanguage_HomeFragment_textView"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
@@ -163,11 +163,11 @@
         android:textAlignment="viewStart"
         android:textColor="#000000"
         android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/titleBar_homeFragment"
+        app:layout_constraintBottom_toTopOf="@+id/Title_homeFragment_titleBar"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/titleBar_homeFragment"
+        android:id="@+id/Title_homeFragment_titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"

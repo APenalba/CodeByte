@@ -8,7 +8,7 @@
 
 
     <ProgressBar
-        android:id="@+id/titleBar_allLanguagesFragment"
+        android:id="@+id/LoadingScreen_AlllanguagesFragment_titleBar"
         android:layout_width="116dp"
         android:layout_height="127dp"
         android:layout_gravity="center"
@@ -20,7 +20,7 @@
         app:layout_constraintVertical_bias="0.282" />
 
     <TextView
-        android:id="@+id/signup_textView"
+        android:id="@+id/SignUp_RegisterActivity_textView"
         android:layout_width="253dp"
         android:layout_height="60dp"
         android:layout_marginTop="16dp"
@@ -35,7 +35,7 @@
         tools:ignore="TextSizeCheck" />
 
     <TextView
-        android:id="@+id/signup_password_textView"
+        android:id="@+id/SignUpPassword_RegisterActivity_textView"
         android:layout_width="241dp"
         android:layout_height="25dp"
         android:layout_marginBottom="28dp"
@@ -43,14 +43,14 @@
         android:text="@string/password"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/reg_password_editText"
+        app:layout_constraintBottom_toTopOf="@+id/RegisterPassword_RegisterActivity_editText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.182"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="TextSizeCheck" />
 
     <EditText
-        android:id="@+id/reg_email_emailText"
+        android:id="@+id/RegisterEmail_RegisterActivity_editText"
         android:layout_width="337dp"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
@@ -58,15 +58,15 @@
         android:ems="10"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/signup_password_textView"
+        app:layout_constraintBottom_toTopOf="@+id/SignUpPassword_RegisterActivity_textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.418"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_textView"
+        app:layout_constraintTop_toBottomOf="@+id/Email_LessonActivity_textView"
         tools:ignore="Autofill,DuplicateSpeakableTextCheck,UnknownIdInLayout" />
 
     <TextView
-        android:id="@+id/reg_email_textViev"
+        android:id="@+id/RegisterEmail_RegisterActivity_textView"
         android:layout_width="241dp"
         android:layout_height="25dp"
         android:layout_marginBottom="20dp"
@@ -74,16 +74,16 @@
         android:text="@string/email"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/reg_email_emailText"
+        app:layout_constraintBottom_toTopOf="@+id/RegisterEmail_RegisterActivity_editText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.182"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_textView"
+        app:layout_constraintTop_toBottomOf="@+id/SignUp_RegisterActivity_textView"
         app:layout_constraintVertical_bias="0.977"
         tools:ignore="TextSizeCheck" />
 
     <EditText
-        android:id="@+id/reg_password_editText"
+        android:id="@+id/RegisterPassword_RegisterActivity_editText"
         android:layout_width="337dp"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
@@ -92,15 +92,15 @@
         android:hint="@string/password"
         android:importantForAutofill="no"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/reg_signup_bttn"
+        app:layout_constraintBottom_toTopOf="@+id/RegisterSignUp_LoginActivity_bttn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.418"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_textView"
+        app:layout_constraintTop_toBottomOf="@+id/Password_LessonActivity_textView"
         tools:ignore="DuplicateSpeakableTextCheck,UnknownIdInLayout" />
 
     <Button
-        android:id="@+id/reg_signup_bttn"
+        android:id="@+id/RegisterSignUp_LoginActivity_bttn"
         android:layout_width="343dp"
         android:layout_height="52dp"
         android:layout_marginTop="20dp"
@@ -111,22 +111,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_editText"
+        app:layout_constraintTop_toBottomOf="@+id/EditarContraseña_LessonActivity_editText"
         tools:ignore="DuplicateSpeakableTextCheck,UnknownIdInLayout,VisualLintButtonSize" />
 
     <CheckBox
-        android:id="@+id/terminosCondiciones_checkBox"
+        android:id="@+id/TermsAndConditions_LoginActivity_checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/terminos"
-        app:layout_constraintBottom_toTopOf="@+id/reg_signup_bttn"
+        app:layout_constraintBottom_toTopOf="@+id/RegisterSignUp_LoginActivity_bttn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reg_password_editText"
+        app:layout_constraintTop_toBottomOf="@+id/RegisterPassword_RegisterActivity_editText"
         tools:ignore="VisualLintButtonSize" />
 
     <TextView
-        android:id="@+id/ya_cuenta_text"
+        android:id="@+id/AlreadyExistingAccount_LoginActivity_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/quicksand_medium"
@@ -136,11 +136,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.179"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reg_signup_bttn"
+        app:layout_constraintTop_toBottomOf="@+id/RegisterSignUp_LoginActivity_bttn"
         app:layout_constraintVertical_bias="0.118" />
 
     <Button
-        android:id="@+id/reg_login_bttn"
+        android:id="@+id/RegisterLogin_LoginActivity_bttn"
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="153dp"
         android:layout_height="51dp"
@@ -155,7 +155,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.868"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reg_signup_bttn"
+        app:layout_constraintTop_toBottomOf="@+id/RegisterSignUp_LoginActivity_bttn"
         app:layout_constraintVertical_bias="0.046"
         tools:ignore="TextSizeCheck" />
 

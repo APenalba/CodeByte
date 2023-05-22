@@ -7,7 +7,7 @@
     tools:context=".view.main.SplashScreen">
 
     <ImageView
-        android:id="@+id/imageViewLogo"
+        android:id="@+id/Logo_SplashScreenActivity_imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="100dp"
@@ -21,7 +21,7 @@
         app:srcCompat="@drawable/ic_launcher" />
 
     <TextView
-        android:id="@+id/codeByteTextView"
+        android:id="@+id/CodeByte_ActivitySplashScreen_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
@@ -34,6 +34,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewLogo"
+        app:layout_constraintTop_toBottomOf="@+id/Logo_SplashScreenActivity_imageView"
         app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

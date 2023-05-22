@@ -65,25 +65,25 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
         mainViewModel.setCurrentLanguagesUpdateListener(this);
         mainViewModel.setLanguageListListener(this);
 
-        loadingBar = rootView.findViewById(R.id.home_progressBar);
+        loadingBar = rootView.findViewById(R.id.LoagingBar_HomeFragment_progressBar);
         loadingBar.bringToFront();
         loadingBar.setVisibility((loaded)? View.GONE : View.VISIBLE);
 
         progressBar = rootView.findViewById(R.id.languageProgress_homeFragment);
 
-        titleBar = rootView.findViewById(R.id.titleBar_homeFragment);
+        titleBar = rootView.findViewById(R.id.Title_homeFragment_titleBar);
         titleBar.setIndicatorColor(getResources().getColor(R.color.black));
         titleBar.setTrackColor(getResources().getColor(R.color.grey_progressbar));;
         titleBar.setProgressCompat(40, true);
 
-        TextView title = rootView.findViewById(R.id.allLanguage_textView2);
+        TextView title = rootView.findViewById(R.id.AllLanguage_HomeFragment_textView);
         title.setText("Lenguajes recomendados");
         title.setTextSize(30);
         titleBar.setProgressCompat(100, true);
 
         recyclerViewSetUp();
 
-        Button dailyChallenge = rootView.findViewById(R.id.start_home_button);
+        Button dailyChallenge = rootView.findViewById(R.id.StartHome_HomeFragment_button);
         dailyChallenge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +97,7 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
 
     @Override
     public void onLanguageSelected(Hashtable<String, String> language) {
-        ImageView selectedLanguageImage = getView().findViewById(R.id.selectedLanguage_home_imageView);
+        ImageView selectedLanguageImage = getView().findViewById(R.id.selectedLanguage_HomeFragment_imageView);
         this.selectedLanguage = language;
         selectedLanguageImage.setImageResource(Integer.parseInt(language.get("imageResourceId")));
         progressBar.setProgressCompat((int) mainViewModel.getUserProgressOfLanguage(language.get("name")), true);
@@ -106,8 +106,8 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
 
     private void updateCourseView(Hashtable<String, String> language) {
         Hashtable<String, String> course = mainViewModel.getLastCourse(language.get("name"));
-        TextView courseTitle = getView().findViewById(R.id.courseTitle_homeFragment_textView);
-        TextView courseDescription = getView().findViewById(R.id.ourseDescription_homeFragment_textView);
+        TextView courseTitle = getView().findViewById(R.id.CourseTitle_homeFragment_textView);
+        TextView courseDescription = getView().findViewById(R.id.CourseDescription_homeFragment_textView);
         if(course != null) {
             courseTitle.setText(course.get("name"));
             courseDescription.setText(course.get("description"));
@@ -126,14 +126,14 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
     }
 
     private void recyclerViewSetUp() {
-        recyclerView = rootView.findViewById(R.id.recyclerView);
+        recyclerView = rootView.findViewById(R.id.List_HomeFragment_recyclerView);
         currentUserLanguages = mainViewModel.getuCurrentLanguages();
         if (currentUserLanguages == null || currentUserLanguages.size() == 0) {
             currentUserLanguages = getDefaultCurrentLanguagesList();
         }
         else {
             loadingBar.setVisibility(View.GONE);
-            TextView title = rootView.findViewById(R.id.allLanguage_textView2);
+            TextView title = rootView.findViewById(R.id.AllLanguage_HomeFragment_textView);
             title.setTextSize(34);
             title.setText("En curso");
             titleBar.setProgressCompat(40, true);

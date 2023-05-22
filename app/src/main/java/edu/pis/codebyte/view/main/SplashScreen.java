@@ -27,8 +27,8 @@ public class SplashScreen extends AppCompatActivity {
         Animation animacion1 = AnimationUtils.loadAnimation(this, R.anim.desplazamiento_arriba);
         Animation animacion2 = AnimationUtils.loadAnimation(this, R.anim.desplazamiento_abajo);
 
-        TextView deTextView = findViewById(R.id.codeByteTextView);
-        ImageView logoImageView = findViewById(R.id.imageViewLogo);
+        TextView deTextView = findViewById(R.id.CodeByte_ActivitySplashScreen_textView);
+        ImageView logoImageView = findViewById(R.id.Logo_SplashScreenActivity_imageView);
 
         deTextView.setAnimation(animacion2);
         logoImageView.setAnimation(animacion1);

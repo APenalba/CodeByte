@@ -46,12 +46,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         dbm = DataBaseManager.getInstance();
-        email_text = findViewById(R.id.reg_email_emailText);
-        password_text = findViewById(R.id.reg_password_editText);
-        signUp_button = findViewById(R.id.reg_signup_bttn);
-        login_button = findViewById(R.id.reg_login_bttn);
-        terminosYcondiciones = findViewById(R.id.terminosCondiciones_checkBox);
-        progressBar = findViewById(R.id.titleBar_allLanguagesFragment);
+        email_text = findViewById(R.id.RegisterEmail_RegisterActivity_editText);
+        password_text = findViewById(R.id.RegisterPassword_RegisterActivity_editText);
+        signUp_button = findViewById(R.id.RegisterSignUp_LoginActivity_bttn);
+        login_button = findViewById(R.id.RegisterLogin_LoginActivity_bttn);
+        terminosYcondiciones = findViewById(R.id.TermsAndConditions_LoginActivity_checkBox);
+        progressBar = findViewById(R.id.LoadingScreen_AlllanguagesFragment_titleBar);
         progressBar.bringToFront();
         progressBar.setVisibility(View.GONE);
         signUp_button.setOnClickListener(new View.OnClickListener() {

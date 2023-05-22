@@ -102,7 +102,7 @@ public class ProfileFragment extends Fragment {
      * Este metodo inicializa el textView que muestra el nombre de usuario
      */
     private void username_textView_setup(View view) {
-        username_textView = view.findViewById(R.id.username_textView);
+        username_textView = view.findViewById(R.id.Username_ProfileFragment_textView);
         final Observer<String> observerUsername = new Observer<String>() {
             @Override
             public void onChanged(String username) {
@@ -118,7 +118,7 @@ public class ProfileFragment extends Fragment {
      * Este metodo inicializa el textView que muestra el correo electrónico
      */
     private void email_textView_setup(View view) {
-        email_textView = view.findViewById(R.id.correo_textView);
+        email_textView = view.findViewById(R.id.Mail_ProfileFragment_textView);
         final Observer<String> observerEmail = new Observer<String>() {
             @Override
             public void onChanged(String email) {
@@ -132,7 +132,7 @@ public class ProfileFragment extends Fragment {
      * Este método inicializa el ImageView que muestra la imagen de perfil
      */
     private void userImage_imageView_setup(View view) {
-        userImage = view.findViewById(R.id.userImage_ImageView);
+        userImage = view.findViewById(R.id.UserImage_ProfileFragment_imageView);
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,7 +154,7 @@ public class ProfileFragment extends Fragment {
      * Este método inicializa el botón para cambiar el nombre de usuario
      */
     private void cambiarUsername_button_setup(View view) {
-        Button cambiarUsername_button = view.findViewById(R.id.cambiarUsername_button);
+        Button cambiarUsername_button = view.findViewById(R.id.ChangeUsername_ProfileFragment_bttn);
         cambiarUsername_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,7 +167,7 @@ public class ProfileFragment extends Fragment {
      * Inicializa el boton para cambiar el correo del usuario
      */
     private void cambiarEmail_button_setup(View view) {
-        Button cambiarEmail_button = view.findViewById(R.id.btn_correo);
+        Button cambiarEmail_button = view.findViewById(R.id.ChangeMail_ProfileFragment_bttn);
         if (userProvider.equals("google.com") || userProvider.equals("github.com")) {
             cambiarEmail_button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#D6BEF6")));
         }
@@ -192,7 +192,7 @@ public class ProfileFragment extends Fragment {
      */
     private void cambiarPassword_button_setup(View view) {
 
-        Button cambiarPassword_button = view.findViewById(R.id.btn_contrasena);
+        Button cambiarPassword_button = view.findViewById(R.id.ChangePassword_ProfileFragment_bttn);
         if (userProvider.equals("google.com") || userProvider.equals("github.com")) {
             cambiarPassword_button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#D6BEF6")));
         }
@@ -214,14 +214,14 @@ public class ProfileFragment extends Fragment {
      * Este método inicializa el EditText para ingresar el problema
      */
     private void problema_editText_setup(View view) {
-        problema = view.findViewById(R.id.problema_editText);
+        problema = view.findViewById(R.id.Issue_ProfileFragment_editText);
     }
 
     /**
      * Este método inicializa el botón para enviar el problema
      */
     private void enviarProblema_button_setup(View view) {
-        enviaProblema_button = view.findViewById(R.id.enviarProblema_button);
+        enviaProblema_button = view.findViewById(R.id.SendComment_ProfileFragment_bttn);
         enviaProblema_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -238,7 +238,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void language_button_setup(View view) {
-        Button language_button = view.findViewById(R.id.language_button);
+        Button language_button = view.findViewById(R.id.ChangeLanguageButton_ProfileFragment_bttn);
         language_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
