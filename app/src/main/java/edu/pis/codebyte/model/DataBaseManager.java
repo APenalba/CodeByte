@@ -8,8 +8,10 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -24,6 +26,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -137,7 +140,7 @@ public class DataBaseManager {
                                     String courseName = progressDocument.getId();
                                     String language = progressDocument.getString("language");
 
-                                    if (courseName == null || language == null) {
+                                    if (courseName == null || language == null || courseName.equals("null") || language.equals("null") ) {
                                         break;
                                     }
                                     userProgress.addCourseToProgress(courseName, language);
@@ -284,40 +287,60 @@ public class DataBaseManager {
     public void registrarLeccionEnProgresso(String uId, String lesson, String course, String language) {
         //TODO
         DocumentReference docRef = db.collection("users").document(uId).collection("progress").document(course);
-        db.runTransaction(new Transaction.Function<Void>() {
-                    @Override
-                    public Void apply(Transaction transaction) throws FirebaseFirestoreException {
-                        DocumentSnapshot snapshot = transaction.get(docRef);
-                        if (!snapshot.exists()) {
-                            List<String> lessons = new ArrayList<>();
-                            lessons.add(lesson);
 
-                            Map<String, Object> data = new HashMap<>();
-                            data.put("lessons", lessons);
-                            data.put("language", language);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // El documento ya existe, actualizar los campos necesarios
+                        docRef.update("language", language, "lessons", FieldValue.arrayUnion(lesson))
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            // Actualización exitosa
+                                        } else {
+                                            // Error al actualizar
+                                        }
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(Exception e) {
+                                        // Error al actualizar
+                                    }
+                                });
+                    } else {
+                        // El documento no existe, crearlo con los campos requeridos
+                        Map<String, Object> progressData = new HashMap<>();
+                        progressData.put("language", language);
+                        progressData.put("lessons", Arrays.asList(lesson));
 
-                            transaction.set(docRef, data);
-                        } else {
-                            List<String> lessons = snapshot.get("lessons", List.class);
-                            lessons.add(lesson);
-
-                            transaction.update(docRef, "lessons", lessons);
-                        }
-                        return null;
+                        docRef.set(progressData)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            // Creación exitosa
+                                        } else {
+                                            // Error al crear el documento
+                                        }
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(Exception e) {
+                                        // Error al crear el documento
+                                    }
+                                });
                     }
-                })
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // El elemento se agregó exitosamente al array o se creó un nuevo documento
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Ocurrió un error al agregar el elemento al array o crear el documento
-                    }
-                });
+                } else {
+                    // Error al obtener el documento
+                }
+            }
+        });
     }
 
     public void loadProgrammingLanguages() {

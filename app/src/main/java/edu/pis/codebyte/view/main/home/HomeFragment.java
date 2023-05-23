@@ -1,9 +1,9 @@
 package edu.pis.codebyte.view.main.home;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -11,14 +11,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarMenu;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
@@ -27,6 +23,7 @@ import java.util.Hashtable;
 
 import edu.pis.codebyte.R;
 import edu.pis.codebyte.view.challenges.DailyChallengeActivity;
+import edu.pis.codebyte.view.lesson.LessonActivity;
 import edu.pis.codebyte.viewmodel.main.MainViewModel;
 import edu.pis.codebyte.viewmodel.main.ProgrammingLanguagesAdapter;
 
@@ -61,7 +58,6 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // inflar la vista del fragmento
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
         mainViewModel = MainViewModel.getInstance();
         mainViewModel.setCurrentLanguagesUpdateListener(this);
@@ -117,6 +113,16 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
             courseTitle.setText(course.get("name"));
             courseDescription.setText(course.get("description"));
         }
+        Button courseStart = rootView.findViewById(R.id.startCourse_homeFragment_button);
+        courseStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), LessonActivity.class);
+                intent.putExtra("lessons", mainViewModel.getLessons(language.get("name"), course.get("name")));
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                onStop();
+            }
+        });
     }
 
     public void recyclerViewSetUp() {

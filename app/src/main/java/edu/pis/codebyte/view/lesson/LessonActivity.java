@@ -63,27 +63,14 @@ public class LessonActivity extends AppCompatActivity implements OnQuestionAnswe
             DataBaseManager dataBaseManager = DataBaseManager.getInstance();
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             dataBaseManager.registrarLeccionEnProgresso(user.getUid(), lessons.get(cont).get("name"), lessons.get(cont).get("course"), lessons.get(cont).get("language"));
+            cont += 1;
+            if( cont == lessons.size()) {
+                System.out.println("FIN DE CURSO");
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(LessonActivity.this).toBundle());
+                onStop();
+            }
         }
-        if( cont == lessons.size()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-            builder.setTitle("Curso completado")
-                    .setMessage("¡Felicidades! Has finalizado el curso de manera exitosa.")
-                    .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Acciones adicionales al hacer clic en "Aceptar"
-                            dialog.dismiss();
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(LessonActivity.this).toBundle());
-                            BottomNavigationView navigation = findViewById(R.id.navigation);;
-                            navigation.setSelectedItemId(R.id.navigation_bar_lenguajes);
-                            onStop();
-                        }
-                    })
-                    .setCancelable(false)
-                    .show();
-        }
-        cont += 1;
         updateLesson();
     }
 

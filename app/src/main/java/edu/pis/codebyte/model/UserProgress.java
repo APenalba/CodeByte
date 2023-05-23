@@ -31,6 +31,7 @@ public class UserProgress {
     }
 
     public HashSet<String> getStartedProgrammingLanguages() {
+        System.out.println(progress.keySet());
         return new HashSet<>(progress.keySet());
     }
 

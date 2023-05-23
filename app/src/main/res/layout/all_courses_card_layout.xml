@@ -45,7 +45,7 @@
         app:layout_constraintTop_toTopOf="@+id/LoadingScreen_AlllanguagesFragment_titleBar" />
 
     <Button
-        android:id="@+id/startCourse_HomeFragment_button"
+        android:id="@+id/startCourse_allCoursesCard_button"
         android:layout_width="119dp"
         android:layout_height="60dp"
         android:layout_marginStart="48dp"

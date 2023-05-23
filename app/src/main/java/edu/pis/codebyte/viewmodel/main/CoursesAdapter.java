@@ -36,7 +36,7 @@ public class CoursesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(itemView);
             title = itemView.findViewById(R.id.textView);
             courseDescription = itemView.findViewById(R.id.textView3);
-            button = itemView.findViewById(R.id.startCourse_HomeFragment_button);
+            button = itemView.findViewById(R.id.startCourse_allCoursesCard_button);
 
         }
     }

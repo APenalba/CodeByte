@@ -17,8 +17,6 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
-
 import edu.pis.codebyte.R;
 
 public class MultichoiceChallengeFragment extends Fragment {
@@ -77,7 +75,7 @@ public class MultichoiceChallengeFragment extends Fragment {
 
         questionTextView = rootView.findViewById(R.id.question_multichoiceChallenge_textView);
         radioGroup = rootView.findViewById(R.id.radioGroup);
-        hintButton = rootView.findViewById(R.id.hint_multichoiceChallenge_button);
+        hintButton = rootView.findViewById(R.id.hint_multichoice_button);
         solveButton = rootView.findViewById(R.id.solve_multichoiceChallenge_button);
         questionTextView.setText(question);
 
