@@ -382,10 +382,11 @@ public class LoginActivity extends AppCompatActivity {
         tagsCpp.add("Alto Nivel");
         tagsCpp.add("OOP");
         ProgrammingLanguage cpp = new ProgrammingLanguage("C++", descripcionCpp, cursosCpp, tagsCpp, R.drawable.logo_cpp);
-        lenguajes.add(cpp);*//*
+        lenguajes.add(cpp);*/
+/*
 
 
-        // Lenguaje C#
+       // Lenguaje C#
         String descripcionCSharp = "C# es un lenguaje de programación de alto nivel desarrollado por Microsoft. Es utilizado principalmente para el desarrollo de aplicaciones en la plataforma .NET.";
         ArrayList<Course> cursosCSharp = new ArrayList<>();
         cursosCSharp.add(new Course("Introducción a C#", "Aprende los fundamentos de la programación en C#","C#"));
@@ -406,7 +407,8 @@ public class LoginActivity extends AppCompatActivity {
         tagsJava.add("Alto Nivel");
         tagsJava.add("OOP");
         ProgrammingLanguage java = new ProgrammingLanguage("Java", descripcionJava, cursosJava, tagsJava, R.drawable.logo_java);
-        lenguajes.add(java);*//*
+        lenguajes.add(java);*/
+/*
 
 
         // Kotlin
@@ -419,7 +421,8 @@ public class LoginActivity extends AppCompatActivity {
         kotlinTags.add("Lenguaje Funcional");
         ProgrammingLanguage kotlin = new ProgrammingLanguage("Kotlin", "Kotlin es un lenguaje de programación multiplataforma, orientado a objetos y funcional. Es un lenguaje estáticamente tipado que se ejecuta en la JVM y que también se puede compilar a JavaScript o nativo.", kotlinCourses, kotlinTags, R.drawable.logo_kotlin);
         lenguajes.add(kotlin);
-        *//*
+        */
+/*
 
 
 

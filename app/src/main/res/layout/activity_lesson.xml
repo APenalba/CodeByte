@@ -10,24 +10,33 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
         android:layout_width="409dp"
-        android:layout_height="769dp"
+        android:layout_height="500dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/languageProgress_lessonActivity_progressBar">
 
         <TextView
-            android:id="@+id/descriptionLanguage_LessonActivity_textView"
+            android:id="@+id/lesson_lessonActivity_textView"
             android:layout_width="327dp"
             android:layout_height="97dp"
             android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/quicksand_medium"
             android:text="@string/texto_ejemplo_leccion"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.04" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/challenge_lessonActivity_fragmentContainer"
+            android:name="edu.pis.codebyte.view.challenges.MultichoiceChallengeFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lesson_lessonActivity_textView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -44,7 +53,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/LanguageTitle_AlllanguagesFragment_textView"
+            android:id="@+id/language_lessonActivity_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/quicksand_bold"
@@ -55,7 +64,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/CourseLesson_LessonActivity_textView"
+            android:id="@+id/course_lessonActivity_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"

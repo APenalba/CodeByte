@@ -1,9 +1,11 @@
 package edu.pis.codebyte.view.main;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
@@ -24,7 +26,7 @@ import edu.pis.codebyte.view.main.profile.ProfileFragment;
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 
     private static MutableLiveData<ArrayList<ProgrammingLanguage>> languages = new MutableLiveData<>();
-    private DataBaseManager dbm;
+    BottomNavigationView navigation;
 
 
     @Override
@@ -35,12 +37,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dbm = DataBaseManager.getInstance();
         navigationBar_setup();
     }
 
     private void navigationBar_setup() {
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
         navigation.setOnItemSelectedListener(this);
 
         // Mostrar el primer fragment por defecto
@@ -49,7 +50,36 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 .commit();
     }
 
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
+        if (fragment instanceof AllLanguagesFragment) {
+            if (((AllLanguagesFragment) fragment).getLvl() == 1) {
+                ((AllLanguagesFragment) fragment).onBack();
+            }else {
+                navigation.setSelectedItemId(R.id.navigation_bar_home);
+                /*getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, HomeFragment.newInstance())
+                        .commit();*/
+            }
+        } else if (fragment instanceof HomeFragment || fragment instanceof ProfileFragment) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Cerrar aplicación")
+                    .setMessage("¿Estás seguro de que quieres cerrar la aplicación?")
+                    .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Cierra la aplicación
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        }else {
+            super.onBackPressed();
+        }
+    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment selectedFragment = null;

@@ -61,7 +61,6 @@ public class OpenAiManager {
 
             JSONObject jsonObject = new JSONObject(response.body().string());
             String generatedText = jsonObject.getJSONArray("choices").getJSONObject(0).getString("text");
-            System.out.println(generatedText);
 
 
 

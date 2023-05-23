@@ -3,6 +3,7 @@ package edu.pis.codebyte.view.main.home;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -10,10 +11,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarMenu;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
@@ -41,9 +46,6 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
     private HashSet<String> currentUserLanguages;
     private View rootView;
     private boolean loaded = false;
-
-
-
     public HomeFragment() {
     }
 
@@ -76,7 +78,7 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
         titleBar.setTrackColor(getResources().getColor(R.color.grey_progressbar));;
         titleBar.setProgressCompat(40, true);
 
-        TextView title = rootView.findViewById(R.id.AllLanguage_HomeFragment_textView);
+        TextView title = rootView.findViewById(R.id.title_HomeFragment_textView);
         title.setText("Lenguajes recomendados");
         title.setTextSize(30);
         titleBar.setProgressCompat(100, true);
@@ -91,17 +93,20 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
             }
         });
 
+
         return rootView;
     }
 
 
     @Override
     public void onLanguageSelected(Hashtable<String, String> language) {
-        ImageView selectedLanguageImage = getView().findViewById(R.id.selectedLanguage_HomeFragment_imageView);
-        this.selectedLanguage = language;
-        selectedLanguageImage.setImageResource(Integer.parseInt(language.get("imageResourceId")));
-        progressBar.setProgressCompat((int) mainViewModel.getUserProgressOfLanguage(language.get("name")), true);
-        updateCourseView(language);
+        if (loaded) {
+            ImageView selectedLanguageImage = getView().findViewById(R.id.selectedLanguage_HomeFragment_imageView);
+            this.selectedLanguage = language;
+            selectedLanguageImage.setImageResource(Integer.parseInt(language.get("imageResourceId")));
+            progressBar.setProgressCompat((int) mainViewModel.getUserProgressOfLanguage(language.get("name")), true);
+            updateCourseView(language);
+        }
     }
 
     private void updateCourseView(Hashtable<String, String> language) {
@@ -114,18 +119,7 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
         }
     }
 
-    private HashSet<String> getDefaultCurrentLanguagesList() {
-        HashSet<String> hash= new HashSet<>();
-        hash.add("Java");
-        hash.add("Python");
-        hash.add("C");
-        hash.add("Cpp");
-        hash.add("JavaScript");
-        hash.add("C#");
-        return hash;
-    }
-
-    private void recyclerViewSetUp() {
+    public void recyclerViewSetUp() {
         recyclerView = rootView.findViewById(R.id.List_HomeFragment_recyclerView);
         currentUserLanguages = mainViewModel.getuCurrentLanguages();
         if (currentUserLanguages == null || currentUserLanguages.size() == 0) {
@@ -133,7 +127,7 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
         }
         else {
             loadingBar.setVisibility(View.GONE);
-            TextView title = rootView.findViewById(R.id.AllLanguage_HomeFragment_textView);
+            TextView title = rootView.findViewById(R.id.title_HomeFragment_textView);
             title.setTextSize(34);
             title.setText("En curso");
             titleBar.setProgressCompat(40, true);
@@ -150,7 +144,19 @@ public class HomeFragment extends Fragment implements ProgrammingLanguagesAdapte
 
     @Override
     public void updateLanguageList(ArrayList<Hashtable<String, String>> new_languageList) {
-        recyclerViewSetUp();
         loaded = true;
+        recyclerViewSetUp();
     }
+
+    private HashSet<String> getDefaultCurrentLanguagesList() {
+        HashSet<String> hash= new HashSet<>();
+        hash.add("Java");
+        hash.add("Python");
+        hash.add("C");
+        hash.add("Cpp");
+        hash.add("JavaScript");
+        hash.add("C#");
+        return hash;
+    }
+
 }

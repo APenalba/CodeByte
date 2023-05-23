@@ -2,24 +2,29 @@ package edu.pis.codebyte.model;
 
 import java.util.ArrayList;
 
+import edu.pis.codebyte.model.challenges.Challenge;
+
 public class Course {
 
     private String name;
     private String programmingLanguage;
     private String description;
     private ArrayList<Lesson> lessons;
+    private ArrayList<Challenge> challenges;
 
-    public Course(String name, String description, String programmingLanguage, ArrayList<Lesson> lessons) {
+    public Course(String name, String description, String programmingLanguage, ArrayList<Lesson> lessons, ArrayList<Challenge> challenges) {
         this.name = name;
         this.description = description;
         this.lessons = lessons;
         this.programmingLanguage = programmingLanguage;
+        this.challenges = challenges;
     }
 
     public Course(String name, String description, String programmingLanguage) {
         this.name = name;
         this.description = description;
         this.lessons = new ArrayList<>();
+        this.challenges = new ArrayList<>();
         this.programmingLanguage = programmingLanguage;
     }
 
@@ -63,4 +68,10 @@ public class Course {
         this.lessons.remove(lesson);
     }
 
+    public void addChallenge(Challenge challenge, int position) {
+        this.challenges.add(position, challenge);
+    }
+    public ArrayList<Challenge> getChallenges() {
+        return this.challenges;
+    }
 }

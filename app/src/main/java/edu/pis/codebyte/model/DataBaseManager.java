@@ -8,11 +8,8 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -21,20 +18,22 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
+import edu.pis.codebyte.model.challenges.Challenge;
+import edu.pis.codebyte.model.challenges.FillTheGapChallenge;
+import edu.pis.codebyte.model.challenges.MultichoiceChallenge;
 
 
 public class DataBaseManager {
@@ -141,7 +140,7 @@ public class DataBaseManager {
                                     if (courseName == null || language == null) {
                                         break;
                                     }
-
+                                    userProgress.addCourseToProgress(courseName, language);
                                     if (completedLessons != null) {
                                         for (String lesson : completedLessons) {
                                             userProgress.addLessonToProgress(lesson, courseName, language);
@@ -162,20 +161,6 @@ public class DataBaseManager {
                 });
     }
 
-
-
-    /**
-     * Actualiza el username de un usuario
-     *
-     * @param uId
-     * @param new_username
-     */
-    /**
-     * Este método actualiza el nombre de usuario de un usuario
-     *
-     * @param uId
-     * @param new_username
-     */
     public void updateUserUsername(String uId, String new_username) {
         DocumentReference docRef = db.collection("users").document(uId);
 
@@ -227,7 +212,7 @@ public class DataBaseManager {
      * @param imagenPerfilUri
      * @param successListener
      */
-    public void subirImagenPerfilStorage(String uId, Uri imagenPerfilUri, OnSuccessListener<Uri> successListener) {
+    public void uploadUserImage(String uId, Uri imagenPerfilUri, OnSuccessListener<Uri> successListener) {
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference userImageRef = storageRef.child("userImages/" + uId + ".jpg");
 
@@ -297,57 +282,112 @@ public class DataBaseManager {
 
 
     public void registrarLeccionEnProgresso(String uId, String lesson, String course, String language) {
-        Map<String, Object> updates = new HashMap<>();
-        updates.put("lessons", FieldValue.arrayUnion("nuevo_valor"));
-        db.collection("users").document(uId).collection("progress").document(course).update(updates);
+        //TODO
+        DocumentReference docRef = db.collection("users").document(uId).collection("progress").document(course);
+        db.runTransaction(new Transaction.Function<Void>() {
+                    @Override
+                    public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                        DocumentSnapshot snapshot = transaction.get(docRef);
+                        if (!snapshot.exists()) {
+                            List<String> lessons = new ArrayList<>();
+                            lessons.add(lesson);
+
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("lessons", lessons);
+                            data.put("language", language);
+
+                            transaction.set(docRef, data);
+                        } else {
+                            List<String> lessons = snapshot.get("lessons", List.class);
+                            lessons.add(lesson);
+
+                            transaction.update(docRef, "lessons", lessons);
+                        }
+                        return null;
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // El elemento se agregó exitosamente al array o se creó un nuevo documento
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Ocurrió un error al agregar el elemento al array o crear el documento
+                    }
+                });
     }
 
     public void loadProgrammingLanguages() {
         ArrayList<ProgrammingLanguage> programmingLanguages = new ArrayList<>();
         db.collection("programmingLanguages")
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
+                .addOnCompleteListener(getLanguagesTask -> {
+                    if (getLanguagesTask.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : getLanguagesTask.getResult()) {
                             String languageName = document.getId();
                             String languageDescription = document.getString("descripcion").trim();
                             int resourceImageId = document.getLong("resourceImageId").intValue();
                             ArrayList<String> tags = (ArrayList<String>) document.get("tags");
                             HashSet<String> tags_set = new HashSet<>(tags);
 
-                            ArrayList<Course> arrayList = new ArrayList<>();
-                            document.getReference().collection("courses").get().addOnCompleteListener(task2 -> {
-                                if (task2.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document2 : task2.getResult()) {
+                            ArrayList<Course> coursesArrayList = new ArrayList<>();
+                            document.getReference().collection("courses").get().addOnCompleteListener(getCoursesTask -> {
+                                if (getCoursesTask.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document2 : getCoursesTask.getResult()) {
+                                        if (document2.get("descripcion") == null) {
+                                            System.out.println();
+                                        }
                                         Course course = new Course(document2.getId(), document2.getString("descripcion"), languageName);
-                                        arrayList.add(course);
-                                        document2.getReference().collection("lessons").get().addOnCompleteListener(task3 -> {
-                                            if (task3.isSuccessful()) {
-                                                for (QueryDocumentSnapshot document3 : task3.getResult()) {
-                                                    Lesson lesson = new Lesson(document3.getId(), document3.getString("lesson"), course);
+                                        coursesArrayList.add(course);
+                                        document2.getReference().collection("lessons").get().addOnCompleteListener(getLessonsTask -> {
+                                            if (getLessonsTask.isSuccessful()) {
+                                                for (QueryDocumentSnapshot document3 : getLessonsTask.getResult()) {
+                                                    int id = (document3.getString("exercice") == null)? -1:Integer.parseInt(document3.getString("exercice"));
+                                                    Lesson lesson = new Lesson(document3.getId(), document3.getString("descripcion"), course, id);
                                                     course.addLesson(lesson);
                                                 }
                                                 // Verificar si todas las lecciones se han agregado al curso
-                                                if (arrayList.indexOf(course) == arrayList.size() - 1) {
+                                                if (coursesArrayList.indexOf(course) == coursesArrayList.size() - 1) {
                                                     // Todas las lecciones han sido agregadas, llamar a onLoadProgrammingLanguages
-                                                    ProgrammingLanguage programmingLanguage = new ProgrammingLanguage(languageName, languageDescription, arrayList, tags_set, resourceImageId);
+                                                    ProgrammingLanguage programmingLanguage = new ProgrammingLanguage(languageName, languageDescription, coursesArrayList, tags_set, resourceImageId);
                                                     programmingLanguages.add(programmingLanguage);
-                                                    if (programmingLanguages.size() == task.getResult().size()) {
+                                                    if (programmingLanguages.size() == getLanguagesTask.getResult().size()) {
                                                         languagesListener.onLoadProgrammingLanguages(programmingLanguages);
                                                     }
                                                 }
                                             } else {
-                                                Log.d(TAG, "Error getting lessons: ", task3.getException());
+                                                Log.d(TAG, "Error getting lessons: ", getLessonsTask.getException());
+                                            }
+                                        });
+                                        document2.getReference().collection("exercices").get().addOnCompleteListener(getExercicesTask -> {
+                                            if (getExercicesTask.isSuccessful()) {
+                                                for (QueryDocumentSnapshot document4 : getExercicesTask.getResult()) {
+                                                    Challenge challenge = null;
+
+                                                    if ( document4.getString("type") == null || document4.getString("type").equals("1")) {
+                                                        challenge = new FillTheGapChallenge(document4.getString("question"), document4.getString("correct_answer"));
+                                                    }else if(document4.getString("type").equals("0")) {
+                                                        ArrayList<String> responses = (ArrayList<String>) document4.get("responses");
+                                                        challenge = new MultichoiceChallenge(document4.getString("question"), document4.getString("correct_answer"), (ArrayList<String>) document4.get("responses"));
+                                                    }
+
+                                                    if (challenge != null) course.addChallenge(challenge, Integer.parseInt(document4.getId()));
+                                                }
+                                            } else {
+                                                Log.d(TAG, "Error getting lessons: ", getExercicesTask.getException());
                                             }
                                         });
                                     }
                                 } else {
-                                    Log.d(TAG, "Error getting courses: ", task2.getException());
+                                    Log.d(TAG, "Error getting courses: ", getCoursesTask.getException());
                                 }
                             });
                         }
                     } else {
-                        Log.d(TAG, "Error getting documents: ", task.getException());
+                        Log.d(TAG, "Error getting documents: ", getLanguagesTask.getException());
                     }
                 })
                 .addOnFailureListener(e -> {

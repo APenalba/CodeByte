@@ -350,7 +350,7 @@ public class ProfileFragment extends Fragment {
                     //Toast.makeText(mContext, e.toString(), Toast.LENGTH_SHORT).show();
                     Snackbar.make(getView(), e.toString(), Snackbar.LENGTH_SHORT).show();
                 }
-                mainViewModel.changeuEmail(newEmail, password, mContext);
+                mainViewModel.changeEmail(newEmail, password, mContext);
             }
         });
         builder.setNegativeButton(R.string.change_email_dialog_negative_button, new DialogInterface.OnClickListener() {
@@ -409,7 +409,7 @@ public class ProfileFragment extends Fragment {
                 }
                 try {
                     LoginUtils.isSecurePassword(newPassword);
-                    mainViewModel.changeuPassword(currentPassword, newPassword, mContext);
+                    mainViewModel.changePassword(currentPassword, newPassword, mContext);
                 } catch (WeakPasswordException e) {
                     //Toast.makeText(mContext, e.toString(), Toast.LENGTH_SHORT).show();
                     Snackbar.make(inputConfirmPassword, e.toString(), Snackbar.LENGTH_SHORT).show();

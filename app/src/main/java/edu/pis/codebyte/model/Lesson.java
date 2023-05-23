@@ -7,20 +7,13 @@ public class Lesson {
     private String name;
     private String lesson;
     private Course course;
-    private Challenge challenge;
+    private int challengeId;
 
-    public Lesson(String name, String lesson, Course course, Challenge challenge) {
+    public Lesson(String name, String lesson, Course course, int challengeId) {
         this.name = name;
         this.lesson = lesson;
         this.course = course;
-        this.challenge = challenge;
-    }
-
-    public Lesson(String name, String lesson, Course course) {
-        this.name = name;
-        this.lesson = lesson;
-        this.challenge = null;
-        this.course = course;
+        this.challengeId = challengeId;
     }
 
     public Course getCourse() {
@@ -31,12 +24,12 @@ public class Lesson {
         this.course = course;
     }
 
-    public Challenge getChallenge() {
-        return challenge;
+    public int getChallengeId() {
+        return challengeId;
     }
 
-    public void setChallenge(Challenge challenge) {
-        this.challenge = challenge;
+    public void setChallenge(int challengeId) {
+        this.challengeId = challengeId;
     }
 
     public String getName() {

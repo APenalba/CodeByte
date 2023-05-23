@@ -80,8 +80,10 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
         selectedLanguage = findSelectedLanguage(currentUserLanguages.get(0));
         if (selectedLanguage == null)
             selectedLanguage = allProgrammingLanguageList.get(0);
+
         this.viewType = ViewType.HOME_VIEW_TYPE;
         this.languageSelectedListener = languageSelectedListener;
+        languageSelectedListener.onLanguageSelected(selectedLanguage);
     }
 
     @NonNull
@@ -108,7 +110,6 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
                 programmingLanguage = findSelectedLanguage(currentUserLanguages.get(position));
                 if (programmingLanguage == null)
                     programmingLanguage = allProgrammingLanguageList.get(position % allProgrammingLanguageList.size());
-                languageSelectedListener.onLanguageSelected(programmingLanguage);
                 HomeRecyclerViewViewHolder homeRecyclerViewViewHolderHolder = (HomeRecyclerViewViewHolder) holder;
                 homeRecyclerViewViewHolderHolder.languageImage.setImageResource(Integer.parseInt(Objects.requireNonNull(programmingLanguage.get("imageResourceId"))));
                 homeRecyclerViewViewHolderHolder.languageImage.setTag(programmingLanguage.get("name"));
@@ -130,14 +131,15 @@ public class ProgrammingLanguagesAdapter extends RecyclerView.Adapter<RecyclerVi
                 break;
 
             case ALL_LANGUAGES_VIEW_TYPE:
+                MainViewModel mainViewModel = MainViewModel.getInstance();
                 AllLanguagesRecyclerViewViewHolder allLanguagesHolder = (AllLanguagesRecyclerViewViewHolder) holder;
                 programmingLanguage = allProgrammingLanguageList.get(position % allProgrammingLanguageList.size());
                 allLanguagesHolder.image.setImageResource(Integer.parseInt(Objects.requireNonNull(programmingLanguage.get("imageResourceId"))));
                 allLanguagesHolder.name.setText(programmingLanguage.get("name"));
 
-                int randNumber = new Random().nextInt(101);
-                allLanguagesHolder.progressBar.setProgressCompat(randNumber, true);
-                allLanguagesHolder.progress.setText(String.format("%s%%", Integer.toString(randNumber)));
+                int prog = (int) mainViewModel.getUserProgressOfLanguage(programmingLanguage.get("name"));
+                allLanguagesHolder.progressBar.setProgressCompat( prog, true);
+                allLanguagesHolder.progress.setText(String.format("%s%%", Integer.toString(prog)));
                 allLanguagesHolder.description.setText(programmingLanguage.get("description"));
 
                 Hashtable<String, String> finalProgrammingLanguage1 = programmingLanguage;

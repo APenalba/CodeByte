@@ -45,14 +45,14 @@ public class UserProgress {
         if (!progress.containsKey(pg.getName())) return 0;
 
         ArrayList<Course> courses = pg.getCourses();
-        int coursesSize = courses.size();
-        if (coursesSize == 0) return 100;
+        int languageSize = courses.size();
+        if (languageSize == 0) return 100;
         Hashtable<String, HashSet<String>> coursesProgress = progress.get(pg.getName());
         for (Course course: pg.getCourses()) {
             if(coursesProgress.containsKey(course.getName())) {
                 float courseProgress = calcProgress(course);
                 System.out.println("Progreso del curso " + course.getName() +  " = " + courseProgress);
-                prog += courseProgress / coursesSize;
+                prog += courseProgress / languageSize;
             }
         }
         return prog;
