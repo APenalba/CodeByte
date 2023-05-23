@@ -43,6 +43,9 @@
         Quisque at tortor pulvinar sem tempus congue vel eu leo. </string>
 
     <string name="en_curso">En Curso</string>
+    <string name="continuee">Continue</string>
+    <string name="coming_soon">Coming Soon...</string>
+    <string name="return_home">Go to Home</string>
 
 
     <!--Content Descriptions-->

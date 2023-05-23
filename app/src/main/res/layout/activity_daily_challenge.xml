@@ -10,7 +10,25 @@
         android:id="@+id/text_dailyChallengeActivity_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:layout_marginBottom="100dp"
+        android:fontFamily="@font/quicksand_bold"
+        android:text="@string/coming_soon"
+        android:textSize="48sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_gohome"
+        android:layout_width="180dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="50dp"
+        android:backgroundTint="#2CCD21"
+        android:fontFamily="@font/quicksand_bold"
+        android:text="@string/return_home"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_dailyChallengeActivity_textView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
